@@ -1,0 +1,50 @@
+<main class="flex-1 p-6 flex items-center justify-center bg-gray-100 overflow-y-auto">
+  <fluent-card [class]="'max-w-4xl mx-auto bg-white shadow-lg rounded-lg mt-10'">
+    <div class="text-blue-700 px-6 pt-6 rounded-t-lg">
+      <h1 class="text-center text-2xl font-bold">REQUISITOS PARA INSCRIPCIÓN</h1>
+      <p class="text-center text-lg">Examen extraordinario 2025-I</p>
+      <p class="text-center text-lg">Examen extraordinario 2025-I</p>
+    </div>
+    <div class="text-black-700 p-6 rounded-t-lg">
+      <label class="block text-md font-medium">Modalidad</label>
+      <select class="border p-2 w-full mb-2 bg-white" [(ngModel)]="selectedMode" (change)="selectMode($event)">
+        @for (mode of modes; track mode.value) {
+          <option [value]="mode.value">{{ mode.name }}</option>
+        }
+      </select>
+    </div>
+    <div class="px-6">
+      <table id="requirementsTable" class="w-full border-collapse border border-gray-300">
+        <thead>
+        <tr>
+          <th class="border border-gray-300 p-3 text-left text-gray-700">Requisito</th>
+          <th class="border border-gray-300 p-3 text-left text-gray-700">Descripción</th>
+          <th class="border border-gray-300 p-3 text-center text-gray-700">Guía</th>
+        </tr>
+        </thead>
+        <tbody id="requirementsBody">
+          @for (req of requirement; track req.id) {
+            <tr>
+              <td class="border border-gray-300 p-3 text-gray-600">{{ req.name }}</td>
+              <td class="border border-gray-300 p-3 text-gray-600">{{ req.description }}</td>
+              <td class="border border-gray-300 p-3 text-center">
+                @if (req.guide) {
+                  <a [href]="req.guide" target="_blank" class="text-blue-500 hover:text-blue-700 underline">
+                    <i class="fa-solid fa-circle-info"></i>
+                  </a>
+                } @else {
+                  <span class="text-gray-500">No disponible</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="p-6 text-center">
+      <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        POSTULAR
+      </button>
+    </div>
+  </fluent-card>
+</main>

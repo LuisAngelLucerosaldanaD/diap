@@ -1,0 +1,58 @@
+<div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+  <div class="flex card-side bg-base-100 shadow-xl flex-col md:flex-row">
+    <div class="card-body p-4">
+      <div class="w-full flex justify-center">
+        <img class="w-14 h-14 mb-3 " src="https://i.pinimg.com/originals/ed/94/e3/ed94e3e6fae5dd09cd8f7652f4a01c3d.png"
+             alt="imagen logo">
+      </div>
+      <div class="w-full flex justify-center">
+        <h2 class="font-semibold text-lg">Iniciar sesión</h2>
+      </div>
+
+      <div>
+        <form [formGroup]="loginForm" method="POST" action="https://admision.unas.edu.pe/login">
+          <input type="hidden" name="_token" value="jUElwtaUvLk47J4FlFvngPCZax2DLOFVdBM0NRIm">
+          <!-- Mensajes de error global -->
+
+
+          <!-- Campo de correo -->
+          <div>
+            <label class="block font-medium text-sm text-gray-700">
+              Correo
+            </label>
+            <input formControlName="email" class="form-input rounded-md shadow-sm block mt-1 w-full" type="email"
+                   name="email" required="required" autofocus="autofocus">
+          </div>
+
+          <!-- Campo de contraseña -->
+          <div class="mt-4">
+            <label class="block font-medium text-sm text-gray-700">
+              Contraseña
+            </label>
+            <input formControlName="password" class="form-input rounded-md shadow-sm block mt-1 w-full" type="password"
+                   name="password" required="required" autocomplete="current-password">
+          </div>
+          <!-- Checkbox de recordar -->
+          <div class="block mt-4">
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox" name="remember" formControlName="rememberMe">
+              <span class="ml-2 text-sm text-gray-600">Recuérdame y mantenme conectado</span>
+            </label>
+          </div>
+
+          <!-- Botón de envío -->
+          <div class="flex items-center justify-center mt-4">
+            <button type="submit" (click)="login()"
+                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150 ml-4">
+              INGRESAR
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+    <figure>
+      <img src="https://admision.unas.edu.pe/images/login.png" alt="banner examen admision" style="width: 24rem">
+    </figure>
+  </div>
+</div>

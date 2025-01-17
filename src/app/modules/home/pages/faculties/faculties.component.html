@@ -1,0 +1,24 @@
+<main class="w-full h-full p-6">
+  <div class="pb-4">
+    <h1 class="text-2xl font-bold text-gray-900">Facultades</h1>
+  </div>
+  <div class="grid grid-cols-3 gap-5">
+    @for (faculty of faculties; track faculty.name) {
+      <fluent-card [class]="'border border-gray-300 rounded-lg p-4 bg-white shadow-md'">
+        <div>
+          <img [src]="faculty.logo" alt="logo agronomia" loading="lazy"
+               class="facultad-logo mx-auto mb-4 w-3/5">
+        </div>
+        <div class="text-left">
+          <h2 class="text-xl font-semibold mb-2">{{ faculty.name }}</h2>
+          <p class="text-gray-700"><strong>Grado Académico:</strong> Bachiller en {{ faculty.academic_degree }}</p>
+          <p class="text-gray-700"><strong>Título Profesional:</strong> {{ faculty.professional_name }}</p>
+        </div>
+        <a [href]="faculty.page_link" target="_blank"
+           class="inline-block mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300">
+          Visitar página
+        </a>
+      </fluent-card>
+    }
+  </div>
+</main>

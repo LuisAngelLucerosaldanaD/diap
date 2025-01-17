@@ -1,0 +1,9 @@
+.btn-login {
+  @apply h-full text-white py-4 px-6;
+  background-color: #2563EB;
+}
+
+.header {
+  @apply w-full h-14 flex justify-between;
+  background-color: #1ABB9C;
+}
