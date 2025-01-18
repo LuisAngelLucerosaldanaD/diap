@@ -3,7 +3,7 @@ import {Routes} from "@angular/router";
 export const HomeRouting: Routes = [
   {
     path: '',
-    loadComponent: () => import('./home.component').then(m => m.HomeComponent)
+    loadComponent: () => import('./pages/announcements/announcements.component').then(m => m.AnnouncementsComponent)
   },
   {
     path: 'applications',

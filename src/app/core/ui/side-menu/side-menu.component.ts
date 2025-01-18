@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {NgClass, NgIf} from "@angular/common";
+import {NgClass} from "@angular/common";
 import {MenuService} from "../../services/ui/menu.service";
 import {TooltipModule} from "primeng/tooltip";
 import {RouterLink, RouterLinkActive} from "@angular/router";
@@ -8,7 +8,6 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
   selector: 'app-side-menu',
   standalone: true,
   imports: [
-    NgIf,
     NgClass,
     TooltipModule,
     RouterLink,

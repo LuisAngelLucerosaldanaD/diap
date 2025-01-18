@@ -9,7 +9,7 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
     ReactiveFormsModule
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   protected loginForm = new FormGroup({

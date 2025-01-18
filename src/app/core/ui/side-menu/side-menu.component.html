@@ -1,10 +1,10 @@
 <div class="menu transition-all duration-300" [ngClass]="{'w-12': isCompact, 'w-64': !isCompact}">
   @if (!isCompact) {
-    <div class="item" routerLink="/" routerLinkActive="item-select">
+    <div class="item" routerLink="/home" routerLinkActive="item-select">
       <i class="fa-solid fa-house"></i>
       <span>INICIO</span>
     </div>
-    <div class="item" routerLink="/faculties" routerLinkActive="item-select">
+    <div class="item" routerLink="/home/faculties" routerLinkActive="item-select">
       <i class="fa-solid fa-graduation-cap"></i>
       <span>FACULTADES</span>
     </div>
@@ -12,22 +12,22 @@
       <i class="fa-solid fa-shuffle"></i>
       <span>MODALIDADES</span>
     </div>
-    <div class="item" routerLink="/registration" routerLinkActive="item-select">
+    <div class="item" routerLink="/home/registration" routerLinkActive="item-select">
       <i class="fa-solid fa-file-pen"></i>
       <span>INSCRIPCIÓN</span>
     </div>
   } @else {
-    <div class="item" pTooltip="INICIO" tooltipPosition="right" routerLink="/" routerLinkActive="item-select">
+    <div class="item" pTooltip="INICIO" tooltipPosition="right" routerLink="/home" routerLinkActive="item-select">
       <i class="fa-solid fa-house"></i>
     </div>
-    <div class="item" pTooltip="FACULTADES" routerLink="/faculties" tooltipPosition="right"
+    <div class="item" pTooltip="FACULTADES" routerLink="/home/faculties" tooltipPosition="right"
          routerLinkActive="item-select">
       <i class="fa-solid fa-graduation-cap"></i>
     </div>
     <div class="item" pTooltip="MODALIDADES" tooltipPosition="right">
       <i class="fa-solid fa-shuffle"></i>
     </div>
-    <div class="item" pTooltip="INSCRIPCIÓN" tooltipPosition="right" routerLink="/registration"
+    <div class="item" pTooltip="INSCRIPCIÓN" tooltipPosition="right" routerLink="/home/registration"
          routerLinkActive="item-select">
       <i class="fa-solid fa-file-pen"></i>
     </div>
