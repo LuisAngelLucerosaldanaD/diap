@@ -1,0 +1,19 @@
+export interface ICredentials {
+  email: string;
+  password: string;
+  remember_me: boolean;
+}
+
+export interface ISession {
+  msg: string;
+  details: string;
+  data: IDataSession;
+}
+
+export interface IDataSession {
+  name: string;
+  email: string;
+  id_role: number;
+  expirer_in: number;
+  token: string;
+}
