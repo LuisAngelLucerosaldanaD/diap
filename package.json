@@ -21,6 +21,7 @@
     "@fluentui/web-components": "^2.6.1",
     "@microsoft/fast-element": "^2.0.1",
     "lodash-es": "^4.17.21",
+    "ng-recaptcha": "^13.2.1",
     "primeng": "^17.18.15",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

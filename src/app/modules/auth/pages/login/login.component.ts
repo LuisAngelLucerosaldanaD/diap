@@ -7,6 +7,9 @@ import {Subscription} from "rxjs";
 import {MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
 import {Router} from "@angular/router";
+import {RecaptchaFormsModule, RecaptchaModule} from "ng-recaptcha";
+import {EnvServiceFactory} from "../../../../core/services/env/env.service.provider";
+import {BlockUIModule} from "primeng/blockui";
 
 @Component({
   selector: 'app-login',
@@ -14,7 +17,10 @@ import {Router} from "@angular/router";
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    ToastModule
+    ToastModule,
+    RecaptchaModule,
+    RecaptchaFormsModule,
+    BlockUIModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -27,7 +33,8 @@ export class LoginComponent implements OnDestroy {
   protected loginForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
-    remember_me: new FormControl(false)
+    remember_me: new FormControl(false),
+    captcha: new FormControl('', Validators.required)
   });
   protected emailValidation: IFormValidation = {
     error: false,
@@ -38,6 +45,7 @@ export class LoginComponent implements OnDestroy {
     msg: ''
   };
   protected isLoading: boolean = false;
+  protected captchaKey: string = EnvServiceFactory().GOOGLE_RECAPTCHA_SITE_KEY;
 
   constructor(
     private _authService: AuthService,
@@ -120,6 +128,9 @@ export class LoginComponent implements OnDestroy {
       this.loginForm.markAllAsTouched();
       return;
     }
+
+    const data = this.loginForm.value;
+    delete data.captcha;
 
     this.isLoading = true;
     this._subscriptions.add(

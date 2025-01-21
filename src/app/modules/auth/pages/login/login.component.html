@@ -34,6 +34,10 @@
               }
             </div>
 
+            <div class="mt-4">
+              <re-captcha formControlName="captcha" [siteKey]="captchaKey"></re-captcha>
+            </div>
+
             <div class="block mt-4">
               <label class="flex items-center">
                 <input type="checkbox" class="form-checkbox" name="remember_me" formControlName="remember_me"
@@ -59,3 +63,23 @@
   </div>
 </div>
 <p-toast></p-toast>
+<p-blockUI [blocked]="isLoading">
+  <div class="flex flex-col gap-2 items-center justify-center">
+    <div>
+      <img class="w-14 h-14 mb-3" alt="imagen logo"
+           src="https://portalweb.unas.edu.pe/sites/all/themes/business_responsive_theme/logo.png">
+    </div>
+    <div>
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</p-blockUI>
