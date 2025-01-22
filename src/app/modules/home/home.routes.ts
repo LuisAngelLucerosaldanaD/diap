@@ -1,6 +1,6 @@
 import {Routes} from "@angular/router";
 
-export const HomeRouting: Routes = [
+export const HomeRoutes: Routes = [
   {
     path: '',
     loadComponent: () => import('./pages/announcements/announcements.component').then(m => m.AnnouncementsComponent)

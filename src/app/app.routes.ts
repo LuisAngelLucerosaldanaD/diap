@@ -8,7 +8,12 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./modules/home/home.component').then(m => m.HomeComponent),
-    loadChildren: () => import('./modules/home/home.routing').then(m => m.HomeRouting)
+    loadChildren: () => import('./modules/home/home.routes').then(m => m.HomeRoutes)
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./modules/administration/administration.component').then(m => m.AdministrationComponent),
+    loadChildren: () => import('./modules/administration/administration.routes').then(m => m.AdminRoutes)
   },
   {
     path: '**',

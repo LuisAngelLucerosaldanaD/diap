@@ -10,7 +10,7 @@ import {EnvServiceFactory} from "../env/env.service.provider";
 export class AuthService {
 
   private _http: HttpClient = inject(HttpClient);
-  private readonly _url: string = EnvServiceFactory().REST_API + '/login';
+  private readonly _url: string = EnvServiceFactory().REST_API + '/api/v1/login';
 
   /**
    * Method that allow us to login
