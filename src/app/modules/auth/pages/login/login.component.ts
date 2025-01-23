@@ -145,7 +145,7 @@ export class LoginComponent implements OnDestroy {
             return;
           }
 
-          sessionStorage.setItem('token', res.data.token);
+          sessionStorage.setItem('token', res.data.token.replace('Bearer ', ''));
           this._router.navigateByUrl('/admin/postulations');
         },
         error: (error: HttpErrorResponse) => {

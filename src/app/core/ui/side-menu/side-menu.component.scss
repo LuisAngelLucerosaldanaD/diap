@@ -10,3 +10,7 @@
 .item-select {
   background-color: #2563EB;
 }
+
+.btn-logout {
+  @apply py-3 px-4 flex items-center bg-red-500 hover:bg-red-600 text-white w-full;
+}

@@ -1,4 +1,5 @@
 import {IMode} from "../../models/registration/registration";
+import {IMenuItem} from "../../models/ui/menu";
 
 export const MODES: IMode[] = [
   {
@@ -698,5 +699,46 @@ export const MODES: IMode[] = [
         updated_at: "2024-12-30T15:33:29.000000Z"
       }
     ]
+  }
+];
+
+export const HOME_MENU: IMenuItem[] = [
+  {
+    name: 'INICIO',
+    route: '/home',
+    icon: 'fa-house'
+  },
+  {
+    name: 'FACULTADES',
+    route: '/home/faculties',
+    icon: 'fa-graduation-cap'
+  },
+  {
+    name: 'INSCRIPCIÓN',
+    route: '/home/registration',
+    icon: 'fa-file-pen'
+  },
+  {
+    name: 'MODALIDADES',
+    route: '/home/modalities',
+    icon: 'fa-shuffle'
+  }
+];
+
+export const AUTH_MENU: IMenuItem[] = [
+  {
+    name: 'Usuarios',
+    route: '/admin/users',
+    icon: 'fa-user'
+  },
+  {
+    name: 'Examenes',
+    route: '/admin/exams',
+    icon: 'fa-file'
+  },
+  {
+    name: 'Postulaciones',
+    route: '/admin/postulations',
+    icon: 'fa-book'
   }
 ];

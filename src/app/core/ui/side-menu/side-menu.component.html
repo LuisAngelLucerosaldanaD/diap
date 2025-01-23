@@ -16,10 +16,13 @@
       }
     }
   </div>
-  <button type="submit" class="py-3 px-4 flex items-center bg-red-500 hover:bg-red-600 text-white w-full">
-    <i class="fa-solid fa-power-off"></i>
-    @if (!isCompact) {
-      <span class="ml-2 text-md">Cerrar Sesión</span>
-    }
-  </button>
+  @if (isAuthenticated) {
+    <button type="submit" class="btn-logout" (click)="logout()">
+      <i class="fa-solid fa-power-off"></i>
+      @if (!isCompact) {
+        <span class="ml-2 text-md">Cerrar Sesión</span>
+      }
+    </button>
+  }
 </div>
+<p-confirmDialog key="logout"></p-confirmDialog>

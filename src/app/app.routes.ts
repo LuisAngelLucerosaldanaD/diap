@@ -1,4 +1,5 @@
 import {Routes} from '@angular/router';
+import {sessionGuard} from "./core/guards/session.guard";
 
 export const routes: Routes = [
   {
@@ -12,6 +13,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    canActivate: [sessionGuard],
     loadComponent: () => import('./modules/administration/administration.component').then(m => m.AdministrationComponent),
     loadChildren: () => import('./modules/administration/administration.routes').then(m => m.AdminRoutes)
   },

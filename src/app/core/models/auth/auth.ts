@@ -6,7 +6,6 @@ export interface ICredentials {
 
 export interface ISession {
   msg: string;
-  details: string;
   data: IDataSession;
 }
 
