@@ -54,9 +54,7 @@ export class LoginComponent implements OnDestroy {
   ) {
     this._subscriptions.add(
       this.email.statusChanges.subscribe((status) => {
-        if (this.email.untouched) {
-          return;
-        }
+        if (this.email.untouched) return;
 
         if (status === 'INVALID') {
           this.emailValidation.error = true;
@@ -89,6 +87,11 @@ export class LoginComponent implements OnDestroy {
 
   ngOnDestroy() {
     this._subscriptions.unsubscribe();
+    this.loginForm.reset();
+    this.emailValidation = {error: false, msg: ''};
+    this.pwdValidation = {error: false, msg: ''};
+    this.isLoading = false;
+    this.captchaKey = '';
   }
 
   private _pwdErrorMsg(): void {
@@ -146,6 +149,7 @@ export class LoginComponent implements OnDestroy {
           }
 
           sessionStorage.setItem('token', res.data.token.replace('Bearer ', ''));
+          sessionStorage.setItem('user', JSON.stringify(res.data));
           this._router.navigateByUrl('/admin/postulations');
         },
         error: (error: HttpErrorResponse) => {

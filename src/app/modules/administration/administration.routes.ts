@@ -1,8 +1,11 @@
 import {Routes} from "@angular/router";
+import {permissionGuard} from "../../core/guards/permission.guard";
 
 export const AdminRoutes: Routes = [
   {
     path: 'users',
+    data: {role: [1]},
+    canActivate: [permissionGuard],
     loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent)
   },
   {

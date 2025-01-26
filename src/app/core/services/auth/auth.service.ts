@@ -60,4 +60,11 @@ export class AuthService {
   public getToken(): string | null {
     return sessionStorage.getItem('token');
   }
+
+  public getRole(): number {
+    const user = sessionStorage.getItem('user');
+    if (!user) return -1;
+
+    return JSON.parse(user).id_role;
+  }
 }

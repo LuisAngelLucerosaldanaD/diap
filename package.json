@@ -20,6 +20,7 @@
     "@angular/router": "^17.3.0",
     "@fluentui/web-components": "^2.6.1",
     "@microsoft/fast-element": "^2.0.1",
+    "@ngrx/store": "^17.2.0",
     "jsrsasign": "^11.1.0",
     "lodash-es": "^4.17.21",
     "ng-recaptcha": "^13.2.1",
