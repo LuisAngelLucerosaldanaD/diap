@@ -10,7 +10,7 @@
               <div
                 class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                 <div class="w-full md:w-1/2">
-                  <form class="flex items-center">
+                  <div class="flex items-center">
                     <label for="search" class="sr-only">Buscar</label>
                     <div class="relative w-full">
                       <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -20,14 +20,14 @@
                                 d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
                         </svg>
                       </div>
-                      <input type="text" id="search" placeholder="Buscar"
+                      <input type="text" id="search" placeholder="Buscar" [(ngModel)]="userFilter.name"
                              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2">
                     </div>
-                  </form>
+                  </div>
                 </div>
                 <div
                   class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                  <button type="button"
+                  <button type="button" (click)="createUser()"
                           class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none">
                     <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
                          xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -51,106 +51,111 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr class="border-b">
-                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                      Lui Angel Lucero Saldaña
-                    </th>
-                    <td class="px-4 py-3">luis.lucero&#64;unas.edu.pe</td>
-                    <td class="px-4 py-3">Admin</td>
-                    <td class="px-4 py-3 flex items-center justify-end">
-                      <button id="apple-imac-27-dropdown-button" data-dropdown-toggle="apple-imac-27-dropdown"
-                              class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none"
-                              type="button">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                             xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
-                        </svg>
-                      </button>
-                      <div id="apple-imac-27-dropdown"
-                           class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow">
-                        <ul class="py-1 text-sm text-gray-700" aria-labelledby="apple-imac-27-dropdown-button">
-                          <li>
-                            <a href="#"
-                               class="block py-2 px-4 hover:bg-gray-100">Show</a>
-                          </li>
-                          <li>
-                            <a href="#"
-                               class="block py-2 px-4 hover:bg-gray-100">Edit</a>
-                          </li>
-                        </ul>
-                        <div class="py-1">
-                          <a href="#"
-                             class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Delete</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
+                    @for (usr of users | filterBy: userFilter; track usr.id; let i = $index) {
+                      <tr class="border-b">
+                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                          {{ usr.name }}
+                        </th>
+                        <td class="px-4 py-3">{{ usr.email }}</td>
+                        <td class="px-4 py-3">{{ usr.role }}</td>
+                        <td class="px-4 py-3 flex items-center justify-end relative">
+                          <button id="apple-imac-27-dropdown-button" type="button"
+                                  (click)="user = usr;menu.toggle($event)"
+                                  class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
+                                 xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
+                            </svg>
+                          </button>
+                          <p-menu #menu [model]="items" [popup]="true" appendTo="body"/>
+                        </td>
+                      </tr>
+                    }
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
         </div>
-        <div class="mt-4">
-          <nav
-            class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
-            aria-label="Table navigation">
-                <span class="text-sm font-normal text-gray-500">
-                    Showing
-                    <span class="font-semibold text-gray-900">1-10</span>
-                    of
-                    <span class="font-semibold text-gray-900">1000</span>
-                </span>
-            <ul class="inline-flex items-stretch -space-x-px">
-              <li>
-                <a href="#"
-                   class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700  ">
-                  <span class="sr-only">Previous</span>
-                  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                       xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                          clip-rule="evenodd"/>
-                  </svg>
-                </a>
-              </li>
-              <li>
-                <a href="#"
-                   class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">1</a>
-              </li>
-              <li>
-                <a href="#"
-                   class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">2</a>
-              </li>
-              <li>
-                <a href="#" aria-current="page"
-                   class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700">3</a>
-              </li>
-              <li>
-                <a href="#"
-                   class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">...</a>
-              </li>
-              <li>
-                <a href="#"
-                   class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">100</a>
-              </li>
-              <li>
-                <a href="#"
-                   class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                  <span class="sr-only">Next</span>
-                  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                       xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                          clip-rule="evenodd"/>
-                  </svg>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
       </div>
     </div>
   </div>
 </main>
+
+<div *ngIf="openModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-1/2">
+    <div class="flex justify-between">
+      <h3 class="text-lg font-semibold mb-4">
+        {{type === 'create'? 'Crear' : 'Actualizar' }} Usuario
+      </h3>
+      <button class="text-gray  hover:text-red-400 rounded-full px-1 focus:outline-none" (click)="closeModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+             stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="userForm">
+      <div class="mb-4 bg-white">
+        <label for="name" class="block text-sm font-medium">Nombre <span class="text-red-600">*</span></label>
+        <input type="text" id="name" class="border p-2 w-full mb-2 bg-white rounded-md" formControlName="name">
+      </div>
+      <div class="mb-4">
+        <label for="email" class="block text-sm font-medium">Correo Electrónico <span
+          class="text-red-600 bg-white">*</span></label>
+        <input type="email" id="email" class="border p-2 w-full mb-2 bg-white rounded-md" formControlName="email">
+      </div>
+      @if (type === 'create') {
+        <div class="mb-4 bg-white">
+          <label for="password" class="block text-sm font-medium">Contraseña <span
+            class="text-red-600 bg-white">*</span></label>
+          <input type="password" id="password" class="border p-2 w-full mb-2 bg-white rounded-md"
+                 formControlName="password">
+        </div>
+      }
+
+      <div class="mb-4 bg-white">
+        <label for="role" class="block text-sm font-medium">Rol <span class="text-red-600 bg-white">*</span></label>
+        <select id="role" class="border p-2 w-full mb-2 bg-white rounded-md" formControlName="role">
+          <option selected disabled>Selecciona un Rol</option>
+          <option value="1">Dirección</option>
+          <option value="2">Soporte</option>
+        </select>
+      </div>
+    </form>
+
+    <div class="flex justify-end space-x-2">
+      <button class="bg-gray-500 text-white px-4 py-2  rounded-md" (click)="closeModal()">
+        Cancelar
+      </button>
+      <button class="bg-green-500 text-white px-4 py-2 rounded-md" (click)="saveUser()">
+        Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+<p-toast/>
+<p-confirmDialog key="users"/>
+<p-blockUI [blocked]="isLoading">
+  <div class="flex flex-col gap-2 items-center justify-center">
+    <div>
+      <img class="w-14 h-14 mb-3" alt="imagen logo"
+           src="https://portalweb.unas.edu.pe/sites/all/themes/business_responsive_theme/logo.png">
+    </div>
+    <div>
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</p-blockUI>

@@ -11,10 +11,9 @@ import {Router} from "@angular/router";
   providedIn: 'root'
 })
 export class AuthService {
-
+  private readonly _url: string = EnvServiceFactory().REST_API + '/api/v1/login';
   private _http: HttpClient = inject(HttpClient);
   private _router: Router = inject(Router);
-  private readonly _url: string = EnvServiceFactory().REST_API + '/api/v1/login';
   private _cipher: Cipher = new Cipher();
   private _jwtHelper: JwtHelper = new JwtHelper();
 
@@ -66,5 +65,12 @@ export class AuthService {
     if (!user) return -1;
 
     return JSON.parse(user).id_role;
+  }
+
+  public getUser(): string {
+    const user = sessionStorage.getItem('user');
+    if (!user) return '';
+
+    return JSON.parse(user).name;
   }
 }
