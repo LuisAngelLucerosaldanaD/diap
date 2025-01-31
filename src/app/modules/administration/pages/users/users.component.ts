@@ -1,10 +1,10 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {UsersService} from "../../../../core/services/users/users.service";
+import {UsersService} from "../../../../core/services/admin/users.service";
 import {Subscription} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
-import {ICreatUser, IUpdateUser, IUsers} from "../../../../core/models/users/users";
+import {ICreatUser, IUpdateUser, IUsers} from "../../../../core/models/admin/users";
 import {PaginatorModule} from "primeng/paginator";
 import {FilterPipeModule} from "ngx-filter-pipe";
 import {NgIf} from "@angular/common";
@@ -55,12 +55,12 @@ export class UsersComponent implements OnInit, OnDestroy {
       items: [
         {
           label: 'Editar',
-          icon: 'pi pi-refresh',
+          icon: 'pi pi-pen-to-square',
           command: () => this.updateUser(this.user)
         },
         {
           label: 'Eliminar',
-          icon: 'pi pi-upload',
+          icon: 'pi pi-trash',
           command: () => this.deleteUser()
         }
       ]

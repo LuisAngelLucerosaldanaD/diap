@@ -3,7 +3,7 @@ import {EnvServiceFactory} from "../env/env.service.provider";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IResponse} from "../../models/response";
-import {ICreatUser, IUpdateUser, IUsers} from "../../models/users/users";
+import {ICreatUser, IUpdateUser, IUsers} from "../../models/admin/users";
 
 @Injectable({
   providedIn: 'root'
