@@ -4,3 +4,9 @@ export interface IResponse<T = any> {
   msg: string;
   type: string;
 }
+
+
+export interface IResAddress<T = any> {
+  status: string;
+  data: T;
+}

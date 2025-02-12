@@ -1,0 +1,34 @@
+import {Directive, ElementRef, HostListener} from '@angular/core';
+
+@Directive({
+  selector: '[appNameInp]',
+  standalone: true
+})
+export class NameInpDirective {
+
+  private regex: RegExp = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]$/;
+
+  constructor(private el: ElementRef) {
+  }
+
+  @HostListener('keypress', ['$event'])
+  onKeyPress(event: KeyboardEvent) {
+    const current: string = event.key;
+    if (!this.regex.test(current)) {
+      event.preventDefault();
+    }
+  }
+
+  @HostListener('paste', ['$event'])
+  onPaste(event: ClipboardEvent) {
+    event.preventDefault();
+    const pastedInput: string = event.clipboardData?.getData('text/plain') || '';
+    const cleanedInput = pastedInput
+      .split('')
+      .filter(char => this.regex.test(char))
+      .join('');
+
+    document.execCommand('insertText', false, cleanedInput);
+  }
+
+}

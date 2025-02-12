@@ -2,12 +2,15 @@ import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {IMode, IRequirement} from "../../../../core/models/registration/registration";
 import {MODES} from "../../../../core/utils/constants/constants";
 import {FormsModule} from "@angular/forms";
+import {FormRegistrationComponent} from "../../../../core/ui/form-registration/form-registration.component";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-registration',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',

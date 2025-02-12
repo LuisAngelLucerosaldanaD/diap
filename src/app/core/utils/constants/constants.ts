@@ -1,4 +1,4 @@
-import {IMode} from "../../models/registration/registration";
+import {IMode, IOption} from "../../models/registration/registration";
 import {IMenuItem} from "../../models/ui/menu";
 
 export const MODES: IMode[] = [
@@ -714,14 +714,14 @@ export const HOME_MENU: IMenuItem[] = [
     icon: 'fa-graduation-cap'
   },
   {
-    name: 'INSCRIPCIÓN',
-    route: '/home/registration',
-    icon: 'fa-file-pen'
-  },
-  {
     name: 'MODALIDADES',
     route: '/home/modalities',
     icon: 'fa-shuffle'
+  },
+  {
+    name: 'INSCRIPCIÓN',
+    route: '/home/registration',
+    icon: 'fa-file-pen'
   }
 ];
 
@@ -740,5 +740,97 @@ export const AUTH_MENU: IMenuItem[] = [
     name: 'Postulaciones',
     route: '/admin/postulations',
     icon: 'fa-book'
+  }
+];
+
+export const ModalityOptions: IOption[] = [
+  {
+    name: 'Modalidad Convenios Especiales',
+    value: 2
+  },
+  {
+    name: 'Modalidad Deportistas Calificados',
+    value: 3
+  },
+  {
+    name: 'Modalidad Traslados Externos',
+    value: 4
+  },
+  {
+    name: 'Modalidad primer y segundo puesto de educación secundaria y egresados COAR',
+    value: 5
+  },
+  {
+    name: 'Modalidad Víctimas de Terrorismo',
+    value: 6
+  },
+  {
+    name: 'Modalidad Comunidades Nativas',
+    value: 7
+  },
+  {
+    name: 'Modalidad Arte y Cultura',
+    value: 8
+  },
+  {
+    name: 'Modalidad Beca18',
+    value: 9
+  }
+  ,
+  {
+    name: 'Modalidad Personas con Discapacidad',
+    value: 10
+  }
+  ,
+  {
+    name: 'Modalidad Traslados Internos',
+    value: 11
+  }
+];
+
+export const FacultiesOptions: IOption[] = [
+  {
+    name: 'Agronomia',
+    value: 'Agronomia'
+  },
+  {
+    name: 'Zootecnia',
+    value: 'Zootecnia'
+  },
+  {
+    name: 'Industrias Alimentarias',
+    value: 'Industrias Alimentarias'
+  },
+  {
+    name: 'Ingeniería Forestal',
+    value: 'Ingeniería Forestal'
+  },
+  {
+    name: 'Ingeniería en Conservación de Suelos y Agua',
+    value: 'Ingeniería en Conservación de Suelos y Agua'
+  },
+  {
+    name: 'Ingeniería en Recursos Naturales Renovables',
+    value: 'Ingeniería en Recursos Naturales Renovables'
+  },
+  {
+    name: 'Ingeniería ambiental',
+    value: 'Ingeniería ambiental'
+  },
+  {
+    name: 'Administración de Empresas',
+    value: 'Administración de Empresas'
+  },
+  {
+    name: 'Contabilidad',
+    value: 'Contabilidad'
+  },
+  {
+    name: 'Ingeniería en Informática y Sistemas',
+    value: 'Ingeniería en Informática y Sistemas'
+  },
+  {
+    name: 'Ingeniería en Mecánica Eléctrica',
+    value: 'Ingeniería en Mecánica Eléctrica'
   }
 ];

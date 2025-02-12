@@ -1,0 +1,7 @@
+.inp-dni {
+  @apply mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 bg-white;
+}
+
+.btn-dni {
+  @apply w-full bg-orange-500 text-white font-bold py-2 mt-4 px-4 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500;
+}

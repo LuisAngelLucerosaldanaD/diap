@@ -1,0 +1,382 @@
+<main class="flex-1 p-6 bg-gray-100 overflow-y-auto">
+  <div>
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <h1 class="text-3xl font-bold mb-6 text-center">FORMULARIO DE INSCRIPCIÓN</h1>
+      <button class="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700">Atras</button>
+      <div>
+        <div>
+          <h2 class="text-xl font-semibold mb-4">Datos Generales</h2>
+          <form [formGroup]="basicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+              <label for="nameApplicant" class="block font-medium">Nombres</label>
+              <input type="text" id="nameApplicant" placeholder="Ingrese su nombre" formControlName="names" appNameInp
+                     class="inp-form" title="El nombre no puede contener números ni caracteres especiales">
+            </div>
+
+            <div class="row-span-3 flex items-center justify-center border border-gray-300 rounded-md bg-gray-100 p-4">
+              @if (imgProfile) {
+                <div class="group h-full w-full relative cursor-pointer" (click)="inpImage.click()">
+                  <img [src]="imgProfile" alt="Foto de perfil">
+                  <div
+                    class="group-hover:flex hidden absolute inset-0  items-center justify-center bg-black bg-opacity-50">
+                    <button type="button" class="text-white">
+                      <i class="fa-solid fa-upload"></i> Subir Foto
+                    </button>
+                  </div>
+                </div>
+                <input type="file" accept="image/*" class="hidden" (change)="processProfile($event)" #inpImage>
+              } @else {
+                <div class="text-center">
+                  <label class="block font-medium mb-2">Foto del postulante</label>
+
+                  <input type="file" id="photoApplicant" accept="image/*" class="hidden"
+                         (change)="processProfile($event)">
+                  <label for="photoApplicant" class="cursor-pointer text-blue-500 hover:text-blue-700">
+                    <i class="fa-solid fa-upload"></i> Subir Foto
+                  </label>
+                </div>
+              }
+            </div>
+
+            <div class="md:col-span-2">
+              <label for="paternalSurnameApplicant" class="block font-medium">Apellido Paterno</label>
+              <input type="text" id="paternalSurnameApplicant" placeholder="Ingrese su apellido" class="inp-form"
+                     formControlName="father_lastname" appNameInp
+                     title="El apellido no puede contener números ni caracteres especiales">
+            </div>
+
+            <div class="md:col-span-2">
+              <label for="maternalSurnameApplicant" class="block font-medium">Apellido Materno</label>
+              <input type="text" id="maternalSurnameApplicant" placeholder="Ingrese su apellido" class="inp-form"
+                     formControlName="mother_lastname" appNameInp
+                     title="El apellido no puede contener números ni caracteres especiales">
+            </div>
+            <div>
+              <label for="phoneApplicant" class="block font-medium">Número de celular de contacto</label>
+              <input type="tel" id="phoneApplicant" placeholder="Ingrese número" maxlength="9" minlength="9"
+                     formControlName="phone" class="inp-form" appNumbersInp title="El número debe contener 9 dígitos">
+            </div>
+            <div>
+              <label for="sexApplicant" class="block font-medium">Sexo</label>
+              <select id="sexApplicant" name="sexApplicant" formControlName="sex" class="select-form">
+                <option value="null">Seleccione su sexo</option>
+                <option value="Hombre">Hombre</option>
+                <option value="Mujer">Mujer</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="dni" class="block font-medium">DNI</label>
+              <input type="text" id="dni" title="El DNI debe contener 8 dígitos numéricos" formControlName="dni"
+                     class="inp-form" appNumbersInp placeholder="Ingrese su número de DNI">
+            </div>
+            <div>
+              <label for="marital_statusApplicant" class="block font-medium">Estado civil</label>
+              <select id="marital_statusApplicant" name="marital_statusApplicant" formControlName="civil_status"
+                      class="select-form">
+                <option value="null">Seleccione su estado civil</option>
+                <option value="Soltero">Soltero</option>
+                <option value="Casado">Casado</option>
+                <option value="Viudo">Viudo</option>
+                <option value="Separado">Separado</option>
+                <option value="Divorciado">Divorciado</option>
+              </select>
+            </div>
+            <div>
+              <label for="email" class="block font-medium">Correo electronico</label>
+              <input type="text" id="email" placeholder="ejemplo@gmail.com" formControlName="email" class="inp-form">
+            </div>
+            <div>
+              <label for="phone_contact_school" class="block font-medium">
+                Número de celular de contacto del colegio
+              </label>
+              <input type="tel" id="phone_contact_school" placeholder="Ingrese número" formControlName="phone_school"
+                     title="El número debe contener hasta 9 dígitos" class="inp-form" appNumbersInp>
+            </div>
+            <div>
+              <label for="mother_tongue" class="block font-medium">Lengua materna</label>
+              <input type="text" id="mother_tongue" placeholder="Ingrese su lengua materna" class="inp-form"
+                     formControlName="mother_language"
+                     title="La lengua materne no puede contener números ni caracteres especiales">
+            </div>
+
+            <div class="relative">
+              <label for="fecha_nacimiento" class="block font-medium">Fecha de Nacimiento</label>
+              <div class="relative">
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" formControlName="birthdate"
+                       class="select-form">
+              </div>
+            </div>
+            <div>
+              <label for="birth_departmentApplicant" class="block font-medium">Región de Nacimiento</label>
+              <select id="birth_departmentApplicant" name="birth_departmentApplicant" formControlName="region"
+                      (change)="getProvinces($event.target)"
+                      class=" select-form">
+                <option selected disabled>Seleccione una opción</option>
+                @for (region of regions; track region.idRegion) {
+                  <option [value]="region.idRegion">{{ region.nombreRegion }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label for="birth_provinceApplicant" class="block font-medium">Provincia de Nacimiento</label>
+              <select id="birth_provinceApplicant" name="birth_provinceApplicant" (change)="getDistricts($event.target)"
+                      class="select-form" formControlName="province">
+                <option selected disabled>Seleccione una opción</option>
+                @for (province of provinces; track province.idProvincia) {
+                  <option [value]="province.idProvincia">{{ province.nombreProvincia }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label for="birth_districtApplicant" class="block font-medium">Distrito de Nacimiento</label>
+              <select id="birth_districtApplicant" name="birth_districtApplicant" formControlName="district"
+                      class="select-form">
+                <option selected disabled>Seleccione una opción</option>
+                @for (district of districts; track district.idDistrito) {
+                  <option [value]="district.idDistrito">{{ district.nombreDistrito }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label for="address" class="block font-medium">Dirección</label>
+              <input type="text" id="address" placeholder="Ingrese su dirección" formControlName="address"
+                     class="inp-form" title="No puede contener números ni caracteres especiales">
+            </div>
+
+          </form>
+
+          <h2 class="text-xl font-semibold my-4">Datos de la institución educativa</h2>
+          <form [formGroup]="schoolForm">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+              <div>
+                <label for="school_departmentApplicant" class="block font-medium">Región</label>
+                <select id="school_departmentApplicant" name="school_departmentApplicant" formControlName="region"
+                        (change)="getProvinces($event.target)" class="select-form">
+                  <option selected disabled>Seleccione una opción</option>
+                  @for (region of regions; track region.idRegion) {
+                    <option [value]="region.idRegion">{{ region.nombreRegion }}</option>
+                  }
+                </select>
+              </div>
+              <div>
+                <label for="school_provinceApplicant" class="block font-medium">Provincia</label>
+                <select id="school_provinceApplicant" name="school_provinceApplicant" formControlName="province"
+                        (change)="getDistricts($event.target)" class="select-form">
+                  <option selected disabled>Seleccione una opción</option>
+                  @for (province of schoolProvinces; track province.idProvincia) {
+                    <option [value]="province.idProvincia">{{ province.nombreProvincia }}</option>
+                  }
+                </select>
+              </div>
+              <div>
+                <label for="school_districtApplicant" class="block font-medium">Distrito</label>
+                <select id="school_districtApplicant" name="school_districtApplicant"
+                        (change)="getSchools($event.target)" class="select-form" formControlName="district">
+                  <option selected disabled>Seleccione una opción</option>
+                  @for (district of schoolDistricts; track district.idDistrito) {
+                    <option [value]="district.idDistrito">{{ district.nombreDistrito }}</option>
+                  }
+                </select>
+              </div>
+
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <div>
+                <label for="code_schoolApplicant" class="block font-medium">Nombre</label>
+                <select id="code_schoolApplicant" name="code_schoolApplicant" class="select-form"
+                        formControlName="name">
+                  <option selected disabled>Seleccione una opción</option>
+                  @for (school of schools; track school.codMod) {
+                    <option [value]="school.codMod">{{ school.nombreCenEdu }}</option>
+                  }
+                </select>
+              </div>
+              <div>
+                <label for="type_schoolApplicant" class="block font-medium">Tipo de colegio</label>
+                <select id="type_schoolApplicant" name="type_schoolApplicant" class="select-form"
+                        formControlName="type" (change)="changeSchool()">
+                  <option selected disabled>Seleccione una opción</option>
+                  <option value="Colegio Estatal">Colegio Estatal</option>
+                  <option value="Colegio Privado">Colegio Privado</option>
+                </select>
+              </div>
+              <div>
+                <label for="level_educationApplicant" class="block font-medium">Nivel de educación</label>
+                <select id="level_educationApplicant" name="level_educationApplicant" class="select-form"
+                        formControlName="education_level">
+                  <option selected disabled>Seleccione una opción</option>
+                  <option value="No Concluyo Secundaria">No Concluyó Secundaria</option>
+                  <option value="Secundaria Concluida">Secundaria Concluida</option>
+                  <option value="5 Quinto Año">5 Quinto Año</option>
+                  <option value="4 Cuarto Año">4 Cuarto Año</option>
+                  <option value="3 Tercer Año">3 Tercer Año</option>
+                  <option value="2 Segundo Año">2 Segundo Año</option>
+                  <option value="1 Primer Año">1 Primer Año</option>
+                </select>
+              </div>
+            </div>
+          </form>
+
+          <h2 class="text-xl font-semibold my-4">Datos de carreras a postular</h2>
+
+          <form [formGroup]="academicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <div>
+              <label for="firstOptionApplicant" class="block font-medium">Primera Opción</label>
+              <select id="firstOptionApplicant" name="firstOptionApplicant" class="select-form"
+                      formControlName="first_option">
+                <option selected disabled>Seleccione una opción</option>
+                @for (faculty of faculties; track faculty.value) {
+                  <option [value]="faculty.value">{{ faculty.name }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label for="secondOptionApplicant" class="block font-medium">Segunda Opción</label>
+              <select id="secondOptionApplicant" name="secondOptionApplicant" formControlName="second_option"
+                      class="select-form">
+                <option selected disabled>Seleccione una opción</option>
+                @for (faculty of faculties; track faculty.value) {
+                  <option [value]="faculty.value">{{ faculty.name }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label for="modalityApplicant" class="block font-medium">Modalidad</label>
+              <select id="modalityApplicant" name="modalityApplicant" formControlName="modality" class="select-form"
+                      (change)="changeModality()">
+                <option selected disabled>Seleccione una opción</option>
+                @for (modality of modalities; track modality.value) {
+                  <option [value]="modality.value">{{ modality.name }}</option>
+                }
+              </select>
+            </div>
+          </form>
+          @if (cost) {
+            <div class="w-full border-2 border-dashed border-red-300 mt-4 p-4 rounded-md text-center bg-white">
+              <h2 class="text-xl  font-semibold my-4">{{ cost.name }}</h2>
+              <h2 class="text-xl font-semibold my-4">{{ cost.description }}</h2>
+              <h2 class="text-xl font-semibold my-4">Costo de pago: S/. {{ cost.price }}
+              </h2>
+              <h2 class="text-xl font-semibold my-4">Plataforma de pagos:
+                <a href="https://pagos.unas.edu.pe/" target="_blank">https://pagos.unas.edu.pe/</a>
+              </h2>
+            </div>
+          }
+        </div>
+
+        @if (filesRequired.length) {
+          <h2 class="text-xl font-semibold my-4">
+            Archivos Adjuntos
+            <div class="space-y-6">
+              @for (file of filesRequired; track file.id) {
+                <div>
+                  <label class="block font-medium">
+                    {{ file.name }}
+                  </label>
+                  <div class="w-full border-2 border-dashed border-gray-300 p-4 rounded-md text-center bg-white">
+                    <input type="file" [id]="file.id" accept="image/*,application/pdf" class="hidden"
+                           (change)="processFiles($event, file.id)">
+                    <label [for]="file.id" class="cursor-pointer">
+                      <i class="fas fa-upload text-3xl text-gray-400"></i>
+                      <p class="mt-2 text-gray-500">Subir Archivo</p>
+                      <p *ngIf="file.file_name" class="mt-2 text-gray-500">{{ file.file_name }}</p>
+                    </label>
+                  </div>
+                </div>
+              }
+            </div>
+          </h2>
+        }
+
+        <h2 class="text-xl font-semibold my-4">Encuesta de postulación</h2>
+
+        <form [formGroup]="surveyForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input class="hidden" type="hidden" name="application_headquarters" value="Tingo Maria">
+          <div>
+            <label for="type_preparation" class="block font-medium">Tipo de preparación para su postulación</label>
+            <select id="type_preparation" name="type_preparation" class="select-form"
+                    formControlName="type_preparation">
+              <option selected disabled>Seleccione una opción</option>
+              <option value="Academia">Academia</option>
+              <option value="Auto-preparacion">Auto-preparación</option>
+            </select>
+          </div>
+          <div>
+            <label for="how_know" class="block font-medium">
+              ¿Cómo se enteró de la fecha de nuestro concurso de admisión?
+            </label>
+            <select id="how_know" name="how_know" class="select-form" formControlName="how_know">
+              <option selected disabled>Seleccione una opción</option>
+              <option value="Amigos">Amigos</option>
+              <option value="Redes_Sociales">Redes Sociales</option>
+            </select>
+          </div>
+          <div>
+            <label for="motivation" class="block font-medium">
+              ¿Cuál fue el principal motivo por el que se animó a postular a la UNAS?
+            </label>
+            <select id="motivation" name="motivation" class="select-form" formControlName="motivation">
+              <option selected disabled>Seleccione una opción</option>
+              <option value="Vocacion">Vocación</option>
+              <option value="Proyeccion_Laboral">Proyección Laboral</option>
+            </select>
+          </div>
+          <div>
+            <label for="do_work" class="block font-medium">¿Trabaja?</label>
+            <select id="do_work" name="do_work" class="select-form" formControlName="do_work">
+              <option selected disabled>Seleccione una opción</option>
+              <option value="Si">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div>
+            <label for="economic_dependent" class="block font-medium">Dependencia Económica</label>
+            <select id="economic_dependent" name="economic_dependent" class="select-form"
+                    formControlName="economic_dependent">
+              <option selected disabled>Seleccione una opción</option>
+              <option value="Padres">Padres</option>
+              <option value="Propio">Propio</option>
+            </select>
+          </div>
+          <div>
+            <label for="lives_parents" class="block font-medium">¿Viven tus padres?</label>
+            <select id="lives_parents" name="lives_parents" class="select-form" formControlName="lives_parents">
+              <option selected disabled>Seleccione una opción</option>
+              <option value="Si">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div>
+            <label for="siblings" class="block font-medium">¿Cuántos hermanos son?</label>
+            <input type="number" id="siblings" name="siblings" class="select-form" min="0" formControlName="siblings"
+                   placeholder="Ingrese la cantidad de hermanos" appNumbersInp>
+          </div>
+          <div>
+            <label for="lives_currently" class="block font-medium">¿Con quién vives actualmente?</label>
+            <select id="lives_currently" name="lives_currently" class="select-form" formControlName="lives_currently">
+              <option selected disabled>Seleccione una opción</option>
+              <option value="Padres">Padres</option>
+              <option value="Otros">Otros</option>
+            </select>
+          </div>
+          <div>
+            <label for="survey-address" class="block font-medium">Lugar donde vives</label>
+            <input type="text" id="survey-address" class="inp-form" formControlName="address"
+                   placeholder="Departamento / Provincia / Distrito">
+          </div>
+        </form>
+      </div>
+
+      <div>
+        <div class="flex justify-center">
+          <button type="submit" class="btn-save" (click)="save()">
+            <span>Registrar Postulación</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<p-toast/>
+<app-block-ui [show]="isLoading"/>

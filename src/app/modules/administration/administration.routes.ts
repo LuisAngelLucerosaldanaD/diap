@@ -14,7 +14,15 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'exams',
+    data: {role: [1]},
+    canActivate: [permissionGuard],
     loadComponent: () => import('./pages/exams/exams.component').then(m => m.ExamsComponent)
+  },
+  {
+    path: 'statistics/:id',
+    data: {role: [1]},
+    canActivate: [permissionGuard],
+    loadComponent: () => import('./pages/statistics/statistics.component').then(m => m.StatisticsComponent)
   },
   {
     path: '**',

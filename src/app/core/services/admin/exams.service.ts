@@ -10,6 +10,7 @@ import {ICreateExam, IExam, IUpdateExam} from "../../models/admin/exams";
 })
 export class ExamsService {
   private readonly _url: string = EnvServiceFactory().REST_API + '/api/v1/examcalls';
+  private readonly _urlStatistics: string = EnvServiceFactory().REST_API + '/api/v1/statistics';
   private _http: HttpClient = inject(HttpClient);
 
   public getExams(): Observable<IResponse<IExam[]>> {
@@ -26,5 +27,29 @@ export class ExamsService {
 
   public deleteExam(id: number): Observable<IResponse> {
     return this._http.delete<IResponse>(`${this._url}/${id}`);
+  }
+
+  public getExam(id: number): Observable<IResponse<IExam>> {
+    return this._http.get<IResponse<IExam>>(`${this._url}/${id}`);
+  }
+
+  public getStatisticsFirstOption(exam: number): Observable<IResponse> {
+    return this._http.get<IResponse>(`${this._urlStatistics}/first-option/${exam}`);
+  }
+
+  public getStatisticsSecondOption(exam: number): Observable<IResponse> {
+    return this._http.get<IResponse>(`${this._urlStatistics}/second-option/${exam}`);
+  }
+
+  public getStatisticsSex(exam: number): Observable<IResponse> {
+    return this._http.get<IResponse>(`${this._urlStatistics}/sex/${exam}`);
+  }
+
+  public getStatisticsModality(exam: number): Observable<IResponse> {
+    return this._http.get<IResponse>(`${this._urlStatistics}/modality/${exam}`);
+  }
+
+  public getCurrentExam(): Observable<IResponse<IExam>> {
+    return this._http.get<IResponse<IExam>>(`${this._url}/current`);
   }
 }

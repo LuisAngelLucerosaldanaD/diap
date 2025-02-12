@@ -1,0 +1,11 @@
+.inp-form {
+  @apply w-full p-2 border border-gray-300 rounded-md placeholder-gray-500 bg-white text-black;
+}
+
+.select-form {
+  @apply w-full p-2 border border-gray-300 rounded-md bg-white text-black;
+}
+
+.btn-save {
+  @apply px-6 py-3 mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700;
+}

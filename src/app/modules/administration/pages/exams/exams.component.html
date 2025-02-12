@@ -88,7 +88,7 @@
   <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl h-auto max-h-[90vh] overflow-y-auto">
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-lg font-semibold">
-        {{typeEvent === 'create'? 'Crear': 'Actualizar'}}Crear Convocatoria
+        {{ typeEvent === 'create' ? 'Crear' : 'Actualizar' }} Convocatoria
       </h3>
       <button class="text-gray hover:text-red-400 rounded-full px-1 focus:outline-none" (click)="cancelModal()">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -150,25 +150,6 @@
   </div>
 </div>
 
-<p-blockUI [blocked]="isLoading">
-  <div class="flex flex-col gap-2 items-center justify-center">
-    <div>
-      <img class="w-14 h-14 mb-3" alt="imagen logo"
-           src="https://portalweb.unas.edu.pe/sites/all/themes/business_responsive_theme/logo.png">
-    </div>
-    <div>
-      <div class="lds-roller">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-  </div>
-</p-blockUI>
+<app-block-ui [show]="isLoading"/>
 <p-toast/>
 <p-confirmDialog key="exams"/>

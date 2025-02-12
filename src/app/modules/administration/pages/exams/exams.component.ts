@@ -11,6 +11,8 @@ import {BlockUIModule} from "primeng/blockui";
 import {NgIf} from "@angular/common";
 import {ToastModule} from "primeng/toast";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {Router} from "@angular/router";
+import {BlockUiComponent} from "../../../../core/ui/block-ui/block-ui.component";
 
 @Component({
   selector: 'app-exams',
@@ -23,17 +25,19 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
     FormsModule,
     NgIf,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    BlockUiComponent
   ],
   templateUrl: './exams.component.html',
   styleUrl: './exams.component.scss',
   providers: [MessageService, ConfirmationService]
 })
 export class ExamsComponent implements OnInit, OnDestroy {
-  private _subscriptions: Subscription = new Subscription();
+  private readonly _subscriptions: Subscription = new Subscription();
   private readonly _examsService: ExamsService = inject(ExamsService);
   private readonly _messageService: MessageService = inject(MessageService);
   private readonly _confirmService: ConfirmationService = inject(ConfirmationService);
+  private readonly _route: Router = inject(Router);
   protected items = [
     {
       label: 'Acciones',
@@ -51,6 +55,7 @@ export class ExamsComponent implements OnInit, OnDestroy {
         {
           label: 'Datos Estadísticos',
           icon: 'pi pi-chart-bar',
+          command: () => this._route.navigate(['/admin/statistics', this.exam.id])
         }
       ]
     }
