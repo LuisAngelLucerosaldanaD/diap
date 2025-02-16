@@ -1,33 +1,157 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
-import {IMode, IRequirement} from "../../../../core/models/registration/registration";
-import {MODES} from "../../../../core/utils/constants/constants";
+import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnDestroy} from '@angular/core';
+import {IRequirement} from "../../../../core/models/registration/registration";
 import {FormsModule} from "@angular/forms";
-import {FormRegistrationComponent} from "../../../../core/ui/form-registration/form-registration.component";
 import {RouterLink} from "@angular/router";
+import {HttpErrorResponse} from "@angular/common/http";
+import {ExamsService} from "../../../../core/services/admin/exams.service";
+import {IExam} from "../../../../core/models/admin/exams";
+import {Subscription} from "rxjs";
+import {MessageService} from "primeng/api";
+import {BlockUiComponent} from "../../../../core/ui/block-ui/block-ui.component";
+import {ToastModule} from "primeng/toast";
+import {ModalitiesService} from "../../../../core/services/home/modalities.service";
+import {IModality} from "../../../../core/models/admin/postulation";
 
 @Component({
   selector: 'app-registration',
   standalone: true,
   imports: [
     FormsModule,
-    RouterLink
+    RouterLink,
+    BlockUiComponent,
+    ToastModule
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [MessageService]
 })
-export class RegistrationComponent {
-  protected modes: IMode[] = MODES;
-  protected selectedMode: string = '2';
+export class RegistrationComponent implements OnDestroy {
+  private readonly _subscriptions: Subscription = new Subscription();
+  private readonly _examsService: ExamsService = inject(ExamsService);
+  private readonly _toastService: MessageService = inject(MessageService);
+  private readonly _modalitiesService: ModalitiesService = inject(ModalitiesService);
+  protected exam!: IExam;
+
+  protected modalities: IModality[] = [];
+  protected selectedMode: number = -1;
   protected requirement: IRequirement[] = [];
+  protected isLoading: boolean = false;
 
   constructor() {
-    const mode = this.modes.find((mode) => mode.value === this.selectedMode);
-    this.requirement = mode?.requirements || [];
+    this._getCurrentExam();
   }
 
-  protected selectMode(event: any): void {
-    const mode = this.modes.find((mode) => mode.value === event.target.value);
-    this.requirement = mode?.requirements || [];
+  ngOnDestroy() {
+    this._subscriptions.unsubscribe();
+    this.isLoading = false;
+    this.modalities = [];
+    this.selectedMode = -1;
+    this.requirement = [];
+  }
+
+  protected selectMode(): void {
+    this._getModalities();
+  }
+
+  private _getCurrentExam(): void {
+    this.isLoading = true;
+    this._subscriptions.add(
+      this._examsService.getCurrentExam().subscribe({
+        next: (res) => {
+          if (res.error) {
+            this._toastService.add({
+              severity: 'error',
+              summary: 'Módulo de Registro',
+              detail: 'No se pudo obtener el examen actual'
+            });
+            return;
+          }
+          this.exam = res.data;
+          this._getModalities();
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error(err);
+          this.isLoading = false;
+          if (err.status === 404) {
+            this._toastService.add({
+              severity: 'warn',
+              summary: 'Módulo de Registro',
+              detail: err.error.msg
+            });
+            return;
+          }
+          this._toastService.add({
+            severity: 'error',
+            summary: 'Módulo de Registro',
+            detail: 'No se pudo obtener el examen actual, error: ' + err.message
+          });
+        },
+        complete: () => this.isLoading = false
+      })
+    );
+  }
+
+  private _getModalities(): void {
+    this.isLoading = true;
+    this._subscriptions.add(
+      this._modalitiesService.getModalities(this.exam.id_examtype).subscribe({
+        next: (res) => {
+          if (res.error) {
+            this._toastService.add({
+              severity: 'error',
+              summary: 'Módulo de Registro',
+              detail: 'No se pudo obtener las modalidades'
+            });
+            return;
+          }
+
+          this.modalities = res.data;
+          this.selectedMode = this.selectedMode !== -1 ? this.selectedMode : this.modalities[0].id;
+          this._getFileRequired();
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error(err);
+          this._toastService.add({
+            severity: 'error',
+            summary: 'Módulo de Registro',
+            detail: 'No se pudo obtener las modalidades, error: ' + err.message
+          });
+          this.isLoading = false;
+        },
+        complete: () => this.isLoading = false
+      })
+    );
+  }
+
+  private _getFileRequired(): void {
+    this.isLoading = true;
+    const id = this.selectedMode;
+    this._subscriptions.add(
+      this._modalitiesService.getRequirementsByModality(id).subscribe({
+        next: (res) => {
+          if (res.error) {
+            this._toastService.add({
+              severity: 'error',
+              summary: 'Módulo de Registro',
+              detail: 'No se pudo obtener los archivos requeridos'
+            });
+            return;
+          }
+
+          this.requirement = res.data;
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error(err);
+          this._toastService.add({
+            severity: 'error',
+            summary: 'Módulo de Registro',
+            detail: 'No se pudo obtener los archivos requeridos, error: ' + err.message
+          });
+          this.isLoading = false;
+        },
+        complete: () => this.isLoading = false
+      })
+    );
   }
 }

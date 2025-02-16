@@ -7,8 +7,8 @@ export interface IMode {
 export interface IRequirement {
   id: string;
   name: string;
-  description: string;
-  guide: string | null;
+  description_guide: string;
+  url_guide: string | null;
   url_template: string | null;
   id_modality: number;
   file?: string;
@@ -22,6 +22,7 @@ export interface IRequirement {
 export interface IOption {
   name: string;
   value: any;
+  type: 1 | 2;
 }
 
 export interface IPaymentDTO {
@@ -114,4 +115,13 @@ export interface IDocumentDTO {
   name: string;
   document_url: string;
   id_application: string;
+}
+
+export interface IAnnexe {
+  id: number;
+  name: string;
+  document_url: string;
+  id_application: number;
+  created_at: string;
+  updated_at: string;
 }

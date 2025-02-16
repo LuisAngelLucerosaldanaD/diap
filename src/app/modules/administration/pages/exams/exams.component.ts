@@ -233,7 +233,16 @@ export class ExamsComponent implements OnInit, OnDestroy {
   protected updateExam(): void {
     this.typeEvent = 'update';
     this.openModal = true;
-    this.examForm.patchValue(this.exam);
+    this.examForm.patchValue({
+      id: this.exam.id,
+      name: this.exam.name,
+      description: this.exam.description,
+      contact: this.exam.contact,
+      start_date: this.exam.start_date,
+      end_date: this.exam.end_date,
+      exam_date: this.exam.exam_date,
+      type: this.exam.id_examtype,
+    });
   }
 
   protected createExam(): void {

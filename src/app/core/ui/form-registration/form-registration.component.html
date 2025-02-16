@@ -2,7 +2,10 @@
   <div>
     <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 class="text-3xl font-bold mb-6 text-center">FORMULARIO DE INSCRIPCIÓN</h1>
-      <button class="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700">Atras</button>
+      <button *ngIf="mode === 'create' && module === 'regis'" routerLink="/home/registration"
+              class="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+        Atras
+      </button>
       <div>
         <div>
           <h2 class="text-xl font-semibold mb-4">Datos Generales</h2>
@@ -15,14 +18,21 @@
 
             <div class="row-span-3 flex items-center justify-center border border-gray-300 rounded-md bg-gray-100 p-4">
               @if (imgProfile) {
-                <div class="group h-full w-full relative cursor-pointer" (click)="inpImage.click()">
-                  <img [src]="imgProfile" alt="Foto de perfil">
-                  <div
-                    class="group-hover:flex hidden absolute inset-0  items-center justify-center bg-black bg-opacity-50">
-                    <button type="button" class="text-white">
-                      <i class="fa-solid fa-upload"></i> Subir Foto
-                    </button>
-                  </div>
+                <div class="group h-full w-full relative cursor-pointer max-w-60">
+                  @if (this.mode === 'show' || this.mode === 'update') {
+                    <img [src]="imgProfile | secureImage | async" alt="Foto de perfil" class="pointer-events-none">
+                  } @else {
+                    <img [src]="imgProfile" alt="Foto de perfil">
+                  }
+
+                  @if (this.mode === 'update') {
+                    <div (click)="inpImage.click()"
+                         class="group-hover:flex hidden absolute inset-0  items-center justify-center bg-black bg-opacity-50">
+                      <button type="button" class="text-white">
+                        <i class="fa-solid fa-upload"></i> Subir Foto
+                      </button>
+                    </div>
+                  }
                 </div>
                 <input type="file" accept="image/*" class="hidden" (change)="processProfile($event)" #inpImage>
               } @else {
@@ -59,7 +69,7 @@
             <div>
               <label for="sexApplicant" class="block font-medium">Sexo</label>
               <select id="sexApplicant" name="sexApplicant" formControlName="sex" class="select-form">
-                <option value="null">Seleccione su sexo</option>
+                <option selected disabled>Seleccione su sexo</option>
                 <option value="Hombre">Hombre</option>
                 <option value="Mujer">Mujer</option>
               </select>
@@ -74,7 +84,7 @@
               <label for="marital_statusApplicant" class="block font-medium">Estado civil</label>
               <select id="marital_statusApplicant" name="marital_statusApplicant" formControlName="civil_status"
                       class="select-form">
-                <option value="null">Seleccione su estado civil</option>
+                <option selected disabled>Seleccione su estado civil</option>
                 <option value="Soltero">Soltero</option>
                 <option value="Casado">Casado</option>
                 <option value="Viudo">Viudo</option>
@@ -224,7 +234,7 @@
             <div>
               <label for="firstOptionApplicant" class="block font-medium">Primera Opción</label>
               <select id="firstOptionApplicant" name="firstOptionApplicant" class="select-form"
-                      formControlName="first_option">
+                      formControlName="first_option" (change)="changeFaculty()">
                 <option selected disabled>Seleccione una opción</option>
                 @for (faculty of faculties; track faculty.value) {
                   <option [value]="faculty.value">{{ faculty.name }}</option>
@@ -235,8 +245,8 @@
               <label for="secondOptionApplicant" class="block font-medium">Segunda Opción</label>
               <select id="secondOptionApplicant" name="secondOptionApplicant" formControlName="second_option"
                       class="select-form">
-                <option selected disabled>Seleccione una opción</option>
-                @for (faculty of faculties; track faculty.value) {
+                <option selected disabled value="">Seleccione una opción</option>
+                @for (faculty of facultiesSecond; track faculty.value) {
                   <option [value]="faculty.value">{{ faculty.name }}</option>
                 }
               </select>
@@ -246,8 +256,8 @@
               <select id="modalityApplicant" name="modalityApplicant" formControlName="modality" class="select-form"
                       (change)="changeModality()">
                 <option selected disabled>Seleccione una opción</option>
-                @for (modality of modalities; track modality.value) {
-                  <option [value]="modality.value">{{ modality.name }}</option>
+                @for (modality of modalities; track modality.id) {
+                  <option [value]="modality.id">{{ modality.name }}</option>
                 }
               </select>
             </div>
@@ -265,25 +275,40 @@
           }
         </div>
 
-        @if (filesRequired.length) {
+        @if (filesRequired.length || annexes.length) {
           <h2 class="text-xl font-semibold my-4">
             Archivos Adjuntos
             <div class="space-y-6">
-              @for (file of filesRequired; track file.id) {
-                <div>
-                  <label class="block font-medium">
-                    {{ file.name }}
-                  </label>
-                  <div class="w-full border-2 border-dashed border-gray-300 p-4 rounded-md text-center bg-white">
-                    <input type="file" [id]="file.id" accept="image/*,application/pdf" class="hidden"
-                           (change)="processFiles($event, file.id)">
-                    <label [for]="file.id" class="cursor-pointer">
-                      <i class="fas fa-upload text-3xl text-gray-400"></i>
-                      <p class="mt-2 text-gray-500">Subir Archivo</p>
-                      <p *ngIf="file.file_name" class="mt-2 text-gray-500">{{ file.file_name }}</p>
-                    </label>
+              @if (mode === 'show') {
+                @for (annexe of annexes; track annexe.id) {
+                  <div>
+                    <label class="block font-medium">{{ annexe.name }}</label>
+                    <iframe [src]="annexe.document_url | secureImage | async | safe"
+                            class="w-full h-64 border border-gray-300 rounded-md"
+                            [title]="annexe.name"></iframe>
                   </div>
-                </div>
+                }
+              } @else {
+                @for (file of filesRequired; track file.id) {
+                  <div>
+                    <label class="block font-medium">{{ file.name }}</label>
+                    @if (mode === 'update') {
+                      <a [href]="file.url ||'' | secureImage | async" [download]="file.file_name"
+                         class="text-blue-500 underline hover:text-blue-700 text-sm">
+                        {{ file.file_name }}
+                      </a>
+                    }
+                    <div class="w-full border-2 border-dashed border-gray-300 p-4 rounded-md text-center bg-white">
+                      <input type="file" [id]="file.id" accept="image/*,application/pdf" class="hidden"
+                             (change)="processFiles($event, file.id)">
+                      <label [for]="file.id" class="cursor-pointer">
+                        <i class="fas fa-upload text-3xl text-gray-400"></i>
+                        <p class="mt-2 text-gray-500">Subir Archivo</p>
+                        <p *ngIf="file.file_name" class="mt-2 text-gray-500">{{ file.file_name }}</p>
+                      </label>
+                    </div>
+                  </div>
+                }
               }
             </div>
           </h2>
@@ -368,10 +393,10 @@
         </form>
       </div>
 
-      <div>
+      <div *ngIf="mode !== 'show'">
         <div class="flex justify-center">
           <button type="submit" class="btn-save" (click)="save()">
-            <span>Registrar Postulación</span>
+            <span>{{ mode === 'create' ? 'Registrar' : 'Actualizar' }} Postulación</span>
           </button>
         </div>
       </div>

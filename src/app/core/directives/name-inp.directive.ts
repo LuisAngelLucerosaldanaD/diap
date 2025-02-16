@@ -1,4 +1,4 @@
-import {Directive, ElementRef, HostListener} from '@angular/core';
+import {Directive, HostListener} from '@angular/core';
 
 @Directive({
   selector: '[appNameInp]',
@@ -7,9 +7,6 @@ import {Directive, ElementRef, HostListener} from '@angular/core';
 export class NameInpDirective {
 
   private regex: RegExp = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]$/;
-
-  constructor(private el: ElementRef) {
-  }
 
   @HostListener('keypress', ['$event'])
   onKeyPress(event: KeyboardEvent) {

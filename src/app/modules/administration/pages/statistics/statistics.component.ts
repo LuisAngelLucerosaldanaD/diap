@@ -34,32 +34,6 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._getStatistics();
-
-    const genderChart = new Chart("ctx-gender", {
-      type: 'pie',
-      data: {
-        labels: ['Femenino', 'Masculino'],
-        datasets: [{
-          data: [12, 19],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        plugins: {
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }
-    });
   }
 
   ngOnDestroy() {
@@ -77,11 +51,10 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         this._examService.getExam(this.id)
       ]).subscribe({
         next: ([first, second, sex, modality, exam]) => {
-          console.log(first);
-          console.log(second);
-          console.log(sex);
-          console.log(modality);
           this.processModality(modality);
+          this.processFirstOption(first);
+          this.processSecondOption(second);
+          this.processSex(sex);
 
           if (!exam.error) {
             this.exam = exam.data;
@@ -128,6 +101,109 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         scales: {
           y: {
             beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
+  private processFirstOption(res: IResponse): void {
+    const data = res.data;
+    new Chart("first", {
+      type: 'bar',
+      data: {
+        labels: Object.keys(data).map((key) => key.replace('Ingeniería', 'Ing. ')),
+        datasets: [{
+          label: 'Cantidad de Estudiantes por Primera Opción',
+          data: Object.values(data),
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
+  private processSecondOption(res: IResponse): void {
+    const data = res.data;
+    new Chart("second", {
+      type: 'bar',
+      data: {
+        labels: Object.keys(data).map((key) => key.replace('Ingeniería', 'Ing. ')),
+        datasets: [{
+          label: 'Cantidad de Estudiantes por Segunda Opción',
+          data: Object.values(data),
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
+  private processSex(res: IResponse): void {
+    const data = res.data;
+    const genderChart = new Chart("ctx-gender", {
+      type: 'pie',
+      data: {
+        labels: ['Femenino', 'Masculino'],
+        datasets: [{
+          data: [data.Mujer, data.Hombre],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'bottom'
           }
         }
       }

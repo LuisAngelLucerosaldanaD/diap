@@ -41,3 +41,16 @@ export interface IApplicant {
   created_at: string;
   updated_at: string;
 }
+
+export interface IModality {
+  created_at: string;
+  description: string;
+  id: number;
+  id_examtype: number;
+  name: string;
+  private_school_code_pay: number;
+  private_school_price: number;
+  state_school_code_pay: number;
+  state_school_price: number;
+  updated_at: string;
+}

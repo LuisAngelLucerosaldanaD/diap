@@ -1,6 +1,6 @@
 <div class="font-sans text-gray-900 antialiased">
   <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-    <div class="flex card card-side bg-base-100 shadow-xl">
+    <div class="flex shadow-xl card">
       <div class="card-body p-4">
         <div class="w-full flex justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 mb-3" viewBox="0 0 102 102" fill="none">
@@ -119,8 +119,7 @@
         </div>
 
         <div>
-          <form [formGroup]="loginForm" method="POST" action="https://admision.unas.edu.pe/login">
-            <input type="hidden" name="_token" value="jUElwtaUvLk47J4FlFvngPCZax2DLOFVdBM0NRIm">
+          <form [formGroup]="loginForm">
             <div>
               <label class="block font-medium text-sm text-gray-700">Correo</label>
 
@@ -163,31 +162,14 @@
         </div>
 
       </div>
-      <figure>
-        <img src="https://admision.unas.edu.pe/images/login.png" alt="banner examen admision" class="rounded-r-lg"
-             style="width: 24rem">
-      </figure>
+      <div>
+        <figure>
+          <img src="https://admision.unas.edu.pe/diap-backend/public/images/login.png" alt="banner examen admision" class="rounded-r-lg"
+               style="width: 24rem">
+        </figure>
+      </div>
     </div>
   </div>
 </div>
 <p-toast></p-toast>
-<p-blockUI [blocked]="isLoading">
-  <div class="flex flex-col gap-2 items-center justify-center">
-    <div>
-      <img class="w-14 h-14 mb-3" alt="imagen logo"
-           src="https://portalweb.unas.edu.pe/sites/all/themes/business_responsive_theme/logo.png">
-    </div>
-    <div>
-      <div class="lds-roller">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-  </div>
-</p-blockUI>
+<app-block-ui [show]="isLoading"/>

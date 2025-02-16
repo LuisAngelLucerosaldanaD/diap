@@ -6,12 +6,13 @@ import {EnvServiceFactory} from "../env/env.service.provider";
 import {Cipher} from "../../utils/security/cipher";
 import {JwtHelper} from "../../utils/jwt/jwt";
 import {Router} from "@angular/router";
+import {IResponse} from "../../models/response";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly _url: string = EnvServiceFactory().REST_API + '/api/v1/login';
+  private readonly _url: string = EnvServiceFactory().REST_API + '/api/v1';
   private _http: HttpClient = inject(HttpClient);
   private _router: Router = inject(Router);
   private _cipher: Cipher = new Cipher();
@@ -32,11 +33,16 @@ export class AuthService {
    * this._authService.login(data);
    */
   public login(credentials: ICredentials): Observable<ISession> {
-    return this._http.post<ISession>(this._url, credentials);
+    return this._http.post<ISession>(this._url + '/login', credentials);
+  }
+
+  public setLogout(): Observable<IResponse> {
+    return this._http.get<IResponse>(this._url + '/logout');
   }
 
   public logout(): void {
     sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     this._router.navigateByUrl('/home');
   }
 

@@ -1,11 +1,13 @@
-<app-header/>
-<div class="flex h-[calc(100vh-56px)]">
-  <app-side-menu/>
-  <div class="w-full h-full relative">
-    <div class="h-[calc(100vh-124px)] overflow-y-auto">
-      <router-outlet/>
+<div class="h-screen w-screen">
+  <app-header/>
+  <div class="flex h-[calc(100vh-56px)]">
+    <app-side-menu/>
+    <div class="w-full h-full relative">
+      <div class="h-[calc(100vh-124px)] overflow-y-auto">
+        <router-outlet/>
+      </div>
+      <app-footer/>
     </div>
-    <app-footer/>
   </div>
-</div>
 
+</div>

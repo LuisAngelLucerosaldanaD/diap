@@ -82,7 +82,7 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
           console.error(err);
-          this._toastService.add({severity: 'error', summary: 'Error', detail: err.message});
+          this._toastService.add({severity: 'warn', summary: 'Validación de Pago', detail: err.error.msg});
         },
         complete: () => this.isLoading = false
       })
@@ -107,12 +107,20 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
         },
         error: (err: HttpErrorResponse) => {
           console.error(err);
+          this.isLoading = false;
+          if (err.status === 404) {
+            this._toastService.add({
+              severity: 'warn',
+              summary: 'Módulo de Registro',
+              detail: err.error.msg
+            });
+            return;
+          }
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
             detail: 'No se pudo obtener el examen actual, error: ' + err.message
           });
-          this.isLoading = false;
         },
         complete: () => this.isLoading = false
       })

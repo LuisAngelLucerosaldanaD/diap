@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Subscription} from "rxjs";
 import {RegistrationService} from "../../services/admin/registration.service";
 import {MessageService} from "primeng/api";
@@ -7,13 +7,13 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {ToastModule} from "primeng/toast";
 import {BlockUiComponent} from "../block-ui/block-ui.component";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {FacultiesOptions, ModalityOptions} from "../../utils/constants/constants";
+import {FacultiesOptions} from "../../utils/constants/constants";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducers";
 import {
-  IAcademicDTO, IAnswer,
+  IAcademicDTO, IAnnexe, IAnswer,
   IApplicantDTO,
-  ICost, IDocumentDTO,
+  ICost, IDocumentDTO, IOption,
   IPayment, IPaymentDTO,
   IRequirement,
   ISchoolDTO
@@ -22,11 +22,15 @@ import {NameInpDirective} from "../../directives/name-inp.directive";
 import {NumbersInpDirective} from "../../directives/numbers-inp.directive";
 import {ModalitiesService} from "../../services/home/modalities.service";
 import {FileHelper} from "../../utils/file/file";
-import {NgIf} from "@angular/common";
+import {AsyncPipe, NgIf} from "@angular/common";
 import {IResponse} from "../../models/response";
 import {IExam} from "../../models/admin/exams";
 import {selectExam} from "../../store/reducers/exam.reducer";
 import {selectPayments} from "../../store/reducers/payment.reducer";
+import {IModality, IPostulation} from "../../models/admin/postulation";
+import {SecureImagePipe} from "../../pipes/secure-image.pipe";
+import {SafePipePipe} from "../../pipes/safe-pipe.pipe";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-form-registration',
@@ -37,13 +41,22 @@ import {selectPayments} from "../../store/reducers/payment.reducer";
     ReactiveFormsModule,
     NameInpDirective,
     NumbersInpDirective,
-    NgIf
+    NgIf,
+    SecureImagePipe,
+    AsyncPipe,
+    SafePipePipe,
+    RouterLink
   ],
   templateUrl: './form-registration.component.html',
   styleUrl: './form-registration.component.scss',
   providers: [MessageService]
 })
 export class FormRegistrationComponent implements OnInit, OnDestroy {
+  @Input() postulation!: IPostulation;
+  @Input() mode: 'create' | 'update' | 'show' = 'create';
+  @Input() module: 'post' | 'regis' = 'regis';
+  @Output() finish: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   private readonly _subscriptions: Subscription = new Subscription();
   private readonly _registrationService: RegistrationService = inject(RegistrationService);
   private readonly _modalitiesService: ModalitiesService = inject(ModalitiesService);
@@ -55,9 +68,10 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   private _exam!: IExam;
 
   // Statics
-  protected readonly modalities = ModalityOptions;
   protected readonly faculties = FacultiesOptions;
 
+  protected facultiesSecond: IOption[] = [];
+  protected modalities: IModality[] = [];
   protected regions: IRegion[] = [];
   protected provinces: IProvince[] = [];
   protected schoolProvinces: IProvince[] = [];
@@ -66,9 +80,9 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   protected schools: ISchool[] = [];
   protected isLoading: boolean = false;
   protected filesRequired: IRequirement[] = [];
+  protected annexes: IAnnexe[] = [];
   protected cost!: ICost;
   protected imgProfile: string = '';
-  protected typeProcess: 'create' | 'update' = 'create';
 
   // Forms
   protected basicForm: FormGroup = new FormGroup({
@@ -115,7 +129,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._payments$.subscribe(data => {
-      if (data) {
+      if (data && data.length) {
         this.basicForm.get('dni')?.setValue(data[0].dni);
         this.basicForm.get('dni')?.disable();
       }
@@ -124,10 +138,19 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       this._exam$.subscribe(data => {
         if (data) {
           this._exam = data;
+          this._getModalities();
         }
       })
     );
     this._getRegions();
+    if (this.mode === 'update' || this.mode === 'show') {
+      this._loadData();
+      this._getSchoolData();
+      this._getAnnexes();
+      this._getAnswers();
+    }
+
+    if (this.mode === 'show') this._disableForms();
   }
 
   ngOnDestroy() {
@@ -146,7 +169,42 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     this.filesRequired = [];
     this.cost = {} as ICost;
     this.imgProfile = '';
-    this.typeProcess = 'create';
+    this.mode = 'create';
+  }
+
+  private _loadData(): void {
+    this.basicForm.patchValue({
+      names: this.postulation.applicant.name,
+      father_lastname: this.postulation.applicant.paternal_surname,
+      mother_lastname: this.postulation.applicant.maternal_surname,
+      phone: this.postulation.applicant.phone,
+      sex: this.postulation.applicant.sex,
+      dni: this.postulation.applicant.DNI,
+      civil_status: this.postulation.applicant.marital_status,
+      email: this.postulation.applicant.email,
+      phone_school: '',
+      mother_language: this.postulation.applicant.mother_tongue,
+      birthdate: this.postulation.applicant.birthdate,
+      region: this.postulation.applicant.birth_department,
+      province: this.postulation.applicant.birth_province,
+      district: this.postulation.applicant.birth_district,
+      address: this.postulation.applicant.address,
+    });
+
+    this.imgProfile = this.postulation.applicant.url_photo;
+
+    this.academicForm.patchValue({
+      first_option: this.postulation.first_option,
+      second_option: this.postulation.second_option,
+      modality: this.postulation.modality_name,
+    });
+  }
+
+  private _disableForms(): void {
+    this.basicForm.disable();
+    this.schoolForm.disable();
+    this.academicForm.disable();
+    this.surveyForm.disable();
   }
 
   private _getRegions(): void {
@@ -165,6 +223,11 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           }
 
           this.regions = res.data;
+          if (this.mode === 'show' || this.mode === 'update') {
+            const region = this.regions.find(region => region.idRegion === this.postulation.applicant.birth_department);
+            this.basicForm.get('region')?.setValue(region?.idRegion);
+            this.getProvinces({id: 'applicant', value: region?.idRegion});
+          }
         },
         error: (err: HttpErrorResponse) => {
           console.error(err);
@@ -195,6 +258,13 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
             return;
           }
 
+          if (this.mode === 'update') {
+            res.data.forEach((file: IRequirement) => {
+              const annex = this.annexes.find(annex => annex.name === file.name);
+              file.url = annex?.document_url || '';
+              file.file_name = annex?.document_url.split('_')[1].replaceAll('%20', '_') || '';
+            });
+          }
           this.filesRequired = res.data;
         },
         error: (err: HttpErrorResponse) => {
@@ -284,7 +354,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _createSchool(): Promise<IResponse> {
+  private _saveSchool(): Promise<IResponse> {
     const school = this.schools.find(school => school.codMod === this.schoolForm.value.name);
     const data: ISchoolDTO = {
       name: school?.nombreCenEdu || '',
@@ -297,9 +367,24 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       level_education: this.schoolForm.value.education_level,
     };
 
+    if (this.mode === 'create') {
+      return new Promise<IResponse>((resolve, reject) => {
+        this._subscriptions.add(
+          this._registrationService.registerSchool(data).subscribe({
+            next: (res) => {
+              resolve(res);
+            },
+            error: (err: HttpErrorResponse) => {
+              reject(err);
+            }
+          })
+        );
+      });
+    }
+
     return new Promise<IResponse>((resolve, reject) => {
       this._subscriptions.add(
-        this._registrationService.registerSchool(data).subscribe({
+        this._registrationService.updateSchool(this.postulation.id, data).subscribe({
           next: (res) => {
             resolve(res);
           },
@@ -308,10 +393,10 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           }
         })
       );
-    })
+    });
   }
 
-  private _createApplicant(school: number, profile: string): Promise<IResponse> {
+  private _saveApplicant(school: number, profile: string): Promise<IResponse> {
     const date = new Date();
     const data: IApplicantDTO = {
       name: this.basicForm.value.names,
@@ -334,9 +419,24 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       id_school: school
     };
 
+    if (this.mode === 'create') {
+      return new Promise<IResponse>((resolve, reject) => {
+        this._subscriptions.add(
+          this._registrationService.registerApplicant(data).subscribe({
+            next: (res) => {
+              resolve(res);
+            },
+            error: (err: HttpErrorResponse) => {
+              reject(err);
+            }
+          })
+        );
+      });
+    }
+
     return new Promise<IResponse>((resolve, reject) => {
       this._subscriptions.add(
-        this._registrationService.registerApplicant(data).subscribe({
+        this._registrationService.updateApplicant(this.postulation.id, data).subscribe({
           next: (res) => {
             resolve(res);
           },
@@ -345,23 +445,38 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           }
         })
       );
-    })
+    });
   }
 
-  private _createAcademic(applicant: number,): Promise<IResponse> {
+  private _saveAcademic(applicant: number): Promise<IResponse> {
     const data: IAcademicDTO = {
       first_option: this.academicForm.value.first_option,
       second_option: this.academicForm.value.second_option,
       modality_name: this.academicForm.value.modality,
       application_headquarters: this.surveyForm.value.type_preparation,
-      id_applicant: applicant,
-      id_payment: this._payment?.cod_recibo || '',
+      id_applicant: this.mode === 'create' ? applicant : this.postulation.applicant.id,
+      id_payment: this._payment?.cod_recibo || 'Registrado por administrador, no consigna pago en la pasarela de pagos UNAS',
       id_examcall: this._exam.id
     };
 
+    if (this.mode === 'create') {
+      return new Promise<IResponse>((resolve, reject) => {
+        this._subscriptions.add(
+          this._registrationService.registerAcademic(data).subscribe({
+            next: (res) => {
+              resolve(res);
+            },
+            error: (err: HttpErrorResponse) => {
+              reject(err);
+            }
+          })
+        );
+      });
+    }
+
     return new Promise<IResponse>((resolve, reject) => {
       this._subscriptions.add(
-        this._registrationService.registerAcademic(data).subscribe({
+        this._registrationService.updateAcademic(this.postulation.id, data).subscribe({
           next: (res) => {
             resolve(res);
           },
@@ -370,13 +485,28 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           }
         })
       );
-    })
+    });
   }
 
-  private _createAnswers(data: IAnswer): Promise<IResponse> {
+  private _saveAnswers(data: IAnswer): Promise<IResponse> {
+    if (this.mode === 'create') {
+      return new Promise<IResponse>((resolve, reject) => {
+        this._subscriptions.add(
+          this._registrationService.registerAnswers(data).subscribe({
+            next: (res) => {
+              resolve(res);
+            },
+            error: (err: HttpErrorResponse) => {
+              reject(err);
+            }
+          })
+        );
+      });
+    }
+
     return new Promise<IResponse>((resolve, reject) => {
       this._subscriptions.add(
-        this._registrationService.registerAnswers(data).subscribe({
+        this._registrationService.updateAnswer(this.postulation.id, data).subscribe({
           next: (res) => {
             resolve(res);
           },
@@ -385,19 +515,34 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           }
         })
       );
-    })
+    });
   }
 
-  private _createDocument(file: IRequirement, application: number): Promise<IResponse> {
+  private _saveDocument(file: IRequirement, application: number): Promise<IResponse> {
     const data: IDocumentDTO = {
       document_url: file.url || '',
       name: file.name || '',
-      id_application: application.toString()
+      id_application: this.mode === 'create' ? application.toString() : this.postulation.id.toString()
     };
+
+    if (this.mode === 'create') {
+      return new Promise<IResponse>((resolve, reject) => {
+        this._subscriptions.add(
+          this._registrationService.registerDocument(data).subscribe({
+            next: (res) => {
+              resolve(res);
+            },
+            error: (err: HttpErrorResponse) => {
+              reject(err);
+            }
+          })
+        );
+      });
+    }
 
     return new Promise<IResponse>((resolve, reject) => {
       this._subscriptions.add(
-        this._registrationService.registerDocument(data).subscribe({
+        this._registrationService.updateDocument(this.postulation.id, data).subscribe({
           next: (res) => {
             resolve(res);
           },
@@ -406,7 +551,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           }
         })
       );
-    })
+    });
   }
 
   private _validatePayment(): void {
@@ -438,7 +583,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
           console.error(err);
-          this._toastService.add({severity: 'error', summary: 'Error', detail: err.message});
+          this._toastService.add({severity: 'error', summary: 'Validación de Pago', detail: err.error.msg});
         },
         complete: () => this.isLoading = false
       })
@@ -460,6 +605,149 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     });
   }
 
+  private _getSchoolData(): void {
+    this.isLoading = true;
+    this._subscriptions.add(
+      this._registrationService.getSchoolsData(this.postulation.id).subscribe({
+        next: (res) => {
+          if (res.error) {
+            this._toastService.add({
+              severity: 'error',
+              summary: 'Módulo de Registro',
+              detail: 'No se pudo obtener los colegios'
+            });
+            return;
+          }
+          this.schoolForm.patchValue({
+            region: res.data.origin_department,
+            province: res.data.origin_province,
+            district: res.data.origin_district,
+            name: res.data.code_school,
+            type: res.data.type,
+            education_level: res.data.level_education,
+          });
+
+          this.basicForm.get('phone_school')?.setValue(res.data.phone_contact);
+          this.getProvinces({id: 'school_departmentApplicant', value: res.data.origin_department});
+          if (this.mode === 'update') {
+            this._validatePayment();
+            this._getFileRequired();
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error(err);
+          this._toastService.add({
+            severity: 'error',
+            summary: 'Módulo de Registro',
+            detail: 'No se pudo obtener los colegios, error: ' + err.message
+          });
+          this.isLoading = false;
+        },
+        complete: () => this.isLoading = false
+      })
+    );
+  }
+
+  private _getAnnexes(): void {
+    this.isLoading = true;
+    this._subscriptions.add(
+      this._registrationService.getAnnexes(this.postulation.id).subscribe({
+        next: (res) => {
+          if (res.error) {
+            this._toastService.add({
+              severity: 'error',
+              summary: 'Módulo de Registro',
+              detail: 'No se pudo obtener los documentos anexos'
+            });
+            return;
+          }
+
+          this.annexes = res.data;
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error(err);
+          this._toastService.add({
+            severity: 'error',
+            summary: 'Módulo de Registro',
+            detail: 'No se pudo obtener los documentos anexos, error: ' + err.message
+          });
+          this.isLoading = false;
+        },
+        complete: () => this.isLoading = false
+      })
+    );
+  }
+
+  private _getAnswers(): void {
+    this.isLoading = true;
+    this._subscriptions.add(
+      this._registrationService.getAnswers(this.postulation.id).subscribe({
+        next: (res) => {
+          if (res.error) {
+            this._toastService.add({
+              severity: 'error',
+              summary: 'Módulo de Registro',
+              detail: 'No se pudo obtener las respuestas'
+            });
+            return;
+          }
+
+          this.surveyForm.patchValue({
+            type_preparation: res.data[0].answer,
+            how_know: res.data[1].answer,
+            motivation: res.data[2].answer,
+            do_work: res.data[3].answer,
+            economic_dependent: res.data[4].answer,
+            lives_parents: res.data[5].answer,
+            siblings: res.data[6].answer,
+            lives_currently: res.data[7].answer,
+            address: res.data[8].answer,
+          });
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error(err);
+          this._toastService.add({
+            severity: 'error',
+            summary: 'Módulo de Registro',
+            detail: 'No se pudo obtener las respuestas, error: ' + err.message
+          });
+          this.isLoading = false;
+        },
+        complete: () => this.isLoading = false
+      })
+    );
+  }
+
+  private _getModalities(): void {
+    this.isLoading = true;
+    this._subscriptions.add(
+      this._modalitiesService.getModalities(this._exam.id_examtype).subscribe({
+        next: (res) => {
+          if (res.error) {
+            this._toastService.add({
+              severity: 'error',
+              summary: 'Módulo de Registro',
+              detail: 'No se pudo obtener las modalidades'
+            });
+            return;
+          }
+
+          this.modalities = res.data;
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error(err);
+          this._toastService.add({
+            severity: 'error',
+            summary: 'Módulo de Registro',
+            detail: 'No se pudo obtener las modalidades, error: ' + err.message
+          });
+          this.isLoading = false;
+        },
+        complete: () => this.isLoading = false
+      })
+    );
+  }
+
   protected getProvinces(ev: any): void {
     const id = ev.id;
     const region = ev.value;
@@ -479,9 +767,18 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
           if (id === 'school_departmentApplicant') {
             this.schoolProvinces = res.data;
+            if (this.mode === 'show' || this.mode === 'update') {
+              const province = res.data.find(region => region.idProvincia === this.schoolForm.get('province')?.value);
+              this.getDistricts({id: 'school_provinceApplicant', value: province?.idProvincia});
+            }
             return;
           }
 
+          if (this.mode === 'show' || this.mode === 'update') {
+            const province = res.data.find(region => region.idProvincia === this.postulation.applicant.birth_province);
+            this.basicForm.get('province')?.setValue(province?.idProvincia);
+            this.getDistricts({id: 'applicant', value: province?.idProvincia});
+          }
           this.provinces = res.data;
         },
         error: (err: HttpErrorResponse) => {
@@ -517,9 +814,15 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
           if (id === 'school_provinceApplicant') {
             this.schoolDistricts = res.data;
+            if (this.mode === 'show' || this.mode === 'update') this.getSchools({value: this.schoolForm.get('district')?.value});
             return;
           }
           this.districts = res.data;
+
+          if (this.mode === 'show' || this.mode === 'update') {
+            const district = res.data.find(region => region.idDistrito === this.postulation.applicant.birth_district);
+            this.basicForm.get('district')?.setValue(district?.idDistrito);
+          }
         },
         error: (err: HttpErrorResponse) => {
           console.error(err);
@@ -581,6 +884,14 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       this._validatePayment();
       this._getCosts();
     }
+  }
+
+  protected changeFaculty(): void {
+    this.facultiesSecond = [];
+    const fac = this.faculties.find(faculty => faculty.value === this.academicForm.get('first_option')?.value);
+    if (!fac) return;
+    this.facultiesSecond = this.faculties.filter(faculty => faculty.type === fac.type);
+    this.academicForm.get('second_option')?.setValue('');
   }
 
   protected processProfile(ev: any): void {
@@ -653,7 +964,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
     try {
-      const resSchool = await this._createSchool();
+      const resSchool = await this._saveSchool();
       if (resSchool.error) {
         this._toastService.add({
           severity: 'error',
@@ -675,7 +986,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
         return;
       }
 
-      const resApplicant = await this._createApplicant(resSchool.data.id, resPhoto.data.url);
+      const resApplicant = await this._saveApplicant(resSchool.data.id, resPhoto.data.url);
       if (resApplicant.error) {
         this._toastService.add({
           severity: 'error',
@@ -686,7 +997,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
         return;
       }
 
-      const resAcademic = await this._createAcademic(resApplicant.data.id);
+      const resAcademic = await this._saveAcademic(resApplicant.data.id);
       if (resAcademic.error) {
         this._toastService.add({
           severity: 'error',
@@ -745,7 +1056,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
         }
       ];
       for await (let answer of answers) {
-        const resAnswers = await this._createAnswers(answer);
+        const resAnswers = await this._saveAnswers(answer);
         if (resAnswers.error) {
           this._toastService.add({
             severity: 'error',
@@ -770,7 +1081,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
         }
 
         file.url = resFile.data.url;
-        const resDocument = await this._createDocument(file, resAcademic.data.id);
+        const resDocument = await this._saveDocument(file, resAcademic.data.id);
         if (resDocument.error) {
           this._toastService.add({
             severity: 'error',
@@ -801,7 +1112,9 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
         detail: 'Postulación registrada con éxito'
       });
       this.isLoading = false;
+
       setTimeout(() => {
+        if (this.module === 'post') return this.finish.emit(true);
         window.location.reload();
       }, 1000);
     } catch (e) {
@@ -829,12 +1142,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.typeProcess === 'create') {
-      this.createPostulation();
-    } else {
-
-    }
-
+    this.createPostulation();
   }
 
 }

@@ -14,6 +14,11 @@ import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {RegistrationService} from "../../../../core/services/admin/registration.service";
 import {FileHelper} from "../../../../core/utils/file/file";
 import {ToastModule} from "primeng/toast";
+import {FormRegistrationComponent} from "../../../../core/ui/form-registration/form-registration.component";
+import {DialogModule} from "primeng/dialog";
+import {setExam} from "../../../../core/store/actions/exam.actions";
+import {Store} from "@ngrx/store";
+import {AppState} from "../../../../core/store/app.reducers";
 
 @Component({
   selector: 'app-postulations',
@@ -23,7 +28,9 @@ import {ToastModule} from "primeng/toast";
     MenuModule,
     BlockUiComponent,
     ReactiveFormsModule,
-    ToastModule
+    ToastModule,
+    FormRegistrationComponent,
+    DialogModule
   ],
   templateUrl: './postulations.component.html',
   styleUrl: './postulations.component.scss',
@@ -37,6 +44,7 @@ export class PostulationsComponent implements OnInit, OnDestroy {
   private readonly _postulationsService: PostulationsService = inject(PostulationsService);
   private readonly _registrationService: RegistrationService = inject(RegistrationService);
   private readonly _toastService: MessageService = inject(MessageService);
+  private readonly _store: Store<AppState> = inject(Store);
 
   protected items = [
     {
@@ -46,12 +54,16 @@ export class PostulationsComponent implements OnInit, OnDestroy {
           label: 'Editar',
           icon: 'pi pi-pen-to-square',
           command: () => {
+            this.mode = 'update';
+            this.showPostulation = true;
           }
         },
         {
           label: 'Ver',
           icon: 'pi pi-eye',
           command: () => {
+            this.mode = 'show';
+            this.showPostulation = true;
           }
         },
         {
@@ -69,6 +81,8 @@ export class PostulationsComponent implements OnInit, OnDestroy {
   protected formExam: FormControl = new FormControl('');
   protected postulations: IPostulation[] = [];
   protected postulation!: IPostulation;
+  protected showPostulation: boolean = false;
+  protected mode: "create" | "update" | "show" = 'show';
 
   ngOnInit() {
     this._getExams();
@@ -112,8 +126,9 @@ export class PostulationsComponent implements OnInit, OnDestroy {
 
           this.exams = res.data;
           const latestItem = this.exams.reduce((latest, item) => {
-            return item.created_at > latest.created_at ? item : latest;
+            return item.created_at < latest.created_at ? item : latest;
           });
+          this._store.dispatch(setExam({exam: latestItem}));
           this.formExam.setValue(latestItem.id);
           this._getPostulations(latestItem.id);
         },
@@ -165,15 +180,6 @@ export class PostulationsComponent implements OnInit, OnDestroy {
     );
   }
 
-  protected changeExam(): void {
-    this._getPostulations(this.formExam.value);
-  }
-
-  protected openMenu(data: IPostulation, menu: Menu, event: any): void {
-    this.postulation = data;
-    menu.toggle(event);
-  }
-
   private _exportPDF(): void {
     this.isLoading = true;
     this._subscriptions.add(
@@ -204,6 +210,18 @@ export class PostulationsComponent implements OnInit, OnDestroy {
     );
   }
 
+  protected changeExam(): void {
+    const latestItem = this.exams.find(exam => exam.id.toString() === this.formExam.value);
+    if (!latestItem) return;
+    this._store.dispatch(setExam({exam: latestItem}));
+    this._getPostulations(this.formExam.value);
+  }
+
+  protected openMenu(data: IPostulation, menu: Menu, event: any): void {
+    this.postulation = data;
+    menu.toggle(event);
+  }
+
   protected exportReport(): void {
     this.isLoading = true;
     this._subscriptions.add(
@@ -232,6 +250,16 @@ export class PostulationsComponent implements OnInit, OnDestroy {
         complete: () => this.isLoading = false
       })
     );
+  }
+
+  protected createPostulation(): void {
+    this.mode = 'create';
+    this.showPostulation = true;
+  }
+
+  protected closeForm(): void {
+    this.showPostulation = false;
+    this._getPostulations(this.formExam.value);
   }
 
 }

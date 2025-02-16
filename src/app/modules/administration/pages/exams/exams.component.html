@@ -59,7 +59,7 @@
                         <td class="px-4 py-3">{{ exam.start_date }}</td>
                         <td class="px-4 py-3">{{ exam.end_date }}</td>
                         <td class="px-4 py-3">{{ exam.exam_date }}</td>
-                        <td class="px-4 py-3">{{ exam.id_examtype }}</td>
+                        <td class="px-4 py-3">{{ exam.id_examtype === 1 ? 'Ordinario' : 'ExtraOrdinario' }}</td>
                         <td class="px-4 py-3 flex items-center justify-end relative">
                           <button type="button" class="btn-options" (click)="openMenu(exam, menu, $event)">
                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"

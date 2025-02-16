@@ -2,7 +2,8 @@
   <div class="flex-1">
     @if (!isCompact) {
       @for (item of menuItems; track item.name) {
-        <div class="item" [routerLink]="item.route" routerLinkActive="item-select">
+        <div class="item" [routerLink]="item.route" routerLinkActive="item-select"
+             [routerLinkActiveOptions]="{exact: true}">
           <i class="fa-solid {{item.icon}}"></i>
           <span>{{ item.name }}</span>
         </div>
@@ -10,7 +11,7 @@
     } @else {
       @for (item of menuItems; track item.name) {
         <div class="item" [pTooltip]="item.name" tooltipPosition="right" [routerLink]="item.route"
-             routerLinkActive="item-select">
+             routerLinkActive="item-select" [routerLinkActiveOptions]="{exact: true}">
           <i class="fa-solid {{item.icon}}"></i>
         </div>
       }
@@ -26,3 +27,5 @@
   }
 </div>
 <p-confirmDialog key="logout"></p-confirmDialog>
+<p-toast/>
+<app-block-ui [show]="isLoading"/>

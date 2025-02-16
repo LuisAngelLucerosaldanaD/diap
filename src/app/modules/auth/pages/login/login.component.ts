@@ -10,6 +10,7 @@ import {Router} from "@angular/router";
 import {RecaptchaFormsModule, RecaptchaModule} from "ng-recaptcha";
 import {EnvServiceFactory} from "../../../../core/services/env/env.service.provider";
 import {BlockUIModule} from "primeng/blockui";
+import {BlockUiComponent} from "../../../../core/ui/block-ui/block-ui.component";
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ import {BlockUIModule} from "primeng/blockui";
     ToastModule,
     RecaptchaModule,
     RecaptchaFormsModule,
-    BlockUIModule
+    BlockUIModule,
+    BlockUiComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

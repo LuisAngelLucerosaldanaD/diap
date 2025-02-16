@@ -1,21 +1,29 @@
 <main class="w-full h-full p-6 bg-gray-100 overflow-y-auto flex-1">
   <div class="m-6">
-    <img src="https://admision.unas.edu.pe/images/imagen.jpg" alt="Baner DIAP" class="w-full h-auto">
+    <img src="https://admision.unas.edu.pe/diap-backend/public/images/imagen.jpg" alt="Baner DIAP" class="w-full h-auto">
   </div>
-  <div class="bg-white shadow-md rounded-lg p-6 m-6 border border-green-500">
-    <div class="card-header text-xl font-bold mb-2 uppercase">Examen extraordinario 2025-I</div>
-    <div class="text-gray-700 mb-4">Examen extraordinario 2025-I</div>
-    <div class="section mb-4">
-      <strong>📅 Inscripción Ordinaria:</strong>
-      02/01/2025 al
-      20/02/2025
+  @if (exam) {
+    <div class="bg-white shadow-md rounded-lg p-6 m-6 border border-green-500">
+      <div class="card-header text-xl font-bold mb-2 uppercase">{{ exam.name }}</div>
+      <div class="text-gray-700 mb-4">{{ exam.description }}I</div>
+      <div class="section mb-4">
+        <strong>📅 Inscripción Ordinaria:</strong>
+        {{ startDate }} al
+        {{ endDate }}
+      </div>
+      <div class="section mb-4">
+        <strong>🕘 Horario:</strong> {{ startHour }}<br>
+        <strong>📍 Ingreso:</strong> Puerta 1 de la UNAS
+      </div>
+      <div class="footer text-sm text-white bg-green-500 p-4 rounded-lg">
+        {{ exam.contact }}
+      </div>
     </div>
-    <div class="section mb-4">
-      <strong>🕘 Horario:</strong> 10:47<br>
-      <strong>📍 Ingreso:</strong> Puerta 1 de la UNAS
+  } @else {
+    <div class="bg-white shadow-md rounded-lg p-6 m-6 border border-green-500">
+      <div class="card-header text-xl font-bold mb-2 uppercase">No hay convocatorias disponibles</div>
+      <div class="text-gray-700 mb-4">No hay convocatorias disponibles en este momento.</div>
     </div>
-    <div class="footer text-sm text-white bg-green-500 p-4 rounded-lg">
-      Tel. Fijo: 123123123 &nbsp; | &nbsp; Cel.: 123123123
-    </div>
-  </div>
+  }
+
 </main>

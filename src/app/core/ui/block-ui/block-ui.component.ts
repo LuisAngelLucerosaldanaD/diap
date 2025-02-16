@@ -11,5 +11,5 @@ import {BlockUIModule} from "primeng/blockui";
   styleUrl: './block-ui.component.scss'
 })
 export class BlockUiComponent {
-  @Input() show: boolean = false;
+  @Input({required: true}) show: boolean = false;
 }

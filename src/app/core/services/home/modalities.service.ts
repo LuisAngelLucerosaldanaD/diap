@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IResponse} from "../../models/response";
 import {ICost, IRequirement} from "../../models/registration/registration";
+import {IModality} from "../../models/admin/postulation";
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +23,9 @@ export class ModalitiesService {
       type_schoolApplicant: school,
       id_modality: id
     });
+  }
+
+  public getModalities(exam: number): Observable<IResponse<IModality[]>> {
+    return this._http.get<IResponse<IModality[]>>(this._urlModalities + `/type/${exam}`);
   }
 }

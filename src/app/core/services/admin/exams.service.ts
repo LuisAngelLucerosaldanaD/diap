@@ -22,7 +22,7 @@ export class ExamsService {
   }
 
   public updateExam(exam: IUpdateExam): Observable<IResponse> {
-    return this._http.put<IResponse>(this._url, exam);
+    return this._http.put<IResponse>(this._url + `/${exam.id}`, exam);
   }
 
   public deleteExam(id: number): Observable<IResponse> {

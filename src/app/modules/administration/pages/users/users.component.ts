@@ -86,7 +86,6 @@ export class UsersComponent implements OnInit, OnDestroy {
             return;
           }
 
-          console.log(res.data);
           this.users = res.data;
         },
         error: (err: HttpErrorResponse) => {
@@ -175,8 +174,9 @@ export class UsersComponent implements OnInit, OnDestroy {
       this._messageService.add({
         severity: 'warn',
         summary: 'Módulo de Usuarios',
-        detail: 'Todos los campos son requeridos'
+        detail: 'Complete correctamente los campos requeridos'
       });
+      this.userForm.markAllAsTouched();
       return;
     }
 

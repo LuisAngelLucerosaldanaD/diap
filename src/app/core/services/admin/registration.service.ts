@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 import {IResAddress, IResponse} from "../../models/response";
 import {IDistrict, IProvince, IRegion, ISchool} from "../../models/registration/address";
 import {
-  IAcademicDTO,
+  IAcademicDTO, IAnnexe,
   IAnswer,
   IApplicantDTO, IDocumentDTO,
   IPayment,
@@ -18,7 +18,6 @@ import {
 })
 export class RegistrationService {
 
-  private readonly _url: string = EnvServiceFactory().REST_API + '/api/v1/registration';
   private readonly _urlPayment: string = EnvServiceFactory().REST_API + '/api/v1/validate-payment';
   private readonly _urlFile: string = EnvServiceFactory().REST_API + '/api/v1/upload';
   private readonly _urlSchool: string = EnvServiceFactory().REST_API + '/api/v1/schools';
@@ -78,6 +77,38 @@ export class RegistrationService {
   }
 
   public getApplicationReport(id: number): Observable<any> {
-    return this._http.get(this._urlApplications + `/${id}/pdf`, { responseType: 'blob' });
+    return this._http.get(this._urlApplications + `/${id}/pdf`, {responseType: 'blob'});
+  }
+
+  public getSchoolsData(id: number): Observable<IResponse> {
+    return this._http.get<IResponse>(this._urlSchool + `/${id}`);
+  }
+
+  public getAnnexes(id: number): Observable<IResponse<IAnnexe[]>> {
+    return this._http.get<IResponse<IAnnexe[]>>(this._urlApplicationDocuments + `/${id}`);
+  }
+
+  public getAnswers(id: number): Observable<IResponse<IAnswer[]>> {
+    return this._http.get<IResponse<IAnswer[]>>(this._urlAnswers + `/${id}`);
+  }
+
+  public updateSchool(id: number, data: ISchoolDTO): Observable<IResponse> {
+    return this._http.put<IResponse>(this._urlSchool + `/${id}`, data);
+  }
+
+  public updateApplicant(id: number, data: IApplicantDTO): Observable<IResponse> {
+    return this._http.put<IResponse>(this._urlApplicant + `/${id}`, data);
+  }
+
+  public updateAcademic(id: number, data: IAcademicDTO): Observable<IResponse> {
+    return this._http.put<IResponse>(this._urlApplications + `/${id}`, data);
+  }
+
+  public updateAnswer(id: number, data: IAnswer): Observable<IResponse> {
+    return this._http.put<IResponse>(this._urlAnswers + `/${id}`, data);
+  }
+
+  public updateDocument(id: number, data: IDocumentDTO): Observable<IResponse> {
+    return this._http.put<IResponse>(this._urlApplicationDocuments + `/${id}`, data);
   }
 }
