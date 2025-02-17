@@ -116,8 +116,8 @@ export const FacultiesOptions: IOption[] = [
     type: 1
   },
   {
-    name: "Turismo Y Turismo",
-    value: "Turismo Y Turismo",
+    name: "Hoteleria Y Turismo",
+    value: "Hoteleria Y Turismo",
     type: 2
   },
   {

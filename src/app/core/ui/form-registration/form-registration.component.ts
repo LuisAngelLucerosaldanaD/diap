@@ -193,11 +193,19 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
     this.imgProfile = this.postulation.applicant.url_photo;
 
+
+    const first = this.faculties.find(faculty => faculty.value === this.postulation.first_option);
+    this.facultiesSecond = this.faculties.filter(faculty => faculty.type === first?.type);
+
     this.academicForm.patchValue({
       first_option: this.postulation.first_option,
       second_option: this.postulation.second_option,
       modality: this.postulation.modality_name,
     });
+
+
+    this.academicForm.disable();
+    this.basicForm.get('dni')?.disable();
   }
 
   private _disableForms(): void {
@@ -356,15 +364,16 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
   private _saveSchool(): Promise<IResponse> {
     const school = this.schools.find(school => school.codMod === this.schoolForm.value.name);
+    const form = this.schoolForm.getRawValue();
     const data: ISchoolDTO = {
       name: school?.nombreCenEdu || '',
-      origin_department: this.schoolForm.value.region,
-      origin_province: this.schoolForm.value.province,
-      origin_district: this.schoolForm.value.district,
-      code_school: this.schoolForm.value.name,
+      origin_department: form.region,
+      origin_province: form.province,
+      origin_district: form.district,
+      code_school: form.name,
       phone_contact: this.basicForm.value.phone_school,
-      type: this.schoolForm.value.type,
-      level_education: this.schoolForm.value.education_level,
+      type: form.type,
+      level_education: form.education_level,
     };
 
     if (this.mode === 'create') {
@@ -398,24 +407,25 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
   private _saveApplicant(school: number, profile: string): Promise<IResponse> {
     const date = new Date();
+    const form = this.basicForm.getRawValue();
     const data: IApplicantDTO = {
-      name: this.basicForm.value.names,
-      paternal_surname: this.basicForm.value.father_lastname,
-      maternal_surname: this.basicForm.value.mother_lastname,
-      phone: this.basicForm.value.phone,
+      name: form.names,
+      paternal_surname: form.father_lastname,
+      maternal_surname: form.mother_lastname,
+      phone: form.phone,
       url_photo: profile,
-      birthdate: this.basicForm.value.birthdate,
-      birth_department: this.basicForm.value.region,
-      birth_province: this.basicForm.value.province,
-      birth_district: this.basicForm.value.district,
-      sex: this.basicForm.value.sex,
+      birthdate: form.birthdate,
+      birth_department: form.region,
+      birth_province: form.province,
+      birth_district: form.district,
+      sex: form.sex,
       DNI: this.basicForm.getRawValue().dni,
-      marital_status: this.basicForm.value.civil_status,
+      marital_status: form.civil_status,
       code_applicant: date.getFullYear() + this._exam.id + this.basicForm.getRawValue().dni,
-      email: this.basicForm.value.email,
-      mother_tongue: this.basicForm.value.mother_language,
-      address: this.basicForm.value.address,
-      description_applicant: `${this.basicForm.value.names} ${this.basicForm.value.father_lastname} ${this.basicForm.value.mother_lastname}`,
+      email: form.email,
+      mother_tongue: form.mother_language,
+      address: form.address,
+      description_applicant: `${form.names} ${form.father_lastname} ${form.mother_lastname}`,
       id_school: school
     };
 
@@ -449,10 +459,11 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   }
 
   private _saveAcademic(applicant: number): Promise<IResponse> {
+    const form = this.academicForm.getRawValue();
     const data: IAcademicDTO = {
-      first_option: this.academicForm.value.first_option,
-      second_option: this.academicForm.value.second_option,
-      modality_name: this.academicForm.value.modality,
+      first_option: form.first_option,
+      second_option: form.second_option,
+      modality_name: form.modality,
       application_headquarters: this.surveyForm.value.type_preparation,
       id_applicant: this.mode === 'create' ? applicant : this.postulation.applicant.id,
       id_payment: this._payment?.cod_recibo || 'Registrado por administrador, no consigna pago en la pasarela de pagos UNAS',
@@ -627,6 +638,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
             education_level: res.data.level_education,
           });
 
+          this.schoolForm.get('type')?.disable();
           this.basicForm.get('phone_school')?.setValue(res.data.phone_contact);
           this.getProvinces({id: 'school_departmentApplicant', value: res.data.origin_department});
           if (this.mode === 'update') {
@@ -1117,13 +1129,13 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
         if (this.module === 'post') return this.finish.emit(true);
         window.location.reload();
       }, 1000);
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      console.error(e);
       this.isLoading = false;
       this._toastService.add({
         severity: 'error',
         summary: 'Módulo de Registro',
-        detail: 'No se pudo registrar la postulación, intente nuevamente'
+        detail: e.error ? e.error.msg : 'No se pudo crear la postulación, error: ' + e.message
       });
     }
   }

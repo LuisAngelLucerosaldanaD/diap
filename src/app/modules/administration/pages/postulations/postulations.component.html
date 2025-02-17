@@ -1,83 +1,80 @@
-<main class="flex-1 p-6 overflow-y-auto">
-  <div class="p-4">
-
-    <div class="flex flex-col md:flex-row gap-4 mb-4">
-      <div class="w-full md:w-1/2">
-        <label for="examcall" class="block font-semibold mb-2">Seleccionar Convocatoria:</label>
-        <select id="examcall" class="w-full border p-2 rounded bg-white" [formControl]="formExam"
-                (change)="changeExam()">
-          <option disabled selected>Todas las Convocatorias</option>
-          @for (exam of exams; track exam.id) {
-            <option [value]="exam.id">{{ exam.name }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="w-full md:w-1/2">
-        <label for="searchDNI" class="block font-semibold mb-2">Buscar postulante:</label>
-        <input type="text" id="searchDNI" [formControl]="formSearch"
-               placeholder="Ingrese el DNI del postulante" class="w-full border p-2 rounded bg-white">
-      </div>
-
-    </div>
-    <div class="flex flex-col md:flex-row gap-4 mb-4">
-      <div class="w-full md:w-1/4">
-        <button (click)="createPostulation()" type="button"
-                class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
-          Registrar postulación
-        </button>
-      </div>
-
-      <div class="w-full">
-        <button (click)="exportReport()" type="button"
-                class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-800">
-          Descargar lista de postulaciones
-        </button>
-      </div>
+<main class="p-6 overflow-y-auto h-full">
+  <div class="flex flex-col md:flex-row gap-4 mb-4">
+    <div class="w-full md:w-1/2">
+      <label for="examcall" class="block font-semibold mb-2">Seleccionar Convocatoria:</label>
+      <select id="examcall" class="w-full border p-2 rounded bg-white" [formControl]="formExam"
+              (change)="changeExam()">
+        <option disabled selected>Todas las Convocatorias</option>
+        @for (exam of exams; track exam.id) {
+          <option [value]="exam.id">{{ exam.name }}</option>
+        }
+      </select>
     </div>
 
-    <div class="overflow-x-auto bg-white">
-      <div class="mx-auto px-4 lg:px-6">
-        <div class="bg-white  relative shadow-md sm:rounded-lg overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left text-gray-500">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="col" class="px-4 py-3">Nombre del Postulante</th>
-                <th scope="col" class="px-4 py-3">Primera Opción</th>
-                <th scope="col" class="px-4 py-3">Segunda Opción</th>
-                <th scope="col" class="px-4 py-3">Sede</th>
-                <th scope="col" class="px-4 py-3">
-                  <span class="sr-only">Actions</span>
-                </th>
-              </tr>
-              </thead>
-              <tbody>
+    <div class="w-full md:w-1/2">
+      <label for="searchDNI" class="block font-semibold mb-2">Buscar postulante:</label>
+      <input type="text" id="searchDNI" [formControl]="formSearch"
+             placeholder="Ingrese el DNI del postulante" class="w-full border p-2 rounded bg-white">
+    </div>
 
-                @for (postulation of postulations; track postulation.id) {
-                  <tr class="border-b">
-                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                      {{ postulation.applicant.name }} {{ postulation.applicant.paternal_surname }} {{ postulation.applicant.maternal_surname }}
-                    </th>
-                    <td class="px-4 py-3">{{ postulation.first_option }}</td>
-                    <td class="px-4 py-3">{{ postulation.second_option }}</td>
-                    <td class="px-4 py-3">Tingo Mária</td>
-                    <td class="px-4 py-3 flex items-center justify-end relative">
-                      <button type="button" class="btn-options" (click)="openMenu(postulation, menu, $event)">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                             xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
-                        </svg>
-                      </button>
-                      <p-menu #menu [model]="items" [popup]="true" appendTo="body"/>
-                    </td>
-                  </tr>
-                }
+  </div>
+  <div class="flex flex-col md:flex-row gap-4 mb-4">
+    <div class="w-full md:w-1/4">
+      <button (click)="createPostulation()" type="button"
+              class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
+        Registrar postulación
+      </button>
+    </div>
 
-              </tbody>
-            </table>
-          </div>
+    <div class="w-full">
+      <button (click)="exportReport()" type="button"
+              class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-800">
+        Descargar lista de postulaciones
+      </button>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto bg-white">
+    <div class="mx-auto px-4 lg:px-6">
+      <div class="bg-white  relative shadow-md sm:rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+              <th scope="col" class="px-4 py-3">Nombre del Postulante</th>
+              <th scope="col" class="px-4 py-3">Primera Opción</th>
+              <th scope="col" class="px-4 py-3">Segunda Opción</th>
+              <th scope="col" class="px-4 py-3">Sede</th>
+              <th scope="col" class="px-4 py-3">
+                <span class="sr-only">Actions</span>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+
+              @for (postulation of postulations; track postulation.id) {
+                <tr class="border-b">
+                  <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                    {{ postulation.applicant.name }} {{ postulation.applicant.paternal_surname }} {{ postulation.applicant.maternal_surname }}
+                  </th>
+                  <td class="px-4 py-3">{{ postulation.first_option }}</td>
+                  <td class="px-4 py-3">{{ postulation.second_option }}</td>
+                  <td class="px-4 py-3">Tingo Mária</td>
+                  <td class="px-4 py-3 flex items-center justify-end relative">
+                    <button type="button" class="btn-options" (click)="openMenu(postulation, menu, $event)">
+                      <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
+                           xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
+                      </svg>
+                    </button>
+                    <p-menu #menu [model]="items" [popup]="true" appendTo="body"/>
+                  </td>
+                </tr>
+              }
+
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
