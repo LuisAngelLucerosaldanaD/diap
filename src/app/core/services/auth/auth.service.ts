@@ -1,12 +1,13 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {ICredentials, ISession} from "../../models/auth/auth";
-import {Observable} from "rxjs";
-import {EnvServiceFactory} from "../env/env.service.provider";
-import {Cipher} from "../../utils/security/cipher";
-import {JwtHelper} from "../../utils/jwt/jwt";
-import {Router} from "@angular/router";
-import {IResponse} from "../../models/response";
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { ICredentials, IDataSession, ISession } from "../../models/auth/auth";
+import { Observable } from "rxjs";
+import { EnvServiceFactory } from "../env/env.service.provider";
+import { Cipher } from "../../utils/security/cipher";
+import { JwtHelper } from "../../utils/jwt/jwt";
+import { Router } from "@angular/router";
+import { IResponse } from "../../models/response";
+import { SESSION } from '../../types/session';
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +42,8 @@ export class AuthService {
   }
 
   public logout(): void {
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user');
+    sessionStorage.clear();
+    localStorage.clear();
     this._router.navigateByUrl('/home');
   }
 
@@ -55,7 +56,9 @@ export class AuthService {
     if (!token) return false;
 
     if (!this._cipher.verifyJWT(token) || this._jwtHelper.isTokenExpired(token)) {
-      this.logout();
+      this.setLogout().subscribe((res) => {
+        if (!res.error) return this.logout();
+      });
       return false;
     }
 
@@ -63,20 +66,36 @@ export class AuthService {
   }
 
   public getToken(): string | null {
-    return sessionStorage.getItem('token');
+    return sessionStorage.getItem('token') || localStorage.getItem('token');
   }
 
   public getRole(): number {
-    const user = sessionStorage.getItem('user');
+    const user = sessionStorage.getItem('user') || localStorage.getItem('user');
     if (!user) return -1;
 
-    return JSON.parse(user).id_role;
+    return JSON.parse(atob(user)).id_role;
   }
 
   public getUser(): string {
-    const user = sessionStorage.getItem('user');
+    const user = sessionStorage.getItem('user') || localStorage.getItem('user');
     if (!user) return '';
 
-    return JSON.parse(user).name;
+    return JSON.parse(atob(user)).name;
+  }
+
+  public setSession(session: IDataSession, remainder: SESSION = 'temporary'): void {
+    const token = session.token.replace('Bearer ', '');
+    if (remainder === 'permanent') {
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', btoa(JSON.stringify(session)));
+      localStorage.setItem('session', btoa(remainder));
+      sessionStorage.clear();
+      return;
+    }
+
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('user', btoa(JSON.stringify(session)));
+    sessionStorage.setItem('session', btoa(remainder));
+    localStorage.clear();
   }
 }

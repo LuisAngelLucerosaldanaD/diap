@@ -18,8 +18,8 @@ export class AnnouncementsComponent implements OnInit, OnDestroy {
   private readonly _subscriptions: Subscription = new Subscription();
   private readonly _examsService: ExamsService = inject(ExamsService);
   private readonly _toastService: MessageService = inject(MessageService);
+  
   protected exam!: IExam;
-
   protected isLoading: boolean = false;
   protected startDate: string = '';
   protected endDate: string = '';

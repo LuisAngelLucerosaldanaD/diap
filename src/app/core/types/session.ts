@@ -1,0 +1,1 @@
+export type SESSION = 'permanent' | 'temporary';

@@ -12,10 +12,7 @@ export class SecureImagePipe implements PipeTransform {
   }
 
   transform(url: string): Observable<string> {
-    return this.http.get(url, {responseType: 'blob'})
-      .pipe(
-        map(blob => URL.createObjectURL(blob))
-      );
+    return this.http.get(url, {responseType: 'blob'}).pipe(map(blob => URL.createObjectURL(blob)));
   }
 
 }

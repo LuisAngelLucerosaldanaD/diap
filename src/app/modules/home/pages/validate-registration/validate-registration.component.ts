@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {Subscription} from "rxjs";
 import {RegistrationService} from "../../../../core/services/admin/registration.service";
 import {MessageService} from "primeng/api";
@@ -36,11 +36,10 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
   private readonly _toastService: MessageService = inject(MessageService);
   private readonly _store: Store<AppState> = inject(Store);
   private readonly _examsService: ExamsService = inject(ExamsService);
-  private _exam!: IExam;
 
   protected isLoading: boolean = false;
   protected dniForm: FormControl = new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern('^[0-9]*$')]);
-  protected isPaymentValid: boolean = false;
+  protected isValidPayment = signal<boolean>(false);
 
   ngOnInit() {
     this._getCurrentExam();
@@ -77,11 +76,19 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
           }
 
           this._store.dispatch(setPayments({payments: res.data as IPayment[]}));
-          this.isPaymentValid = true;
+          this.isValidPayment.set(true);
         },
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
           console.error(err);
+          if (err.status === 404) {
+            this._toastService.add({
+              severity: 'warn',
+              summary: 'Validación de Pago',
+              detail: err.error.msg
+            });
+            return;
+          }
           this._toastService.add({severity: 'warn', summary: 'Validación de Pago', detail: err.error.msg});
         },
         complete: () => this.isLoading = false
@@ -102,8 +109,8 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
             });
             return;
           }
-          this._exam = res.data;
-          this._store.dispatch(setExam({exam: this._exam}));
+
+          this._store.dispatch(setExam({exam: res.data}));
         },
         error: (err: HttpErrorResponse) => {
           console.error(err);

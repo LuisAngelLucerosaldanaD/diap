@@ -1,16 +1,18 @@
-import {Component, OnDestroy} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {AuthService} from "../../../../core/services/auth/auth.service";
-import {HttpErrorResponse} from "@angular/common/http";
-import {IFormValidation} from "../../../../core/models/ui/form";
-import {Subscription} from "rxjs";
-import {MessageService} from "primeng/api";
-import {ToastModule} from "primeng/toast";
-import {Router} from "@angular/router";
-import {RecaptchaFormsModule, RecaptchaModule} from "ng-recaptcha";
-import {EnvServiceFactory} from "../../../../core/services/env/env.service.provider";
-import {BlockUIModule} from "primeng/blockui";
-import {BlockUiComponent} from "../../../../core/ui/block-ui/block-ui.component";
+import { Component, inject, OnDestroy } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { AuthService } from "../../../../core/services/auth/auth.service";
+import { HttpErrorResponse } from "@angular/common/http";
+import { IFormValidation } from "../../../../core/models/ui/form";
+import { Subscription } from "rxjs";
+import { MessageService } from "primeng/api";
+import { ToastModule } from "primeng/toast";
+import { Router } from "@angular/router";
+import { RecaptchaFormsModule, RecaptchaModule } from "ng-recaptcha";
+import { EnvServiceFactory } from "../../../../core/services/env/env.service.provider";
+import { BlockUIModule } from "primeng/blockui";
+import { BlockUiComponent } from "../../../../core/ui/block-ui/block-ui.component";
+import { AuthStore } from '../../../../core/store/auth.store';
+import { AppStore } from '../../../../core/store/app.store';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +32,9 @@ import {BlockUiComponent} from "../../../../core/ui/block-ui/block-ui.component"
 })
 export class LoginComponent implements OnDestroy {
 
-  private _subscriptions: Subscription = new Subscription();
+  private readonly _subscriptions: Subscription = new Subscription();
+  private readonly _store = inject(AuthStore);
+  private readonly _appStore = inject(AppStore);
 
   protected loginForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -90,8 +94,8 @@ export class LoginComponent implements OnDestroy {
   ngOnDestroy() {
     this._subscriptions.unsubscribe();
     this.loginForm.reset();
-    this.emailValidation = {error: false, msg: ''};
-    this.pwdValidation = {error: false, msg: ''};
+    this.emailValidation = { error: false, msg: '' };
+    this.pwdValidation = { error: false, msg: '' };
     this.isLoading = false;
     this.captchaKey = '';
   }
@@ -150,8 +154,17 @@ export class LoginComponent implements OnDestroy {
             return;
           }
 
-          sessionStorage.setItem('token', res.data.token.replace('Bearer ', ''));
-          sessionStorage.setItem('user', JSON.stringify(res.data));
+          const remember_me = this.loginForm.value.remember_me ? 'permanent' : 'temporary';
+
+          this._authService.setSession(res.data, remember_me);
+          const session = {
+            token: res.data.token.replace('Bearer ', ''),
+            isAuth: true,
+            role: res.data.id_role,
+            user: res.data.name,
+          };
+          this._store.updateSession(session);
+          this._appStore.setAuthMenu();
           this._router.navigateByUrl('/admin/postulations');
         },
         error: (error: HttpErrorResponse) => {

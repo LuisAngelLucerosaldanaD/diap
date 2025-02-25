@@ -12,6 +12,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {MenuModule} from "primeng/menu";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {BlockUIModule} from "primeng/blockui";
+import { BlockUiComponent } from "../../../../core/ui/block-ui/block-ui.component";
 
 @Component({
   selector: 'app-users',
@@ -25,7 +26,8 @@ import {BlockUIModule} from "primeng/blockui";
     MenuModule,
     ConfirmDialogModule,
     BlockUIModule,
-  ],
+    BlockUiComponent
+],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
   providers: [MessageService, ConfirmationService]

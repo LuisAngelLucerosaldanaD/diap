@@ -16,3 +16,10 @@ export interface IDataSession {
   expirer_in: number;
   token: string;
 }
+
+export interface IAuth {
+  token: string;
+  isAuth: boolean;
+  role: number;
+  user: string;
+}

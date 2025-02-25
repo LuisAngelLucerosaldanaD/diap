@@ -1,7 +1,7 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {MenuService} from "../../services/ui/menu.service";
+import {Component, inject} from '@angular/core';
 import {RouterLink} from "@angular/router";
-import {AuthService} from "../../services/auth/auth.service";
+import { AuthStore } from '../../store/auth.store';
+import { AppStore } from '../../store/app.store';
 
 @Component({
   selector: 'app-header',
@@ -12,20 +12,11 @@ import {AuthService} from "../../services/auth/auth.service";
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit {
-  private readonly _menuService: MenuService = inject(MenuService);
-  private readonly _authService: AuthService = inject(AuthService);
-  private _isMenuVisible: boolean = false;
-  protected isAuthenticated: boolean = false;
-  protected user: string = '';
-
-  ngOnInit() {
-    this.isAuthenticated = this._authService.isAuthenticated();
-    this.user = this._authService.getUser();
-  }
+export class HeaderComponent {
+  protected readonly appStore = inject(AppStore);
+  protected readonly store = inject(AuthStore);
 
   protected showMenu(): void {
-    this._isMenuVisible = !this._isMenuVisible;
-    this._menuService.show({show: this._isMenuVisible});
+    this.appStore.toggleMenu();
   }
 }

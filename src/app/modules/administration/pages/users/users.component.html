@@ -1,76 +1,69 @@
-<main class="h-full p-6 bg-gray-100 overflow-y-auto">
+<main class="h-full px-2 md:px-6 py-6 bg-gray-100 overflow-y-auto">
   <div class="py-1">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-        <h2 class="font-semibold text-xl mb-4">Gestión de Usuarios</h2>
+        <h2 class="font-semibold text-xl mb-4 text-center md:text-left">Gestión de Usuarios</h2>
 
-        <div class="overflow-x-auto bg-white">
-          <div class="mx-auto px-4 lg:px-6">
-            <div class="bg-white  relative shadow-md sm:rounded-lg overflow-hidden">
-              <div
-                class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-                <div class="w-full md:w-1/2">
-                  <div class="flex items-center">
-                    <label for="search" class="sr-only">Buscar</label>
-                    <div class="relative w-full">
-                      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor"
-                             viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
-                        </svg>
-                      </div>
-                      <input type="text" id="search" placeholder="Buscar" [(ngModel)]="userFilter.name"
-                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2">
-                    </div>
-                  </div>
+        <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 py-4 px-2">
+          <div class="w-full md:w-1/2">
+            <div class="flex items-center">
+              <label for="search" class="sr-only">Buscar</label>
+              <div class="relative w-full">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewbox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
+                  </svg>
                 </div>
-                <div
-                  class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                  <button type="button" (click)="createUser()"
-                          class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none">
-                    <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
-                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                      <path clip-rule="evenodd" fill-rule="evenodd"
-                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
-                    </svg>
-                    Agregar Usuario
-                  </button>
-                </div>
+                <input type="text" id="search" placeholder="Buscar" [(ngModel)]="userFilter.name" class="inp-search">
               </div>
+            </div>
+          </div>
+          <div class="btn-container">
+            <button type="button" (click)="createUser()" class="btn-add">
+              <i class="pi pi-plus mr-1"></i>
+              Agregar Usuario
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-auto bg-white">
+          <div class="mx-auto">
+            <div class="bg-white  relative shadow-md sm:rounded-lg overflow-hidden">
+
               <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left text-gray-500">
                   <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                  <tr>
-                    <th scope="col" class="px-4 py-3">Nombre</th>
-                    <th scope="col" class="px-4 py-3">Email</th>
-                    <th scope="col" class="px-4 py-3">Rol</th>
-                    <th scope="col" class="px-4 py-3">
-                      <span class="sr-only">Actions</span>
-                    </th>
-                  </tr>
+                    <tr>
+                      <th scope="col" class="px-4 py-3">Nombre</th>
+                      <th scope="col" class="px-4 py-3">Email</th>
+                      <th scope="col" class="px-4 py-3">Rol</th>
+                      <th scope="col" class="px-4 py-3">
+                        <span class="sr-only">Actions</span>
+                      </th>
+                    </tr>
                   </thead>
                   <tbody>
                     @for (usr of users | filterBy: userFilter; track usr.id; let i = $index) {
-                      <tr class="border-b">
-                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                          {{ usr.name }}
-                        </th>
-                        <td class="px-4 py-3">{{ usr.email }}</td>
-                        <td class="px-4 py-3">{{ usr.role }}</td>
-                        <td class="px-4 py-3 flex items-center justify-end relative">
-                          <button id="apple-imac-27-dropdown-button" type="button"
-                                  (click)="user = usr;menu.toggle($event)"
-                                  class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none">
-                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                                 xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
-                            </svg>
-                          </button>
-                          <p-menu #menu [model]="items" [popup]="true" appendTo="body"/>
-                        </td>
-                      </tr>
+                    <tr class="border-b">
+                      <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        {{ usr.name }}
+                      </th>
+                      <td class="px-4 py-3">{{ usr.email }}</td>
+                      <td class="px-4 py-3">{{ usr.role }}</td>
+                      <td class="px-4 py-3 flex items-center justify-end relative">
+                        <button id="apple-imac-27-dropdown-button" type="button"
+                          (click)="user = usr;menu.toggle($event)"
+                          class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none">
+                          <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                          </svg>
+                        </button>
+                        <p-menu #menu [model]="items" [popup]="true" appendTo="body" />
+                      </td>
+                    </tr>
                     }
                   </tbody>
                 </table>
@@ -91,7 +84,7 @@
       </h3>
       <button class="text-gray  hover:text-red-400 rounded-full px-1 focus:outline-none" (click)="closeModal()">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-             stroke-width="2">
+          stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
@@ -102,49 +95,49 @@
         <label for="name" class="block text-sm font-medium">Nombre <span class="text-red-600">*</span></label>
         <input type="text" id="name" class="border p-2 w-full mb-2 bg-white rounded-md" formControlName="name">
         @if (userForm.get('name')?.invalid && userForm.get('name')?.touched) {
-          <small *ngIf="userForm.get('name')?.hasError('required')" class="text-red-600">
-            El nombre del usuario es requerido.
-          </small>
-          <small *ngIf="userForm.get('name')?.hasError('minlength')" class="text-red-600">
-            El nombre del usuario debe tener al menos 3 caracteres.
-          </small>
-          <small *ngIf="userForm.get('name')?.hasError('maxlength')" class="text-red-600">
-            El nombre del usuario debe tener máximo 100 caracteres.
-          </small>
+        <small *ngIf="userForm.get('name')?.hasError('required')" class="text-red-600">
+          El nombre del usuario es requerido.
+        </small>
+        <small *ngIf="userForm.get('name')?.hasError('minlength')" class="text-red-600">
+          El nombre del usuario debe tener al menos 3 caracteres.
+        </small>
+        <small *ngIf="userForm.get('name')?.hasError('maxlength')" class="text-red-600">
+          El nombre del usuario debe tener máximo 100 caracteres.
+        </small>
         }
       </div>
       <div class="mb-4">
         <label for="email" class="block text-sm font-medium">Correo Electrónico <span
-          class="text-red-600 bg-white">*</span></label>
+            class="text-red-600 bg-white">*</span></label>
         <input type="email" id="email" class="border p-2 w-full mb-2 bg-white rounded-md" formControlName="email"
-               autocomplete="off">
+          autocomplete="off">
         @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
-          <small *ngIf="userForm.get('email')?.hasError('required')" class="text-red-600">
-            El correo electrónico es requerido.
-          </small>
-          <small *ngIf="userForm.get('email')?.hasError('email')" class="text-red-600">
-            El correo electrónico no es válido.
-          </small>
+        <small *ngIf="userForm.get('email')?.hasError('required')" class="text-red-600">
+          El correo electrónico es requerido.
+        </small>
+        <small *ngIf="userForm.get('email')?.hasError('email')" class="text-red-600">
+          El correo electrónico no es válido.
+        </small>
         }
       </div>
       @if (type === 'create') {
-        <div class="mb-4 bg-white">
-          <label for="password" class="block text-sm font-medium">Contraseña <span
+      <div class="mb-4 bg-white">
+        <label for="password" class="block text-sm font-medium">Contraseña <span
             class="text-red-600 bg-white">*</span></label>
-          <input type="password" id="password" class="border p-2 w-full mb-2 bg-white rounded-md"
-                 formControlName="password" autocomplete="off">
-          @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
-            <small *ngIf="userForm.get('password')?.hasError('required')" class="text-red-600">
-              La contraseña es requerida.
-            </small>
-            <small *ngIf="userForm.get('password')?.hasError('minlength')" class="text-red-600">
-              La contraseña debe tener al menos 8 caracteres.
-            </small>
-            <small *ngIf="userForm.get('password')?.hasError('maxlength')" class="text-red-600">
-              La contraseña debe tener máximo 100 caracteres.
-            </small>
-          }
-        </div>
+        <input type="password" id="password" class="border p-2 w-full mb-2 bg-white rounded-md"
+          formControlName="password" autocomplete="off">
+        @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
+        <small *ngIf="userForm.get('password')?.hasError('required')" class="text-red-600">
+          La contraseña es requerida.
+        </small>
+        <small *ngIf="userForm.get('password')?.hasError('minlength')" class="text-red-600">
+          La contraseña debe tener al menos 8 caracteres.
+        </small>
+        <small *ngIf="userForm.get('password')?.hasError('maxlength')" class="text-red-600">
+          La contraseña debe tener máximo 100 caracteres.
+        </small>
+        }
+      </div>
       }
 
       <div class="mb-4 bg-white">
@@ -155,9 +148,9 @@
           <option value="2">Soporte</option>
         </select>
         @if (userForm.get('role')?.invalid && userForm.get('role')?.touched) {
-          <small *ngIf="userForm.get('role')?.hasError('required')" class="text-red-600">
-            El rol del usuario es requerido.
-          </small>
+        <small *ngIf="userForm.get('role')?.hasError('required')" class="text-red-600">
+          El rol del usuario es requerido.
+        </small>
         }
       </div>
     </form>
@@ -173,25 +166,6 @@
   </div>
 </div>
 
-<p-toast/>
-<p-confirmDialog key="users"/>
-<p-blockUI [blocked]="isLoading">
-  <div class="flex flex-col gap-2 items-center justify-center">
-    <div>
-      <img class="w-14 h-14 mb-3" alt="imagen logo"
-           src="https://portalweb.unas.edu.pe/sites/all/themes/business_responsive_theme/logo.png">
-    </div>
-    <div>
-      <div class="lds-roller">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-  </div>
-</p-blockUI>
+<p-toast />
+<p-confirmDialog key="users" />
+<app-block-ui [show]="isLoading"/>

@@ -1,76 +1,76 @@
-<main class="h-full p-6 bg-gray-100 overflow-y-auto">
+<main class="h-full p-2 md:px-6 py-6 bg-gray-100 overflow-y-auto">
   <div class="py-1">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-2 md:px-8">
       <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-        <h2 class="font-semibold text-xl mb-4">Gestión de Convocatorias de examenes de Admision</h2>
-        <div class="overflow-x-auto bg-white">
-          <div class="mx-auto px-4 lg:px-6">
-            <div class="bg-white  relative shadow-md sm:rounded-lg overflow-hidden">
-              <div
-                class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-                <div class="w-full md:w-1/2">
-                  <div class="flex items-center">
-                    <label for="search" class="sr-only">Buscar</label>
-                    <div class="relative w-full">
-                      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor"
-                             viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
-                        </svg>
-                      </div>
-                      <input type="text" id="search" placeholder="Buscar" [(ngModel)]="userFilter.name"
-                             class="inp-search">
-                    </div>
-                  </div>
+        <h2 class="font-semibold text-xl mb-4 text-center md:text-left">Gestión de Convocatorias de examenes de Admision
+        </h2>
+        <div
+          class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 px-2 md:px-4 py-4">
+          <div class="w-full md:w-1/2">
+            <div class="flex items-center">
+              <label for="search" class="sr-only">Buscar</label>
+              <div class="relative w-full">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewbox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
+                  </svg>
                 </div>
-                <div
-                  class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                  <button type="button" class="btn-create" (click)="createExam()">
-                    <i class="pi pi-plus mr-1"></i>
-                    Crear Convocatoria
-                  </button>
-                </div>
+                <input type="text" id="search" placeholder="Buscar" [(ngModel)]="userFilter.name" class="inp-search">
               </div>
+            </div>
+          </div>
+          <div
+            class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+            <button type="button" class="btn-create" (click)="createExam()">
+              <i class="pi pi-plus mr-1"></i>
+              Crear Convocatoria
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-aut">
+          <div class="mx-auto px-2 lg:px-4">
+            <div class="bg-white  relative shadow-md sm:rounded-lg overflow-hidden">
               <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left text-gray-500">
                   <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                  <tr>
-                    <th scope="col" class="px-4 py-3">Nombre</th>
-                    <th scope="col" class="px-4 py-3">Descripción</th>
-                    <th scope="col" class="px-4 py-3">Contacto</th>
-                    <th scope="col" class="px-4 py-3">Fecha de Inicio</th>
-                    <th scope="col" class="px-4 py-3">Fecha de Fin</th>
-                    <th scope="col" class="px-4 py-3">Fecha del Examen</th>
-                    <th scope="col" class="px-4 py-3">Tipo de Examen</th>
-                    <th scope="col" class="px-4 py-3">
-                      <span class="sr-only">Actions</span>
-                    </th>
-                  </tr>
+                    <tr>
+                      <th scope="col" class="px-4 py-3">Nombre</th>
+                      <th scope="col" class="px-4 py-3">Descripción</th>
+                      <th scope="col" class="px-4 py-3">Contacto</th>
+                      <th scope="col" class="px-4 py-3">Fecha de Inicio</th>
+                      <th scope="col" class="px-4 py-3">Fecha de Fin</th>
+                      <th scope="col" class="px-4 py-3">Fecha del Examen</th>
+                      <th scope="col" class="px-4 py-3">Tipo de Examen</th>
+                      <th scope="col" class="px-4 py-3">
+                        <span class="sr-only">Actions</span>
+                      </th>
+                    </tr>
                   </thead>
                   <tbody>
                     @for (exam of exams | filterBy: userFilter; track exam.id) {
-                      <tr class="border-b">
-                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                          {{ exam.name }}
-                        </th>
-                        <td class="px-4 py-3">{{ exam.description }}</td>
-                        <td class="px-4 py-3">{{ exam.contact }}</td>
-                        <td class="px-4 py-3">{{ exam.start_date }}</td>
-                        <td class="px-4 py-3">{{ exam.end_date }}</td>
-                        <td class="px-4 py-3">{{ exam.exam_date }}</td>
-                        <td class="px-4 py-3">{{ exam.id_examtype === 1 ? 'Ordinario' : 'ExtraOrdinario' }}</td>
-                        <td class="px-4 py-3 flex items-center justify-end relative">
-                          <button type="button" class="btn-options" (click)="openMenu(exam, menu, $event)">
-                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                                 xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
-                            </svg>
-                          </button>
-                          <p-menu #menu [model]="items" [popup]="true" appendTo="body"/>
-                        </td>
-                      </tr>
+                    <tr class="border-b">
+                      <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        {{ exam.name }}
+                      </th>
+                      <td class="px-4 py-3">{{ exam.description }}</td>
+                      <td class="px-4 py-3">{{ exam.contact }}</td>
+                      <td class="px-4 py-3">{{ exam.start_date }}</td>
+                      <td class="px-4 py-3">{{ exam.end_date }}</td>
+                      <td class="px-4 py-3">{{ exam.exam_date }}</td>
+                      <td class="px-4 py-3">{{ exam.id_examtype === 1 ? 'Ordinario' : 'ExtraOrdinario' }}</td>
+                      <td class="px-4 py-3 flex items-center justify-end relative">
+                        <button type="button" class="btn-options" (click)="openMenu(exam, menu, $event)">
+                          <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                          </svg>
+                        </button>
+                        <p-menu #menu [model]="items" [popup]="true" appendTo="body" />
+                      </td>
+                    </tr>
                     }
                   </tbody>
                 </table>
@@ -92,7 +92,7 @@
       </h3>
       <button class="text-gray hover:text-red-400 rounded-full px-1 focus:outline-none" (click)="cancelModal()">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-             stroke-width="2">
+          stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
@@ -114,24 +114,24 @@
       </div>
       <div class="mb-4">
         <label for="start_date" class="block text-sm font-medium">Fecha de inicio <span
-          class="text-red-600">*</span></label>
+            class="text-red-600">*</span></label>
         <input type="datetime-local" id="start_date" class="border p-2 w-full mb-2  bg-gray-300"
-               formControlName="start_date">
+          formControlName="start_date">
       </div>
       <div class="mb-4">
         <label for="end_date" class="block text-sm font-medium">Fecha de fin <span class="text-red-600">*</span></label>
         <input type="datetime-local" id="end_date" class="border p-2 w-full mb-2 bg-gray-300"
-               formControlName="end_date">
+          formControlName="end_date">
       </div>
       <div class="mb-4">
         <label for="exam_date" class="block text-sm font-medium">Fecha del examen <span
-          class="text-red-600">*</span></label>
+            class="text-red-600">*</span></label>
         <input type="datetime-local" id="exam_date" class="border p-2 w-full mb-2 bg-gray-300"
-               formControlName="exam_date">
+          formControlName="exam_date">
       </div>
       <div class="mb-4">
         <label for="id_examtype" class="block text-sm font-medium">Tipo de examen <span
-          class="text-red-600">*</span></label>
+            class="text-red-600">*</span></label>
         <select id="id_examtype" class="border p-2 w-full mb-2 bg-gray-300" formControlName="type">
           <option value="1">Ordinario</option>
           <option value="2">ExtraOrdinario</option>
@@ -150,6 +150,6 @@
   </div>
 </div>
 
-<app-block-ui [show]="isLoading"/>
-<p-toast/>
-<p-confirmDialog key="exams"/>
+<app-block-ui [show]="isLoading" />
+<p-toast />
+<p-confirmDialog key="exams" />

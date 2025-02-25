@@ -1,4 +1,4 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnDestroy} from '@angular/core';
+import {Component, effect, inject, OnDestroy, signal} from '@angular/core';
 import {IRequirement} from "../../../../core/models/registration/registration";
 import {FormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
@@ -23,7 +23,6 @@ import {IModality} from "../../../../core/models/admin/postulation";
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [MessageService]
 })
 export class RegistrationComponent implements OnDestroy {
@@ -34,24 +33,23 @@ export class RegistrationComponent implements OnDestroy {
   protected exam!: IExam;
 
   protected modalities: IModality[] = [];
-  protected selectedMode: number = -1;
+  protected selectedMode = signal(-1);
   protected requirement: IRequirement[] = [];
   protected isLoading: boolean = false;
 
   constructor() {
     this._getCurrentExam();
+    effect(() => {
+      if (this.selectedMode() !== -1) this._getFileRequired();
+    });
   }
 
   ngOnDestroy() {
     this._subscriptions.unsubscribe();
     this.isLoading = false;
     this.modalities = [];
-    this.selectedMode = -1;
+    this.selectedMode.set(-1);
     this.requirement = [];
-  }
-
-  protected selectMode(): void {
-    this._getModalities();
   }
 
   private _getCurrentExam(): void {
@@ -107,8 +105,7 @@ export class RegistrationComponent implements OnDestroy {
           }
 
           this.modalities = res.data;
-          this.selectedMode = this.selectedMode !== -1 ? this.selectedMode : this.modalities[0].id;
-          this._getFileRequired();
+          this.selectedMode.set(this.selectedMode() !== -1 ? this.selectedMode() : this.modalities[0].id);
         },
         error: (err: HttpErrorResponse) => {
           console.error(err);
@@ -126,7 +123,7 @@ export class RegistrationComponent implements OnDestroy {
 
   private _getFileRequired(): void {
     this.isLoading = true;
-    const id = this.selectedMode;
+    const id = this.selectedMode();
     this._subscriptions.add(
       this._modalitiesService.getRequirementsByModality(id).subscribe({
         next: (res) => {

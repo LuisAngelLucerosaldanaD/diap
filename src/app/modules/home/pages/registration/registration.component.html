@@ -3,12 +3,12 @@
     <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg mt-10">
       <div class="text-blue-700 px-6 pt-6 rounded-t-lg">
         <h1 class="text-center text-2xl font-bold">REQUISITOS PARA INSCRIPCIÓN</h1>
-        <p class="text-center text-lg">{{ exam?.name }}</p>
-        <p class="text-center text-lg">{{ exam?.description }}</p>
+        <p class="text-center text-lg">{{ exam.name }}</p>
+        <p class="text-center text-lg">{{ exam.description }}</p>
       </div>
       <div class="text-black-700 p-6 rounded-t-lg">
         <label class="block text-md font-medium">Modalidad</label>
-        <select class="border p-2 w-full mb-2 bg-white" [(ngModel)]="selectedMode" (change)="selectMode()">
+        <select class="border p-2 w-full mb-2 bg-white" [(ngModel)]="selectedMode">
           @for (mode of modalities; track mode.id) {
             <option [value]="mode.id">{{ mode.name }}</option>
           }

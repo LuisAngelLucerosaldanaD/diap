@@ -31,6 +31,7 @@ import {IModality, IPostulation} from "../../models/admin/postulation";
 import {SecureImagePipe} from "../../pipes/secure-image.pipe";
 import {SafePipePipe} from "../../pipes/safe-pipe.pipe";
 import {RouterLink} from "@angular/router";
+import { ModeForm } from '../../types/forms';
 
 @Component({
   selector: 'app-form-registration',
@@ -53,21 +54,24 @@ import {RouterLink} from "@angular/router";
 })
 export class FormRegistrationComponent implements OnInit, OnDestroy {
   @Input() postulation!: IPostulation;
-  @Input() mode: 'create' | 'update' | 'show' = 'create';
+  @Input() mode: ModeForm = 'create';
   @Input() module: 'post' | 'regis' = 'regis';
   @Output() finish: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  // Services and Providers
   private readonly _subscriptions: Subscription = new Subscription();
   private readonly _registrationService: RegistrationService = inject(RegistrationService);
   private readonly _modalitiesService: ModalitiesService = inject(ModalitiesService);
   private readonly _toastService: MessageService = inject(MessageService);
   private readonly _store: Store<AppState> = inject(Store);
+
+  // Private Properties
   private _payments$ = this._store.select(selectPayments);
   private _exam$ = this._store.select(selectExam);
   private _payment: IPayment | null = null;
   private _exam!: IExam;
 
-  // Statics
+  // Readonly Properties
   protected readonly faculties = FacultiesOptions;
 
   protected facultiesSecond: IOption[] = [];
@@ -619,7 +623,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   private _getSchoolData(): void {
     this.isLoading = true;
     this._subscriptions.add(
-      this._registrationService.getSchoolsData(this.postulation.id).subscribe({
+      this._registrationService.getSchoolsData(this.postulation.applicant.id_school).subscribe({
         next: (res) => {
           if (res.error) {
             this._toastService.add({
@@ -781,6 +785,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
             this.schoolProvinces = res.data;
             if (this.mode === 'show' || this.mode === 'update') {
               const province = res.data.find(region => region.idProvincia === this.schoolForm.get('province')?.value);
+              console.log(this.schoolForm)
               this.getDistricts({id: 'school_provinceApplicant', value: province?.idProvincia});
             }
             return;
@@ -903,6 +908,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     const fac = this.faculties.find(faculty => faculty.value === this.academicForm.get('first_option')?.value);
     if (!fac) return;
     this.facultiesSecond = this.faculties.filter(faculty => faculty.type === fac.type);
+    this.facultiesSecond = this.facultiesSecond.filter(faculty => faculty.value !== this.academicForm.get('first_option')?.value);
     this.academicForm.get('second_option')?.setValue('');
   }
 

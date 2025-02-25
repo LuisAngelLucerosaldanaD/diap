@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {BlockUIModule} from "primeng/blockui";
 
 @Component({
@@ -11,5 +11,5 @@ import {BlockUIModule} from "primeng/blockui";
   styleUrl: './block-ui.component.scss'
 })
 export class BlockUiComponent {
-  @Input({required: true}) show: boolean = false;
+  public show = input.required<boolean>();
 }
