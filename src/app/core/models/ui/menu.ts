@@ -7,4 +7,5 @@ export interface IMenuItem {
   route: string;
   icon: string;
   roles: number[];
+  exact: boolean;
 }

@@ -7,25 +7,29 @@ export const HOME_MENU: IMenuItem[] = [
     name: 'INICIO',
     route: '/home',
     icon: 'fa-house',
-    roles: []
+    roles: [],
+    exact: true
   },
   {
     name: 'FACULTADES',
     route: '/home/faculties',
     icon: 'fa-graduation-cap',
-    roles: []
+    roles: [],
+    exact: true
   },
   {
     name: 'MODALIDADES',
     route: '/home/modalities',
     icon: 'fa-shuffle',
-    roles: []
+    roles: [],
+    exact: true
   },
   {
     name: 'INSCRIPCIÓN',
     route: '/home/registration',
     icon: 'fa-file-pen',
-    roles: []
+    roles: [],
+    exact: false
   }
 ];
 
@@ -34,19 +38,29 @@ export const AUTH_MENU: IMenuItem[] = [
     name: 'Usuarios',
     route: '/admin/users',
     icon: 'fa-user',
-    roles: [1]
+    roles: [1],
+    exact: true
   },
   {
     name: 'Examenes',
     route: '/admin/exams',
     icon: 'fa-file',
-    roles: [1]
+    roles: [1],
+    exact: false
+  },
+  {
+    name: 'FACULTADES',
+    route: '/home/faculties',
+    icon: 'fa-graduation-cap',
+    roles: [1],
+    exact: true
   },
   {
     name: 'Postulaciones',
     route: '/admin/postulations',
     icon: 'fa-book',
-    roles: [1, 2]
+    roles: [1, 2],
+    exact: true
   }
 ];
 

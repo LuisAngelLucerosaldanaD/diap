@@ -16,9 +16,7 @@ import {FileHelper} from "../../../../core/utils/file/file";
 import {ToastModule} from "primeng/toast";
 import {FormRegistrationComponent} from "../../../../core/ui/form-registration/form-registration.component";
 import {DialogModule} from "primeng/dialog";
-import {setExam} from "../../../../core/store/actions/exam.actions";
-import {Store} from "@ngrx/store";
-import {AppState} from "../../../../core/store/app.reducers";
+import { ExamStore } from '../../../../core/store/exam.store';
 
 @Component({
   selector: 'app-postulations',
@@ -44,7 +42,7 @@ export class PostulationsComponent implements OnInit, OnDestroy {
   private readonly _postulationsService: PostulationsService = inject(PostulationsService);
   private readonly _registrationService: RegistrationService = inject(RegistrationService);
   private readonly _toastService: MessageService = inject(MessageService);
-  private readonly _store: Store<AppState> = inject(Store);
+  private readonly _examStore = inject(ExamStore);
 
   protected items = [
     {
@@ -128,7 +126,7 @@ export class PostulationsComponent implements OnInit, OnDestroy {
           const latestItem = this.exams.reduce((latest, item) => {
             return item.created_at < latest.created_at ? item : latest;
           });
-          this._store.dispatch(setExam({exam: latestItem}));
+          this._examStore.setExam(latestItem)
           this.formExam.setValue(latestItem.id);
           this._getPostulations(latestItem.id);
         },
@@ -213,7 +211,7 @@ export class PostulationsComponent implements OnInit, OnDestroy {
   protected changeExam(): void {
     const latestItem = this.exams.find(exam => exam.id.toString() === this.formExam.value);
     if (!latestItem) return;
-    this._store.dispatch(setExam({exam: latestItem}));
+    this._examStore.setExam(latestItem);
     this._getPostulations(this.formExam.value);
   }
 

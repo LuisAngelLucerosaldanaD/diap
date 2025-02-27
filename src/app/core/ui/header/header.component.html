@@ -3,9 +3,11 @@
     <div class="pl-3">
       <img src="/assets/logos/diap.svg" alt="Logo diap" class="w-11">
     </div>
-    <div class="text-white font-bold select-none">
-      <span>DIAP</span>
-    </div>
+    @if (store.isAuth()) {
+      <div class="text-white font-bold select-none">
+        <span>SISTEMA DE ADMISIÓN UNAS</span>
+      </div>
+    }
     <button type="button" class="text-white" (click)="showMenu()">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -13,18 +15,25 @@
     </button>
   </div>
   @if (store.isAuth()) {
-  <button type="button" class="btn-login">
-    {{ store.user() }}
-  </button>
+    @if (!appStore.isMobileDevice()) {
+      <div class="chip-user">
+        <div class="rounded-full flex items-center justify-center bg-white h-10 w-10">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="text-white">
+          <span>{{ store.user() }}</span>
+        </div>
+    </div>
+    }
   } @else {
-  <button type="button" class="btn-login" routerLink="/auth/login">
-    Ingresar
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-      class="size-5 rotate-90">
-      <path stroke-linecap="round" stroke-linejoin="round"
-        d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
-    </svg>
-  </button>
+    <button type="button" class="btn-login" routerLink="/auth/login">
+      Ingresar
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="size-5 rotate-90">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+      </svg>
+    </button>
   }
 
 </header>

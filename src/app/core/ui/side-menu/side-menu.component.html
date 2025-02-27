@@ -1,55 +1,66 @@
 @if (appStore.isMobileDevice()) {
-<p-sidebar [visible]="!appStore.menuIsCompact()" [showCloseIcon]="false">
-  <ng-template pTemplate="headless">
-    <div class="menu h-full flex flex-col">
-      <div class="flex-1 mt-4">
-        @for (item of appStore.menuItems(); track item.name) {
-        <div class="item" (click)="goToRoute(item.route)" appActiveRoute [appActiveRoute]="item.route"
-          activeClass="item-select">
-          <i class="fa-solid {{item.icon}}"></i>
-          <span>{{ item.name }}</span>
+  <p-sidebar [visible]="!appStore.menuIsCompact()" [showCloseIcon]="false">
+    <ng-template pTemplate="headless">
+      <div class="menu h-full flex flex-col">
+        @if (authStore.isAuth()) {
+          <div class="w-full flex items-center justify-center flex-col mt-6">
+            <div class="rounded-full flex items-center justify-center bg-white h-16 w-16">
+              <i class="fa-solid fa-user" style="font-size: 24px;"></i>
+            </div>
+            <div class="text-white mt-4">
+              <span class="text-xl">{{ authStore.user()}}</span>
+            </div>
+          </div>
+        }
+
+        <div class="flex-1 mt-4">
+          @for (item of appStore.menuItems(); track item.name) {
+            <div class="item" (click)="goToRoute(item.route)" appActiveRoute [appActiveRoute]="item.route"
+              activeClass="item-select">
+              <i class="fa-solid {{item.icon}}"></i>
+              <span>{{ item.name }}</span>
+            </div>
+          }
         </div>
+        @if (authStore.isAuth()) {
+          <button type="submit" class="btn-logout" (click)="logout()">
+            <i class="fa-solid fa-power-off"></i>
+            <span class="ml-2 text-md">Cerrar Sesión</span>
+          </button>
         }
       </div>
-      @if (authStore.isAuth()) {
-        <button type="submit" class="btn-logout" (click)="logout()">
-          <i class="fa-solid fa-power-off"></i>
-          <span class="ml-2 text-md">Cerrar Sesión</span>
-        </button>
+    </ng-template>
+  </p-sidebar>
+} @else {
+  <div class="menu transition-all duration-300 h-full flex flex-col"
+    [ngClass]="{'w-12': appStore.menuIsCompact(), 'w-64': !appStore.menuIsCompact()}">
+    <div class="flex-1">
+      @if (!appStore.menuIsCompact()) {
+        @for (item of appStore.menuItems(); track item.name) {
+          <div class="item" [routerLink]="item.route" routerLinkActive="item-select"
+            [routerLinkActiveOptions]="{exact: item.exact}">
+            <i class="fa-solid {{item.icon}}"></i>
+            <span>{{ item.name }}</span>
+          </div>
+        }
+      } @else {
+        @for (item of appStore.menuItems(); track item.name) {
+          <div class="item" [pTooltip]="item.name" tooltipPosition="right" [routerLink]="item.route"
+            routerLinkActive="item-select" [routerLinkActiveOptions]="{exact: item.exact}">
+            <i class="fa-solid {{item.icon}}"></i>
+          </div>
+        }
       }
     </div>
-  </ng-template>
-</p-sidebar>
-} @else {
-<div class="menu transition-all duration-300 h-full flex flex-col"
-  [ngClass]="{'w-12': appStore.menuIsCompact(), 'w-64': !appStore.menuIsCompact()}">
-  <div class="flex-1">
-    @if (!appStore.menuIsCompact()) {
-    @for (item of appStore.menuItems(); track item.name) {
-    <div class="item" [routerLink]="item.route" routerLinkActive="item-select"
-      [routerLinkActiveOptions]="{exact: true}">
-      <i class="fa-solid {{item.icon}}"></i>
-      <span>{{ item.name }}</span>
-    </div>
-    }
-    } @else {
-    @for (item of appStore.menuItems(); track item.name) {
-    <div class="item" [pTooltip]="item.name" tooltipPosition="right" [routerLink]="item.route"
-      routerLinkActive="item-select" [routerLinkActiveOptions]="{exact: true}">
-      <i class="fa-solid {{item.icon}}"></i>
-    </div>
-    }
+    @if (authStore.isAuth()) {
+      <button type="submit" class="btn-logout" (click)="logout()">
+        <i class="fa-solid fa-power-off"></i>
+        @if (!appStore.menuIsCompact()) {
+          <span class="ml-2 text-md">Cerrar Sesión</span>
+        }
+      </button>
     }
   </div>
-  @if (authStore.isAuth()) {
-  <button type="submit" class="btn-logout" (click)="logout()">
-    <i class="fa-solid fa-power-off"></i>
-    @if (!appStore.menuIsCompact()) {
-    <span class="ml-2 text-md">Cerrar Sesión</span>
-    }
-  </button>
-  }
-</div>
 }
 
 <p-confirmDialog key="logout" #cd>

@@ -7,3 +7,8 @@
   @apply w-full h-14 flex justify-between;
   background-color: #1ABB9C;
 }
+
+.chip-user {
+  background-color: #0F75BC;
+  @apply flex gap-2 px-2 items-center;
+}

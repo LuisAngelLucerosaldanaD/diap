@@ -1,6 +1,7 @@
 
 .btn-login {
-  @apply inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 disabled:opacity-25 transition ease-in-out duration-150 ml-4;
+  background-color: #15AA7A;
+  @apply w-full text-center justify-center inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest focus:outline-none focus:border-emerald-300 disabled:opacity-25 transition ease-in-out duration-150 ml-4;
 }
 
 .card-body {

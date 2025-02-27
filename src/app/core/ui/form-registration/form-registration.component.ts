@@ -8,8 +8,6 @@ import {ToastModule} from "primeng/toast";
 import {BlockUiComponent} from "../block-ui/block-ui.component";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {FacultiesOptions} from "../../utils/constants/constants";
-import {Store} from "@ngrx/store";
-import {AppState} from "../../store/app.reducers";
 import {
   IAcademicDTO, IAnnexe, IAnswer,
   IApplicantDTO,
@@ -25,13 +23,13 @@ import {FileHelper} from "../../utils/file/file";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {IResponse} from "../../models/response";
 import {IExam} from "../../models/admin/exams";
-import {selectExam} from "../../store/reducers/exam.reducer";
-import {selectPayments} from "../../store/reducers/payment.reducer";
 import {IModality, IPostulation} from "../../models/admin/postulation";
 import {SecureImagePipe} from "../../pipes/secure-image.pipe";
 import {SafePipePipe} from "../../pipes/safe-pipe.pipe";
 import {RouterLink} from "@angular/router";
-import { ModeForm } from '../../types/forms';
+import {ModeForm} from '../../types/forms';
+import {ExamStore} from "../../store/exam.store";
+import {PaymentStore} from "../../store/payment.store";
 
 @Component({
   selector: 'app-form-registration',
@@ -63,11 +61,9 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   private readonly _registrationService: RegistrationService = inject(RegistrationService);
   private readonly _modalitiesService: ModalitiesService = inject(ModalitiesService);
   private readonly _toastService: MessageService = inject(MessageService);
-  private readonly _store: Store<AppState> = inject(Store);
+  private readonly _examStore = inject(ExamStore);
+  private readonly _paymentStore = inject(PaymentStore);
 
-  // Private Properties
-  private _payments$ = this._store.select(selectPayments);
-  private _exam$ = this._store.select(selectExam);
   private _payment: IPayment | null = null;
   private _exam!: IExam;
 
@@ -132,20 +128,16 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit() {
-    this._payments$.subscribe(data => {
-      if (data && data.length) {
-        this.basicForm.get('dni')?.setValue(data[0].dni);
-        this.basicForm.get('dni')?.disable();
-      }
-    });
-    this._subscriptions.add(
-      this._exam$.subscribe(data => {
-        if (data) {
-          this._exam = data;
-          this._getModalities();
-        }
-      })
-    );
+    if (this._paymentStore.payments() && this._paymentStore.payments().length) {
+      this.basicForm.get('dni')?.setValue(this._paymentStore.payments()[0].dni);
+      this.basicForm.get('dni')?.disable();
+    }
+
+    if (this._examStore.exam()) {
+      this._exam = this._examStore.exam() as IExam;
+      this._getModalities();
+    }
+
     this._getRegions();
     if (this.mode === 'update' || this.mode === 'show') {
       this._loadData();

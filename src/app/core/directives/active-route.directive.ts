@@ -46,8 +46,6 @@ export class ActiveRouteDirective implements OnInit, OnDestroy {
     }
 
     private isRouteMatch(currentUrl: string, targetRoute: string): boolean {
-        return currentUrl === targetRoute ||
-            currentUrl.startsWith(targetRoute + '/') ||
-            (targetRoute === '/' && currentUrl === '');
+        return currentUrl === targetRoute;
     }
 }
