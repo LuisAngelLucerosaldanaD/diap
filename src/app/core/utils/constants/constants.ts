@@ -62,6 +62,14 @@ export const AUTH_MENU: IMenuItem[] = [
     roles: [1, 2],
     exact: true
   }
+  ,
+  {
+    name: 'Configuraciones',
+    route: '/admin/settings',
+    icon: 'fa-gear',
+    roles: [1],
+    exact: true
+  }
 ];
 
 export const FacultiesOptions: IOption[] = [
