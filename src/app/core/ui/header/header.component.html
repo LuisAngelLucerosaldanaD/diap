@@ -3,7 +3,7 @@
     <div class="pl-3">
       <img src="/assets/logos/diap.svg" alt="Logo diap" class="w-11">
     </div>
-    @if (store.isAuth()) {
+    @if (store.isAuth() || !appStore.isMobileDevice()) {
       <div class="text-white font-bold select-none">
         <span>SISTEMA DE ADMISIÓN UNAS</span>
       </div>
