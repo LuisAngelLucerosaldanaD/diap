@@ -42,7 +42,7 @@ export const AUTH_MENU: IMenuItem[] = [
     exact: true
   },
   {
-    name: 'Examenes',
+    name: 'Convocatorias',
     route: '/admin/exams',
     icon: 'fa-file',
     roles: [1],
@@ -66,6 +66,14 @@ export const AUTH_MENU: IMenuItem[] = [
   {
     name: 'Configuraciones',
     route: '/admin/settings',
+    icon: 'fa-gear',
+    roles: [1],
+    exact: true
+  }
+  ,
+  {
+    name: 'Exámenes complementarios',
+    route: '/admin/exams-complementarios',
     icon: 'fa-gear',
     roles: [1],
     exact: true
