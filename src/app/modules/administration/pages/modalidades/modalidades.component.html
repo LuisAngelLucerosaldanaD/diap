@@ -96,30 +96,31 @@
     </div>
 
     <form class="grid grid-cols-2 gap-4">
-      <div>
+      <div class="col-span-2">
         <label class="block text-sm font-medium">Nombre <span class="text-red-600 ">*</span></label>
         <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="name">
       </div>
+      <div class="col-span-2">
+        <label class="block text-sm font-medium">Descripción</label>
+        <textarea class="border p-2 w-full mb-2 bg-white" rows="3"></textarea>
+      </div>
       <div>
-        <label class="block text-sm font-medium">Código de tipo de examen (solo examen extraordinario)
+        <label class="block text-sm font-medium">Código de pago (Colegio Estatal) <span class="text-red-600 ">*</span>
         </label>
         <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
       </div>
       <div>
-        <label class="block text-sm font-medium">Fecha inicio de inscripción <span class="text-red-600">*</span></label>
-        <input type="date" class="border p-2 w-full mb-2 bg-white" formControlName="contact">
-      </div>
-      <div>
-        <label class="block text-sm font-medium">Fecha fin de inscripción <span class="text-red-600">*</span></label>
-        <input type="date" class="border p-2 w-full mb-2 bg-white" formControlName="contact">
-      </div>
-      <div>
-        <label class="block text-sm font-medium">Código tipo de pago <span class="text-red-600 ">*</span>
+        <label class="block text-sm font-medium">Monto de pago (S/.) (Colegio Estatal)<span class="text-red-600 ">*</span>
         </label>
         <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
       </div>
       <div>
-        <label class="block text-sm font-medium">Código de pago <span class="text-red-600 ">*</span>
+        <label class="block text-sm font-medium">Código de pago (Colegio Privado) <span class="text-red-600 ">*</span>
+        </label>
+        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Monto de pago (S/.) (Colegio Privado)<span class="text-red-600 ">*</span>
         </label>
         <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
       </div>
