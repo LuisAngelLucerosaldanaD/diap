@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-2 md:px-8">
       <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
         <div class="flex gap-2 items-center mb-4">
-          <button class="text-gray rounded-full px-1 focus:outline-none" routerLink="/admin/exams">
+          <button class="text-gray rounded-full px-1 focus:outline-none" routerLink="/admin/modalidades">
             <div>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
@@ -11,7 +11,7 @@
 
             </div>
           </button>
-          <h2 class="font-semibold text-xl text-center md:text-left">Gestión de modalidades
+          <h2 class="font-semibold text-xl text-center md:text-left">Gestión de requisitos para Modalidad [nombre_modalidad]
           </h2>
         </div>
         <div
@@ -58,7 +58,7 @@
                     <td class="px-4 py-3">1</td>
                     <td class="px-4 py-3">Nombre modalidad</td>
                     <td class="px-4 py-3 flex items-center justify-end relative">
-                      <button type="button" class="btn-options" routerLink="/admin/requisitos">
+                      <button type="button" class="btn-options">
                         <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
                              xmlns="http://www.w3.org/2000/svg">
                           <path
@@ -66,7 +66,6 @@
                         </svg>
                       </button>
                       <p-menu #menu [popup]="true" appendTo="body" />
-                      <!--Gestionar requisitos, Editar, Borrar-->
                     </td>
                   </tr>
                   </tbody>
@@ -85,7 +84,7 @@
   <div class="bg-white rounded-lg shadow-lg p-6 w-[70%] md:w-1/2">
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-lg font-semibold">
-        {{ true ? 'Crear' : 'Actualizar' }} Modalidad
+        {{ true ? 'Crear' : 'Actualizar' }} Requisito
       </h3>
       <button class="text-gray hover:text-red-400 rounded-full px-1 focus:outline-none">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -101,27 +100,20 @@
         <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="name">
       </div>
       <div>
-        <label class="block text-sm font-medium">Código de tipo de examen (solo examen extraordinario)
+        <label class="block text-sm font-medium">Código de modalidad
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
+        <!--Solo lectura-->
+        <input type="text" readonly class="border p-2 w-full mb-2 bg-white" formControlName="description">
       </div>
-      <div>
-        <label class="block text-sm font-medium">Fecha inicio de inscripción <span class="text-red-600">*</span></label>
-        <input type="date" class="border p-2 w-full mb-2 bg-white" formControlName="contact">
-      </div>
-      <div>
-        <label class="block text-sm font-medium">Fecha fin de inscripción <span class="text-red-600">*</span></label>
-        <input type="date" class="border p-2 w-full mb-2 bg-white" formControlName="contact">
-      </div>
-      <div>
-        <label class="block text-sm font-medium">Código tipo de pago <span class="text-red-600 ">*</span>
+      <div class="col-span-2">
+        <label class="block text-sm font-medium">Descripción <span class="text-red-600 ">*</span>
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
+        <textarea class="border p-2 w-full mb-2 bg-white" rows="3"></textarea>
       </div>
       <div>
-        <label class="block text-sm font-medium">Código de pago <span class="text-red-600 ">*</span>
+        <label class="block text-sm font-medium">Documento guía <span class="text-red-600 ">*</span>
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
+        <input type="file" class="border p-2 w-full mb-2 bg-white" formControlName="description">
       </div>
     </form>
 

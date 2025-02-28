@@ -43,6 +43,12 @@ export const AdminRoutes: Routes = [
     loadComponent: () => import('./pages/modalidades/modalidades.component').then(m => m.ModalidadesComponent)
   },
   {
+    path: 'requisitos',
+    data: {role: [1]},
+    canActivate: [permissionGuard],
+    loadComponent: () => import('./pages/requisitos/requisitos.component').then(m => m.RequisitosComponent)
+  },
+  {
     path: '**',
     redirectTo: 'postulations',
     pathMatch: 'full'
