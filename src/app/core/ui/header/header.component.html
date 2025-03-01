@@ -1,39 +1,54 @@
-<header class="header">
-  <div class="flex gap-2 items-center">
-    <div class="pl-3">
-      <img src="/assets/logos/diap.svg" alt="Logo diap" class="w-11">
-    </div>
-    @if (store.isAuth() || !appStore.isMobileDevice()) {
-      <div class="text-white font-bold select-none">
-        <span>SISTEMA DE ADMISIÓN UNAS</span>
+<header class="header bg-brand">
+  <div class="w-fit flex gap-2 items-center">
+    <button type="button"
+            class="flex items-center justify-center w-16 h-16 hover:opacity-80 active:opacity-60 text-white"
+            (click)="showMenu()">
+      <div>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 7H20.5M4 12.25H20.5M4 17.5H20.5" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
       </div>
-    }
-    <button type="button" class="text-white" (click)="showMenu()">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
     </button>
+    <div class="w-fit flex items-center gap-2">
+      <div>
+        <img src="/assets/logos/diap.svg" alt="Logo DIAP" class="w-12 h-12">
+      </div>
+      @if (store.isAuth() || !appStore.isMobileDevice()) {
+        <div class="text-white font-bold select-none text-base">
+          <span>Sistema de Admisión UNAS</span>
+        </div>
+      }
+    </div>
   </div>
   @if (store.isAuth()) {
     @if (!appStore.isMobileDevice()) {
-      <div class="chip-user">
-        <div class="rounded-full flex items-center justify-center bg-white h-10 w-10">
-          <i class="fa-solid fa-user"></i>
-        </div>
-        <div class="text-white">
+      <div class="w-fit">
+        <div class="b-header w-fit h-16 px-6 flex items-center gap-2 bg-neutral text-white">
+          <div>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15.75 6C15.75 6.99456 15.3549 7.94839 14.6516 8.65165C13.9484 9.35491 12.9945 9.75 12 9.75C11.0054 9.75 10.0516 9.35491 9.34833 8.65165C8.64506 7.94839 8.24998 6.99456 8.24998 6C8.24998 5.00544 8.64506 4.05161 9.34833 3.34835C10.0516 2.64509 11.0054 2.25 12 2.25C12.9945 2.25 13.9484 2.64509 14.6516 3.34835C15.3549 4.05161 15.75 5.00544 15.75 6ZM4.50098 20.118C4.53311 18.1504 5.33731 16.2742 6.74015 14.894C8.14299 13.5139 10.0321 12.7405 12 12.7405C13.9679 12.7405 15.857 13.5139 17.2598 14.894C18.6626 16.2742 19.4668 18.1504 19.499 20.118C17.1464 21.1968 14.5881 21.7535 12 21.75C9.32398 21.75 6.78398 21.166 4.50098 20.118Z"
+                stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
           <span>{{ store.user() }}</span>
         </div>
-    </div>
+      </div>
     }
   } @else {
-    <button type="button" class="btn-login" routerLink="/auth/login">
-      Ingresar
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-        class="size-5 rotate-90">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
-      </svg>
-    </button>
+    <div class="w-fit">
+      <button type="button" class="b-header w-fit h-16 px-6 flex items-center gap-2 bg-neutral text-white"
+              routerLink="/auth/login">
+        <span>Ingresar</span>
+        <div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M8.25 9V5.25C8.25 4.65326 8.48705 4.08097 8.90901 3.65901C9.33097 3.23705 9.90326 3 10.5 3H16.5C17.0967 3 17.669 3.23705 18.091 3.65901C18.5129 4.08097 18.75 4.65326 18.75 5.25V18.75C18.75 19.3467 18.5129 19.919 18.091 20.341C17.669 20.7629 17.0967 21 16.5 21H10.5C9.90326 21 9.33097 20.7629 8.90901 20.341C8.48705 19.919 8.25 19.3467 8.25 18.75V15M12 9L15 12M15 12L12 15M15 12H2.25"
+              stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </button>
+    </div>
   }
-
 </header>

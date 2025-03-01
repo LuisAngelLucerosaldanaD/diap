@@ -33,27 +33,27 @@
   </p-sidebar>
 } @else {
   <div class="menu transition-all duration-300 h-full flex flex-col"
-    [ngClass]="{'w-12': appStore.menuIsCompact(), 'w-64': !appStore.menuIsCompact()}">
+    [ngClass]="{'w-[50px]': appStore.menuIsCompact(), 'w-[240px]': !appStore.menuIsCompact()}">
     <div class="flex-1">
       @if (!appStore.menuIsCompact()) {
         @for (item of appStore.menuItems(); track item.name) {
-          <div class="item" [routerLink]="item.route" routerLinkActive="item-select"
+          <button class="w-full text-white h-12 px-4 flex items-center gap-2" [routerLink]="item.route" routerLinkActive="item-select"
             [routerLinkActiveOptions]="{exact: item.exact}">
             <i class="fa-solid {{item.icon}}"></i>
-            <span>{{ item.name }}</span>
-          </div>
+            <span class="text-base">{{ item.name }}</span>
+          </button>
         }
       } @else {
         @for (item of appStore.menuItems(); track item.name) {
-          <div class="item" [pTooltip]="item.name" tooltipPosition="right" [routerLink]="item.route"
+          <button class="w-[50px] px-4 h-12 flex items-center justify-center text-white" [pTooltip]="item.name" tooltipPosition="right" [routerLink]="item.route"
             routerLinkActive="item-select" [routerLinkActiveOptions]="{exact: item.exact}">
             <i class="fa-solid {{item.icon}}"></i>
-          </div>
+          </button>
         }
       }
     </div>
     @if (authStore.isAuth()) {
-      <button type="submit" class="btn-logout" (click)="logout()">
+      <button type="submit" class="w-full btn-logout" (click)="logout()">
         <i class="fa-solid fa-power-off"></i>
         @if (!appStore.menuIsCompact()) {
           <span class="ml-2 text-md">Cerrar Sesión</span>
@@ -65,19 +65,21 @@
 
 <p-confirmDialog key="logout" #cd>
   <ng-template pTemplate="headless" let-message>
-    <div class="flex flex-col items-center p-5 bg-white rounded-md">
-      <div class="bg-blue-500 rounded-full text-white inline-flex justify-center items-center h-24 w-24">
-        <img src="/assets/logos/diap.svg" alt="logo diap" class="pointer-events-none">
+    <div class="rounded-lg p-12 flex flex-col items-center gap-6 bg-white">
+      <div>
+        <img src="/assets/logos/diap.svg" alt="logo diap" class="pointer-events-none w-12 h-12">
       </div>
-      <span class="font-bold text-2xl block mb-2 mt-4 text-slate-700">
-        {{ message.header }}
-      </span>
-      <p class="mb-0">{{ message.message }}</p>
-      <div class="flex items-center gap-2 mt-4">
-        <button pButton label="Aceptar" (click)="cd.accept()" class="w-32 bg-blue-500 text-white hover:bg-blue-700">
+      <div class="flex flex-col text-center items-center gap-2">
+        <span class="font-bold text-2xl text-neutral">
+          {{ message.header }}
+        </span>
+        <p class="opacity-60">{{ message.message }}</p>
+      </div>
+      <div class="flex items-center w-full gap-2">
+        <button pButton label="Aceptar" (click)="cd.accept()" class="b-primary-neutral w-full">
         </button>
         <button pButton label="Cancelar" (click)="cd.reject()"
-          class="border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white w-32">
+          class="b-secondary-neutral w-full">
         </button>
       </div>
     </div>
