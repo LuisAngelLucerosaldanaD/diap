@@ -1,6 +1,5 @@
 .menu {
-  @apply h-full;
-  background-color: #26313c;
+  @apply h-full bg-[#2F4050];
 }
 
 .item {
@@ -8,9 +7,9 @@
 }
 
 .item-select {
-  background-color: #2563EB;
+  @apply bg-[#435361];
 }
 
 .btn-logout {
-  @apply py-3 px-4 flex items-center bg-red-500 hover:bg-red-600 text-white w-full;
+  @apply h-12 px-4 flex items-center bg-red-500 hover:bg-red-600 text-white w-full;
 }

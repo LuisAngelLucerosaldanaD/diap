@@ -2,3 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 @import "primeicons/primeicons.css";
+
+.b-base {
+  @apply h-10 flex items-center justify-center gap-2 rounded px-4 hover:opacity-80 active:opacity-60 text-base
+}
+
+.b-primary-brand {
+  @apply b-base bg-brand text-white
+}
+
+.b-primary-neutral {
+  @apply b-base bg-neutral text-white
+}
+
+.b-secondary-brand {
+  @apply b-base border border-brand text-brand
+}
+
+.b-secondary-neutral {
+  @apply b-base border border-neutral text-neutral
+}

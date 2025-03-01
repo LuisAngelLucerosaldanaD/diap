@@ -5,11 +5,14 @@ import {ExamsService} from "../../../../core/services/admin/exams.service";
 import {MessageService} from "primeng/api";
 import {IExam} from "../../../../core/models/admin/exams";
 import {DatePipe} from "@angular/common";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-announcements',
   standalone: true,
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './announcements.component.html',
   styleUrl: './announcements.component.scss',
   providers: [MessageService]
@@ -18,7 +21,7 @@ export class AnnouncementsComponent implements OnInit, OnDestroy {
   private readonly _subscriptions: Subscription = new Subscription();
   private readonly _examsService: ExamsService = inject(ExamsService);
   private readonly _toastService: MessageService = inject(MessageService);
-  
+
   protected exam!: IExam;
   protected isLoading: boolean = false;
   protected startDate: string = '';

@@ -1,13 +1,12 @@
-<div class="h-screen w-screen">
+<div class="h-screen w-full">
   <app-header/>
-  <div class="flex h-[calc(100vh-56px)]">
+  <div class="flex h-[calc(100vh-64px)]">
     <app-side-menu/>
     <div class="w-full h-full relative">
-      <div class="h-[calc(100vh-124px)] overflow-y-auto">
+      <div class="h-[calc(100vh-64px)] overflow-y-auto">
         <router-outlet/>
       </div>
-      <app-footer/>
+      <!--<app-footer/>-->
     </div>
   </div>
-
 </div>

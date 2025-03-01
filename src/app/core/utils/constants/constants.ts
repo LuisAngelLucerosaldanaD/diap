@@ -4,28 +4,28 @@ import {IMenuItem} from "../../models/ui/menu";
 
 export const HOME_MENU: IMenuItem[] = [
   {
-    name: 'INICIO',
+    name: 'Inicio',
     route: '/home',
     icon: 'fa-house',
     roles: [],
     exact: true
   },
   {
-    name: 'FACULTADES',
+    name: 'Facultades',
     route: '/home/faculties',
     icon: 'fa-graduation-cap',
     roles: [],
     exact: true
   },
   {
-    name: 'MODALIDADES',
+    name: 'Modalidades',
     route: '/home/modalities',
     icon: 'fa-shuffle',
     roles: [],
     exact: true
   },
   {
-    name: 'INSCRIPCIÓN',
+    name: 'Inscripciones',
     route: '/home/registration',
     icon: 'fa-file-pen',
     roles: [],
