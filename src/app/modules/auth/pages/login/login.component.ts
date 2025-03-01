@@ -6,7 +6,7 @@ import { IFormValidation } from "../../../../core/models/ui/form";
 import { Subscription } from "rxjs";
 import { MessageService } from "primeng/api";
 import { ToastModule } from "primeng/toast";
-import { Router } from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import { RecaptchaFormsModule, RecaptchaModule } from "ng-recaptcha";
 import { EnvServiceFactory } from "../../../../core/services/env/env.service.provider";
 import { BlockUIModule } from "primeng/blockui";
@@ -24,7 +24,8 @@ import { AppStore } from '../../../../core/store/app.store';
     RecaptchaModule,
     RecaptchaFormsModule,
     BlockUIModule,
-    BlockUiComponent
+    BlockUiComponent,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

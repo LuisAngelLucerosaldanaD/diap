@@ -41,6 +41,6 @@
     @apply text-black/60;
   }
   input, textarea, select {
-    @apply p-2 rounded border border-black/20 w-full;
+    @apply p-2 rounded border border-black/20 w-full focus:outline-none focus:ring-2 focus:ring-neutral;
   }
 }
