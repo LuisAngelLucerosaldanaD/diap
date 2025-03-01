@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {Subscription} from "rxjs";
 import {RegistrationService} from "../../../../core/services/admin/registration.service";
 import {MessageService} from "primeng/api";
-import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ToastModule} from "primeng/toast";
 import {BlockUiComponent} from "../../../../core/ui/block-ui/block-ui.component";
@@ -12,17 +12,20 @@ import {ExamsService} from "../../../../core/services/admin/exams.service";
 import {IPayment, IPaymentDTO} from "../../../../core/models/registration/registration";
 import { ExamStore } from '../../../../core/store/exam.store';
 import { PaymentStore } from '../../../../core/store/payment.store';
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-validate-registration',
   standalone: true,
-  imports: [
-    ToastModule,
-    BlockUiComponent,
-    ReactiveFormsModule,
-    NgIf,
-    FormRegistrationComponent
-  ],
+    imports: [
+        ToastModule,
+        BlockUiComponent,
+        ReactiveFormsModule,
+        NgIf,
+        FormRegistrationComponent,
+        FormsModule,
+        RouterLink
+    ],
   templateUrl: './validate-registration.component.html',
   styleUrl: './validate-registration.component.scss',
   providers: [MessageService]

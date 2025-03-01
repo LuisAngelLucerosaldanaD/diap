@@ -1,6 +1,6 @@
 import {Component, effect, inject, OnDestroy, signal} from '@angular/core';
 import {IRequirement} from "../../../../core/models/registration/registration";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ExamsService} from "../../../../core/services/admin/exams.service";
@@ -11,16 +11,20 @@ import {BlockUiComponent} from "../../../../core/ui/block-ui/block-ui.component"
 import {ToastModule} from "primeng/toast";
 import {ModalitiesService} from "../../../../core/services/home/modalities.service";
 import {IModality} from "../../../../core/models/admin/postulation";
+import {RecaptchaFormsModule, RecaptchaModule} from "ng-recaptcha";
 
 @Component({
   selector: 'app-registration',
   standalone: true,
-  imports: [
-    FormsModule,
-    RouterLink,
-    BlockUiComponent,
-    ToastModule
-  ],
+    imports: [
+        FormsModule,
+        RouterLink,
+        BlockUiComponent,
+        ToastModule,
+        ReactiveFormsModule,
+        RecaptchaFormsModule,
+        RecaptchaModule
+    ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
   providers: [MessageService]
