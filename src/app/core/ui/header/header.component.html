@@ -14,11 +14,9 @@
       <div>
         <img src="/assets/logos/diap.svg" alt="Logo DIAP" class="w-12 h-12">
       </div>
-      @if (store.isAuth() || !appStore.isMobileDevice()) {
-        <div class="text-white font-bold select-none text-base">
-          <span>Sistema de Admisión UNAS</span>
-        </div>
-      }
+      <div class="hidden md:block text-white font-bold select-none text-base">
+        <span>Sistema de Admisión UNAS</span>
+      </div>
     </div>
   </div>
   @if (store.isAuth()) {
