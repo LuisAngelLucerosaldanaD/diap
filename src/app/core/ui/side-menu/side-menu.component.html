@@ -1,4 +1,4 @@
-<div class="menu transition-all duration-300 h-[calc(100vh-64px)] flex flex-col fixed md:static top-16 left-0 z-50"
+<div class="menu transition-all duration-300 h-[calc(100vh-64px)] fixed top-16 left-0 md:static flex flex-col z-50"
      [ngClass]="{'hidden md:flex md:w-[50px]': appStore.menuIsCompact(), 'w-[280px]': !appStore.menuIsCompact()}">
   <div class="flex-1">
     @if (!appStore.menuIsCompact()) {
