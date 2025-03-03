@@ -14,10 +14,6 @@ export const HomeRoutes: Routes = [
     loadComponent: () => import('./pages/registration/registration.component').then(m => m.RegistrationComponent)
   },
   {
-    path: 'registration/onboarding',
-    loadComponent: () => import('./pages/validate-registration/validate-registration.component').then(m => m.ValidateRegistrationComponent)
-  },
-  {
     path: 'modalities',
     loadComponent: () => import('./pages/modalities/modalities.component').then(m => m.ModalitiesComponent)
   },

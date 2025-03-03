@@ -24,10 +24,9 @@ export class AnnouncementsComponent implements OnInit, OnDestroy {
 
   protected exam!: IExam;
   protected isLoading: boolean = false;
-  protected startDate: string = '';
+  protected examDate: string = '';
   protected endDate: string = '';
   protected startHour: string = '';
-  protected endHour: string = '';
 
   ngOnInit() {
     this._getCurrentExam();
@@ -52,12 +51,11 @@ export class AnnouncementsComponent implements OnInit, OnDestroy {
             return;
           }
           this.exam = res.data;
-          const start = new Date(this.exam.start_date);
+          const exam_date = new Date(this.exam.exam_date);
           const end = new Date(this.exam.end_date);
-          this.startDate = new DatePipe('en-US').transform(start, 'dd/MM/yyyy') || '';
+          this.examDate = new DatePipe('en-US').transform(exam_date, 'dd/MM/yyyy') || '';
           this.endDate = new DatePipe('en-US').transform(end, 'dd/MM/yyyy') || '';
-          this.startHour = new DatePipe('en-US').transform(start, 'hh:mm a') || '';
-          this.endHour = new DatePipe('en-US').transform(end, 'hh:mm a') || '';
+          this.startHour = new DatePipe('en-US').transform(exam_date, 'hh:mm a') || '';
         },
         error: (err: HttpErrorResponse) => {
           console.error(err);

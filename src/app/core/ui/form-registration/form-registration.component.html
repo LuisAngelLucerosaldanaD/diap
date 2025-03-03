@@ -2,7 +2,7 @@
   <div>
     <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 class="text-3xl font-bold mb-6 text-center">FORMULARIO DE INSCRIPCIÓN</h1>
-      <button *ngIf="mode === 'create' && module === 'regis'" routerLink="/home/registration"
+      <button *ngIf="mode === 'create' && module === 'regis'" (click)="cancel()"
               class="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700">
         Atras
       </button>

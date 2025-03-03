@@ -30,6 +30,7 @@ import {RouterLink} from "@angular/router";
 import {ModeForm} from '../../types/forms';
 import {ExamStore} from "../../store/exam.store";
 import {PaymentStore} from "../../store/payment.store";
+import {PostStore} from "../../store/post.store";
 
 @Component({
   selector: 'app-form-registration',
@@ -56,13 +57,16 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   @Input() module: 'post' | 'regis' = 'regis';
   @Output() finish: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  // Services and Providers
+  // Services
   private readonly _subscriptions: Subscription = new Subscription();
   private readonly _registrationService: RegistrationService = inject(RegistrationService);
   private readonly _modalitiesService: ModalitiesService = inject(ModalitiesService);
   private readonly _toastService: MessageService = inject(MessageService);
+
+  // Stores
   private readonly _examStore = inject(ExamStore);
   private readonly _paymentStore = inject(PaymentStore);
+  private readonly _postStore = inject(PostStore);
 
   private _payment: IPayment | null = null;
   private _exam!: IExam;
@@ -128,9 +132,19 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit() {
-    if (this._paymentStore.payments() && this._paymentStore.payments().length) {
-      this.basicForm.get('dni')?.setValue(this._paymentStore.payments()[0].dni);
+    if (this._postStore.dni()) {
+      this.basicForm.get('dni')?.setValue(this._postStore.dni());
       this.basicForm.get('dni')?.disable();
+    }
+
+    if (this._postStore.typeSchool()) {
+      this.schoolForm.get('type')?.setValue(this._postStore.typeSchool());
+      this.schoolForm.get('type')?.disable();
+    }
+
+    if (this._postStore.modality()) {
+      this.academicForm.get('modality')?.setValue(this._postStore.modality()?.id);
+      this.academicForm.get('modality')?.disable();
     }
 
     if (this._examStore.exam()) {
@@ -953,6 +967,12 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     );
   }
 
+  protected cancel(): void {
+    this._postStore.setDni('');
+    this._postStore.setTypeSchool('');
+    this._postStore.setFinish(true);
+  }
+
   protected async createPostulation(): Promise<void> {
     if (this.imgProfile === '') {
       this._toastService.add({
@@ -1125,7 +1145,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
       setTimeout(() => {
         if (this.module === 'post') return this.finish.emit(true);
-        window.location.reload();
+        this._postStore.setFinish(true);
       }, 1000);
     } catch (e: any) {
       console.error(e);
