@@ -14,18 +14,20 @@ import {PostStore} from "../../../../core/store/post.store";
 import {ExamStore} from "../../../../core/store/exam.store";
 import {ValidateRegistrationComponent} from "../validate-registration/validate-registration.component";
 import {RecaptchaFormsModule, RecaptchaModule} from "ng-recaptcha";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-registration',
   standalone: true,
-  imports: [
-    FormsModule,
-    BlockUiComponent,
-    ToastModule,
-    ValidateRegistrationComponent,
-    RecaptchaFormsModule,
-    RecaptchaModule
-  ],
+    imports: [
+        FormsModule,
+        BlockUiComponent,
+        ToastModule,
+        ValidateRegistrationComponent,
+        RecaptchaFormsModule,
+        RecaptchaModule,
+        RouterLink
+    ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
   providers: [MessageService]
