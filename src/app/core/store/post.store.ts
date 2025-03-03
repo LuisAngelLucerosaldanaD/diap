@@ -5,14 +5,14 @@ type PostState = {
   typeSchool: string;
   modality: IModality | null;
   dni: string;
-  finish: boolean;
+  onboarding: boolean;
 };
 
 const initialState: PostState = {
   typeSchool: '',
   modality: null,
   dni: '',
-  finish: false
+  onboarding: false
 };
 
 export const PostStore = signalStore(
@@ -34,8 +34,8 @@ export const PostStore = signalStore(
     setPostulation(postulation: PostState) {
       patchState(store, () => postulation);
     },
-    setFinish(finish: boolean) {
-      patchState(store, (state) => ({...state, finish}));
+    setOnboarding(onboarding: boolean) {
+      patchState(store, (state) => ({...state, onboarding}));
     }
   }))
 );

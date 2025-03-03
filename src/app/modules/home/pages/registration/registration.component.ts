@@ -13,6 +13,7 @@ import {IModality} from "../../../../core/models/admin/postulation";
 import {PostStore} from "../../../../core/store/post.store";
 import {ExamStore} from "../../../../core/store/exam.store";
 import {ValidateRegistrationComponent} from "../validate-registration/validate-registration.component";
+import {RecaptchaFormsModule, RecaptchaModule} from "ng-recaptcha";
 
 @Component({
   selector: 'app-registration',
@@ -21,7 +22,9 @@ import {ValidateRegistrationComponent} from "../validate-registration/validate-r
     FormsModule,
     BlockUiComponent,
     ToastModule,
-    ValidateRegistrationComponent
+    ValidateRegistrationComponent,
+    RecaptchaFormsModule,
+    RecaptchaModule
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
@@ -37,12 +40,12 @@ export class RegistrationComponent implements OnDestroy {
   private readonly _modalitiesService: ModalitiesService = inject(ModalitiesService);
 
   // Store
-  private readonly _postStore = inject(PostStore);
+  protected readonly _postStore = inject(PostStore);
   private readonly _examStore = inject(ExamStore);
 
   protected selectedMode = signal(-1);
   protected isLoading = signal(false);
-  protected onboarding = signal(false);
+  protected exams = signal<IExam[]>([]);
   protected exam!: IExam;
   protected requirement: IRequirement[] = [];
   protected modalities: IModality[] = [];
@@ -52,10 +55,6 @@ export class RegistrationComponent implements OnDestroy {
     effect(() => {
       if (this.selectedMode() !== -1) this._getFileRequired();
     }, {allowSignalWrites: true});
-
-    if (this._postStore.finish()) {
-      this.onboarding.set(false);
-    }
   }
 
   ngOnDestroy() {
@@ -63,6 +62,7 @@ export class RegistrationComponent implements OnDestroy {
     this.isLoading.set(false);
     this.selectedMode.set(-1);
     this.modalities = [];
+    this.selectedMode.set(-1);
     this.requirement = [];
   }
 
@@ -79,6 +79,7 @@ export class RegistrationComponent implements OnDestroy {
             });
             return;
           }
+          this.exams.set(res.data);
           console.log(res.data);
           this.exam = res.data[0];
           this._examStore.setExam(res.data[0]);
@@ -169,10 +170,10 @@ export class RegistrationComponent implements OnDestroy {
   }
 
   protected goToRegister(): void {
-    const modality = this.modalities.find(m => m.id === this.selectedMode());
+    const modality = this.modalities.find(m => m.id.toString() === this.selectedMode().toString());
     if (!modality) return;
     this._postStore.setModality(modality);
-    this.onboarding.set(true);
+    this._postStore.setOnboarding(true);
   }
 
 }

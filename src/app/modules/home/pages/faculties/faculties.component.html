@@ -1,23 +1,59 @@
-<main class="w-full h-full p-6">
-  <div class="pb-4">
-    <h1 class="text-2xl font-bold text-gray-900">Facultades</h1>
+<main class="w-full min-h-full bg-slate-100 flex flex-col gap-5 p-4 md:p-10">
+  <div class="text-center flex flex-col items-center">
+    <h1 class="text-2xl font-bold text-neutral">Facultades UNAS</h1>
+    <div class="h-1 w-40 rounded bg-neutral"></div>
   </div>
-  <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
     @for (faculty of faculties(); track faculty.name) {
-      <div class="border border-gray-300 rounded-lg p-4 bg-white shadow-md">
-        <div>
-          <img [src]="faculty.logo" alt="logo agronomia" loading="lazy"
-               class="facultad-logo mx-auto mb-4 w-3/5">
+      <div class="relative border flex flex-col items-center border-black/10 rounded-lg bg-white shadow-lg overflow-hidden">
+        <div class="flex items-center justify-center px-4 text-center min-h-16 w-full bg-brand">
+          <h2 class="text-md text-white font-bold">{{ faculty.name }}</h2>
         </div>
-        <div class="text-left">
-          <h2 class="text-xl font-semibold mb-2">{{ faculty.name }}</h2>
-          <p class="text-gray-700"><strong>Grado Académico:</strong> Bachiller en {{ faculty.academic_degree }}</p>
-          <p class="text-gray-700"><strong>Título Profesional:</strong> {{ faculty.professional_name }}</p>
+        <div class="flex flex-col items-center p-6 gap-6">
+          <div class="w-40 h-40">
+            <img [src]="faculty.logo" alt="logo agronomia" loading="lazy"
+                 class="facultad-logo w-full h-full object-contain object-center">
+          </div>
+
+          <div class="flex flex-col gap-4 w-full">
+            <div class="flex items-center gap-2">
+              <div>
+                <svg class="stroke-current text-neutral" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
+                  <path d="M11.5 22C7.49306 22 5.48959 22 4.2448 20.5355C3 19.0711 3 16.714 3 12C3 7.28596 3 4.92893 4.2448 3.46447C5.48959 2 7.49306 2 11.5 2C15.5069 2 17.5104 2 18.7552 3.46447C19.7572 4.64332 19.9527 6.40054 19.9908 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M8 8H15M8 13H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M19.6092 18.1054C20.4521 17.4918 21 16.4974 21 15.375C21 13.511 19.489 12 17.625 12H17.375C15.511 12 14 13.511 14 15.375C14 16.4974 14.5479 17.4918 15.3908 18.1054M19.6092 18.1054C19.0523 18.5108 18.3666 18.75 17.625 18.75H17.375C16.6334 18.75 15.9477 18.5108 15.3908 18.1054M19.6092 18.1054L20.192 19.9404C20.4143 20.6403 20.5255 20.9903 20.4951 21.2082C20.4318 21.6617 20.0619 21.9984 19.6252 22C19.4154 22.0008 19.101 21.8358 18.4723 21.5059C18.2027 21.3644 18.0679 21.2936 17.93 21.252C17.649 21.1673 17.351 21.1673 17.07 21.252C16.9321 21.2936 16.7973 21.3644 16.5277 21.5059C15.899 21.8358 15.5846 22.0008 15.3748 22C14.9381 21.9984 14.5682 21.6617 14.5049 21.2082C14.4745 20.9903 14.5857 20.6403 14.808 19.9404L15.3908 18.1054" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-xs text-black/60">Grado académico:</span>
+                <span class="font-bold">{{ faculty.academic_degree }}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div>
+                <svg class="stroke-current text-neutral" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
+                  <path d="M11.5 22C7.49306 22 5.48959 22 4.2448 20.5355C3 19.0711 3 16.714 3 12C3 7.28596 3 4.92893 4.2448 3.46447C5.48959 2 7.49306 2 11.5 2C15.5069 2 17.5104 2 18.7552 3.46447C19.7572 4.64332 19.9527 6.40054 19.9908 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M8 8H15M8 13H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M19.6092 18.1054C20.4521 17.4918 21 16.4974 21 15.375C21 13.511 19.489 12 17.625 12H17.375C15.511 12 14 13.511 14 15.375C14 16.4974 14.5479 17.4918 15.3908 18.1054M19.6092 18.1054C19.0523 18.5108 18.3666 18.75 17.625 18.75H17.375C16.6334 18.75 15.9477 18.5108 15.3908 18.1054M19.6092 18.1054L20.192 19.9404C20.4143 20.6403 20.5255 20.9903 20.4951 21.2082C20.4318 21.6617 20.0619 21.9984 19.6252 22C19.4154 22.0008 19.101 21.8358 18.4723 21.5059C18.2027 21.3644 18.0679 21.2936 17.93 21.252C17.649 21.1673 17.351 21.1673 17.07 21.252C16.9321 21.2936 16.7973 21.3644 16.5277 21.5059C15.899 21.8358 15.5846 22.0008 15.3748 22C14.9381 21.9984 14.5682 21.6617 14.5049 21.2082C14.4745 20.9903 14.5857 20.6403 14.808 19.9404L15.3908 18.1054" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-xs text-black/60">Título profesional:</span>
+                <span class="font-bold">{{ faculty.professional_name }}</span>
+              </div>
+            </div>
+          </div>
+
+          <a [href]="faculty.page_link" target="_blank"
+             class="b-link-sm absolute right-3 bottom-3">
+            <span>Visitar página</span>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+          </a>
         </div>
-        <a [href]="faculty.page_link" target="_blank"
-           class="inline-block mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300">
-          Visitar página
-        </a>
       </div>
     }
   </div>

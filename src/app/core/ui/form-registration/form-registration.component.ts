@@ -26,7 +26,6 @@ import {IExam} from "../../models/admin/exams";
 import {IModality, IPostulation} from "../../models/admin/postulation";
 import {SecureImagePipe} from "../../pipes/secure-image.pipe";
 import {SafePipePipe} from "../../pipes/safe-pipe.pipe";
-import {RouterLink} from "@angular/router";
 import {ModeForm} from '../../types/forms';
 import {ExamStore} from "../../store/exam.store";
 import {PaymentStore} from "../../store/payment.store";
@@ -45,7 +44,6 @@ import {PostStore} from "../../store/post.store";
     SecureImagePipe,
     AsyncPipe,
     SafePipePipe,
-    RouterLink
   ],
   templateUrl: './form-registration.component.html',
   styleUrl: './form-registration.component.scss',
@@ -970,7 +968,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   protected cancel(): void {
     this._postStore.setDni('');
     this._postStore.setTypeSchool('');
-    this._postStore.setFinish(true);
+    this._postStore.setOnboarding(false);
   }
 
   protected async createPostulation(): Promise<void> {
@@ -1145,7 +1143,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
       setTimeout(() => {
         if (this.module === 'post') return this.finish.emit(true);
-        this._postStore.setFinish(true);
+        this._postStore.setOnboarding(false);
       }, 1000);
     } catch (e: any) {
       console.error(e);

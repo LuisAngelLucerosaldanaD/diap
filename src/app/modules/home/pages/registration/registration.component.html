@@ -1,37 +1,117 @@
-@if (onboarding()) {
+<main class="w-full min-h-full bg-slate-100 flex flex-col gap-5 p-4 md:p-10">
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
+    @for (exam of exams(); track exam.id) {
+      <div
+        class="relative border flex flex-col items-center border-black/10 rounded-lg bg-white shadow-lg overflow-hidden">
+        <div class="flex items-center justify-center px-4 text-center min-h-16 w-full bg-brand">
+          <h2 class="text-md text-white font-bold">{{ exam.name }}</h2>
+        </div>
+        <div class="flex flex-col items-center p-6 gap-6">
+          <div class="w-40 h-40">
+            <img src="faculty.logo" alt="logo agronomia" loading="lazy"
+                 class="facultad-logo w-full h-full object-contain object-center">
+          </div>
+
+          <div class="flex flex-col gap-4 w-full">
+            <div class="flex items-center gap-2">
+              <div>
+                <svg class="stroke-current text-neutral" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                     width="24" height="24" fill="none">
+                  <path
+                    d="M11.5 22C7.49306 22 5.48959 22 4.2448 20.5355C3 19.0711 3 16.714 3 12C3 7.28596 3 4.92893 4.2448 3.46447C5.48959 2 7.49306 2 11.5 2C15.5069 2 17.5104 2 18.7552 3.46447C19.7572 4.64332 19.9527 6.40054 19.9908 9.5"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 8H15M8 13H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round"/>
+                  <path
+                    d="M19.6092 18.1054C20.4521 17.4918 21 16.4974 21 15.375C21 13.511 19.489 12 17.625 12H17.375C15.511 12 14 13.511 14 15.375C14 16.4974 14.5479 17.4918 15.3908 18.1054M19.6092 18.1054C19.0523 18.5108 18.3666 18.75 17.625 18.75H17.375C16.6334 18.75 15.9477 18.5108 15.3908 18.1054M19.6092 18.1054L20.192 19.9404C20.4143 20.6403 20.5255 20.9903 20.4951 21.2082C20.4318 21.6617 20.0619 21.9984 19.6252 22C19.4154 22.0008 19.101 21.8358 18.4723 21.5059C18.2027 21.3644 18.0679 21.2936 17.93 21.252C17.649 21.1673 17.351 21.1673 17.07 21.252C16.9321 21.2936 16.7973 21.3644 16.5277 21.5059C15.899 21.8358 15.5846 22.0008 15.3748 22C14.9381 21.9984 14.5682 21.6617 14.5049 21.2082C14.4745 20.9903 14.5857 20.6403 14.808 19.9404L15.3908 18.1054"
+                    stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-xs text-black/60">Grado académico:</span>
+                <span class="font-bold">test</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div>
+                <svg class="stroke-current text-neutral" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                     width="24" height="24" fill="none">
+                  <path
+                    d="M11.5 22C7.49306 22 5.48959 22 4.2448 20.5355C3 19.0711 3 16.714 3 12C3 7.28596 3 4.92893 4.2448 3.46447C5.48959 2 7.49306 2 11.5 2C15.5069 2 17.5104 2 18.7552 3.46447C19.7572 4.64332 19.9527 6.40054 19.9908 9.5"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 8H15M8 13H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round"/>
+                  <path
+                    d="M19.6092 18.1054C20.4521 17.4918 21 16.4974 21 15.375C21 13.511 19.489 12 17.625 12H17.375C15.511 12 14 13.511 14 15.375C14 16.4974 14.5479 17.4918 15.3908 18.1054M19.6092 18.1054C19.0523 18.5108 18.3666 18.75 17.625 18.75H17.375C16.6334 18.75 15.9477 18.5108 15.3908 18.1054M19.6092 18.1054L20.192 19.9404C20.4143 20.6403 20.5255 20.9903 20.4951 21.2082C20.4318 21.6617 20.0619 21.9984 19.6252 22C19.4154 22.0008 19.101 21.8358 18.4723 21.5059C18.2027 21.3644 18.0679 21.2936 17.93 21.252C17.649 21.1673 17.351 21.1673 17.07 21.252C16.9321 21.2936 16.7973 21.3644 16.5277 21.5059C15.899 21.8358 15.5846 22.0008 15.3748 22C14.9381 21.9984 14.5682 21.6617 14.5049 21.2082C14.4745 20.9903 14.5857 20.6403 14.808 19.9404L15.3908 18.1054"
+                    stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-xs text-black/60">Título profesional:</span>
+                <span class="font-bold">test</span>
+              </div>
+            </div>
+          </div>
+
+          <a href="faculty.page_link" target="_blank"
+             class="b-link-sm absolute right-3 bottom-3">
+            <span>Visitar página</span>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/>
+              </svg>
+            </div>
+          </a>
+        </div>
+      </div>
+    }
+  </div>
+</main>
+
+<!--@if (_postStore.onboarding()) {
   <app-validate-registration/>
 } @else {
-  <main class="h-full w-full p-6 bg-gray-100 overflow-y-auto">
+  <main class="w-full min-h-[calc(100vh-64px)] p-4 md:p-10 bg-slate-100 overflow-y-auto">
     @if (exam) {
-      <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg mt-10">
-        <div class="text-blue-700 px-6 pt-6 rounded-t-lg">
-          <h1 class="text-center text-2xl font-bold">REQUISITOS PARA INSCRIPCIÓN</h1>
-          <p class="text-center text-lg">{{ exam.name }}</p>
-          <p class="text-center text-lg">{{ exam.description }}</p>
+      <div class="max-w-[1440px] mx-auto bg-white shadow-lg rounded-lg border border-black/10">
+        <div class="flex flex-col p-6">
+          <h1 class="text-neutral text-center text-2xl font-bold">REQUISITOS PARA INSCRIPCIÓN</h1>
+          <p class="text-center font-bold text-lg text-neutral">{{ exam.name }}</p>
+          <p class="text-center text-xs text-black/60">{{ exam.description }}</p>
         </div>
-        <div class="text-black-700 p-6 rounded-t-lg">
-          <label class="block text-md font-medium">Modalidad</label>
-          <select class="border p-2 w-full mb-2 bg-white" [(ngModel)]="selectedMode">
-            @for (mode of modalities; track mode.id) {
-              <option [value]="mode.id">{{ mode.name }}</option>
-            }
-          </select>
+        <div class="flex gap-3 items-end px-6 max-w-sm">
+          <div class="i-field w-full">
+            <div class="i-field w-full">
+              <label for="modalidad">Modalidad</label>
+              <select id="modalidad" [(ngModel)]="selectedMode" class="h-10">
+                @for (mode of modalities; track mode.id) {
+                  <option [value]="mode.id">{{ mode.name }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <button (click)="goToRegister()" class="b-primary-brand h-10">
+                Postular
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="px-6 overflow-auto">
-          <table id="requirementsTable" class="w-full border-collapse border border-gray-300">
+        <div class="overflow-auto p-6">
+          <table id="requirementsTable" class="w-full border border-black/20">
             <thead>
             <tr>
-              <th class="border border-gray-300 p-3 text-left text-gray-700">Requisito</th>
-              <th class="border border-gray-300 p-3 text-left text-gray-700">Descripción</th>
-              <th class="border border-gray-300 p-3 text-center text-gray-700">Guía</th>
+              <th class="border border-black/10 px-4 py-2 text-left font-bold">Requisito</th>
+              <th class="border border-black/10 px-4 py-2 text-left font-bold">Descripción</th>
+              <th class="border border-black/10 px-4 py-2 text-left font-bold">Guía</th>
             </tr>
             </thead>
             <tbody id="requirementsBody">
               @for (req of requirement; track req.id) {
                 <tr>
-                  <td class="border border-gray-300 p-3 text-gray-600">{{ req.name }}</td>
-                  <td class="border border-gray-300 p-3 text-gray-600">{{ req.description_guide }}</td>
-                  <td class="border border-gray-300 p-3 text-center">
+                  <td class="border border-black/10 px-4 py-2 text-left">{{ req.name }}</td>
+                  <td class="border border-black/10 px-4 py-2 text-left">{{ req.description_guide }}</td>
+                  <td class="border border-black/10 px-4 py-2 text-left">
                     @if (req.url_guide) {
                       <a [href]="req.url_guide" target="_blank" class="text-blue-500 hover:text-blue-700 underline">
                         <i class="fa-solid fa-circle-info"></i>
@@ -44,11 +124,6 @@
               }
             </tbody>
           </table>
-        </div>
-        <div class="p-6 text-center">
-          <button (click)="goToRegister()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            POSTULAR
-          </button>
         </div>
       </div>
     } @else {
@@ -65,7 +140,7 @@
       </div>
     }
   </main>
-}
+}-->
 
 <app-block-ui [show]="isLoading()"/>
 <p-toast/>

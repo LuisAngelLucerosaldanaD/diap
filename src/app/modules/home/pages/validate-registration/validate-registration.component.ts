@@ -22,7 +22,7 @@ import {PostStore} from "../../../../core/store/post.store";
     ReactiveFormsModule,
     NgIf,
     FormRegistrationComponent,
-    NumbersInpDirective
+    NumbersInpDirective,
   ],
   templateUrl: './validate-registration.component.html',
   styleUrl: './validate-registration.component.scss',
@@ -121,11 +121,20 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
 
   protected validate(): void {
     if (this.postForm.invalid) {
-      this._toastService.add({severity: 'error', summary: 'Error', detail: 'Ingrese un DNI válido'});
+      this._toastService.add({
+        severity: 'warn',
+        summary: 'Módulo de Registro',
+        detail: 'Complete los campos requeridos'
+      });
       this.postForm.markAllAsTouched();
       return;
     }
 
     this._validatePayment();
+  }
+
+  protected goBack(): void {
+    this.postForm.reset();
+    this._postStore.setOnboarding(false);
   }
 }
