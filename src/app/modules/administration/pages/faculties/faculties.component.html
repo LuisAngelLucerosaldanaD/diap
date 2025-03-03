@@ -28,7 +28,7 @@
         </div>
         <div class="text-left">
           <h2 class="text-xl font-semibold mb-2">{{ faculty.name }}</h2>
-          <p class="text-gray-700"><strong>Grado Académico:</strong> Bachiller en {{ faculty.academic_degree }}</p>
+          <p class="text-gray-700"><strong>Grado Académico:</strong> {{ faculty.academic_degree }}</p>
           <p class="text-gray-700"><strong>Título Profesional:</strong> {{ faculty.professional_name }}</p>
         </div>
       </div>
@@ -47,7 +47,7 @@
     <div class="mb-4">
       <label for="name" class="block text-sm font-medium mb-2">Logo <span class="text-red-600 ">*</span></label>
       <input type="file" class="hidden" id="file" #logo (change)="processLogo($event)" accept="image/*">
-      @if (isEditing()) {
+      @if (isEditing() || schoolForm.get('logo')?.value) {
         <div class="group relative border-slate-400 border-dashed rounded-lg">
           <img [src]="schoolForm.get('logo')?.value" alt="logo agronomia" loading="lazy"
                class="facultad-logo mx-auto mb-4 w-2/5">

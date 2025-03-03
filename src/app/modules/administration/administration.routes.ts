@@ -25,7 +25,7 @@ export const AdminRoutes: Routes = [
     loadComponent: () => import('./pages/statistics/statistics.component').then(m => m.StatisticsComponent)
   },
   {
-    path: 'faculties',
+    path: 'schools',
     data: {role: [1]},
     canActivate: [permissionGuard],
     loadComponent: () => import('./pages/faculties/faculties.component').then(m => m.FacultiesComponent)

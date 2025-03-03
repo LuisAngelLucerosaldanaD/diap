@@ -34,7 +34,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   private readonly _toastService = inject(MessageService);
   private readonly _facultiesService = inject(FacultiesService);
 
-  protected faculties = signal<IFaculties[]>(FACULTIES);
+  protected faculties = signal<IFaculties[]>([]);
   protected openModal = signal(false);
   protected isLoading = signal(false);
   protected isEditing = signal(false);
@@ -49,13 +49,14 @@ export class FacultiesComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    //this._getFaculties();
+    this._getFaculties();
   }
 
   ngOnDestroy() {
   }
 
   private _getFaculties(): void {
+    this.isLoading.set(true);
     this._subscriptions.add(
       this._facultiesService.getFaculties().subscribe({
         next: (res) => {
@@ -84,6 +85,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   }
 
   private _deleteFaculty(id: number): void {
+    this.isLoading.set(true);
     this._subscriptions.add(
       this._facultiesService.deleteFaculty(id).subscribe({
         next: (res) => {
@@ -117,6 +119,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   }
 
   private _createFaculty(): void {
+    this.isLoading.set(true);
     const data: IFacultyDTO = {
       logo: this.schoolForm.value.logo,
       name: this.schoolForm.value.name,
@@ -159,6 +162,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   }
 
   private _updateFaculty(): void {
+    this.isLoading.set(true);
     const data: IFacultyDTO = {
       id: this.schoolForm.value.id,
       logo: this.schoolForm.value.logo,
