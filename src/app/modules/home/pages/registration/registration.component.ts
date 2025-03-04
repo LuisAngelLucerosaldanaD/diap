@@ -15,19 +15,21 @@ import {ExamStore} from "../../../../core/store/exam.store";
 import {ValidateRegistrationComponent} from "../validate-registration/validate-registration.component";
 import {RecaptchaFormsModule, RecaptchaModule} from "ng-recaptcha";
 import {RouterLink} from "@angular/router";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-registration',
   standalone: true,
-    imports: [
-        FormsModule,
-        BlockUiComponent,
-        ToastModule,
-        ValidateRegistrationComponent,
-        RecaptchaFormsModule,
-        RecaptchaModule,
-        RouterLink
-    ],
+  imports: [
+    FormsModule,
+    BlockUiComponent,
+    ToastModule,
+    ValidateRegistrationComponent,
+    RecaptchaFormsModule,
+    RecaptchaModule,
+    RouterLink,
+    DatePipe
+  ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
   providers: [MessageService]
