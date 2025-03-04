@@ -37,15 +37,16 @@ export interface IApplicant {
   address: string;
   description_applicant: string;
   id_school: number;
+  is_verified: boolean;
+  date_verified: string;
   deleted_at: any;
   created_at: string;
   updated_at: string;
 }
 
 export interface IModality {
-  created_at: string;
-  description: string;
   id: number;
+  description: string;
   id_examtype: number;
   name: string;
   private_school_code_pay: number;
@@ -53,4 +54,15 @@ export interface IModality {
   state_school_code_pay: number;
   state_school_price: number;
   updated_at: string;
+  created_at: string;
+}
+
+export interface IModalityDTO {
+  description: string;
+  id_examtype: number;
+  name: string;
+  private_school_code_pay: number;
+  private_school_price: number;
+  state_school_code_pay: number;
+  state_school_price: number;
 }

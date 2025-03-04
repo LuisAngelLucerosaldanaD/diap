@@ -15,7 +15,7 @@
     @for (faculty of faculties(); track faculty.name) {
       <div class="border border-gray-300 rounded-lg p-4 bg-white shadow-md">
         <div class="relative">
-          <img [src]="faculty.logo" alt="logo agronomia" loading="lazy"
+          <img [src]="faculty.photo_url" alt="logo {{faculty.name}}" loading="lazy"
                class="facultad-logo mx-auto mb-4 w-3/5">
           <div (click)="editFaculty(faculty)"
                class="top-0 right-0 absolute w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white cursor-pointer hover:bg-blue-300">
@@ -29,7 +29,7 @@
         <div class="text-left">
           <h2 class="text-xl font-semibold mb-2">{{ faculty.name }}</h2>
           <p class="text-gray-700"><strong>Grado Académico:</strong> {{ faculty.academic_degree }}</p>
-          <p class="text-gray-700"><strong>Título Profesional:</strong> {{ faculty.professional_name }}</p>
+          <p class="text-gray-700"><strong>Título Profesional:</strong> {{ faculty.professional_title }}</p>
         </div>
       </div>
     }
@@ -49,7 +49,7 @@
       <input type="file" class="hidden" id="file" #logo (change)="processLogo($event)" accept="image/*">
       @if (isEditing() || schoolForm.get('logo')?.value) {
         <div class="group relative border-slate-400 border-dashed rounded-lg">
-          <img [src]="schoolForm.get('logo')?.value" alt="logo agronomia" loading="lazy"
+          <img [src]="schoolForm.get('logo')?.value" alt="logo {{schoolForm.get('name')?.value}}" loading="lazy"
                class="facultad-logo mx-auto mb-4 w-2/5">
           <div (click)="logo.click()"
                class="group-hover:flex hidden absolute inset-0  items-center justify-center bg-black bg-opacity-25 rounded-lg cursor-pointer">

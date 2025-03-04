@@ -49,7 +49,7 @@ export class ExamsService {
     return this._http.get<IResponse>(`${this._urlStatistics}/modality/${exam}`);
   }
 
-  public getCurrentExam(): Observable<IResponse<IExam>> {
-    return this._http.get<IResponse<IExam>>(`${this._url}/current`);
+  public getCurrentExams(): Observable<IResponse<IExam[]>> {
+    return this._http.get<IResponse<IExam[]>>(`${this._url}/current`);
   }
 }

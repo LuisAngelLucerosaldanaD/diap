@@ -11,7 +11,8 @@ import {RouterLink} from "@angular/router";
   selector: 'app-announcements',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    DatePipe
   ],
   templateUrl: './announcements.component.html',
   styleUrl: './announcements.component.scss',
@@ -40,7 +41,7 @@ export class AnnouncementsComponent implements OnInit, OnDestroy {
   private _getCurrentExam(): void {
     this.isLoading = true;
     this._subscriptions.add(
-      this._examsService.getCurrentExam().subscribe({
+      this._examsService.getCurrentExams().subscribe({
         next: (res) => {
           if (res.error) {
             this._toastService.add({
@@ -50,7 +51,9 @@ export class AnnouncementsComponent implements OnInit, OnDestroy {
             });
             return;
           }
-          this.exam = res.data;
+          this.exam = res.data.reduce((latest, item) => {
+            return item.created_at < latest.created_at ? item : latest;
+          });
           const exam_date = new Date(this.exam.exam_date);
           const end = new Date(this.exam.end_date);
           this.examDate = new DatePipe('en-US').transform(exam_date, 'dd/MM/yyyy') || '';

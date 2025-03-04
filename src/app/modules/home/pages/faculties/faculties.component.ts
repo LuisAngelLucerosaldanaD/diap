@@ -11,6 +11,6 @@ import { FACULTIES } from '../../../../core/utils/constants/constants';
 })
 export class FacultiesComponent {
 
-  protected faculties = signal<IFaculties[]>(FACULTIES);
+  protected faculties = signal<any[]>(FACULTIES);
 
 }

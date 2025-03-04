@@ -1,6 +1,5 @@
 import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
-import {IFaculties, IFacultyDTO} from "../../../../core/models/faculties/faculties";
-import {FACULTIES} from '../../../../core/utils/constants/constants';
+import {IFaculties} from "../../../../core/models/faculties/faculties";
 import {NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -33,6 +32,9 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription = new Subscription();
   private readonly _toastService = inject(MessageService);
   private readonly _facultiesService = inject(FacultiesService);
+
+  private logoName = signal('');
+  private logoMimeType = signal('');
 
   protected faculties = signal<IFaculties[]>([]);
   protected openModal = signal(false);
@@ -120,15 +122,16 @@ export class FacultiesComponent implements OnInit, OnDestroy {
 
   private _createFaculty(): void {
     this.isLoading.set(true);
-    const data: IFacultyDTO = {
-      logo: this.schoolForm.value.logo,
-      name: this.schoolForm.value.name,
-      page_link: this.schoolForm.value.page_link,
-      professional_name: this.schoolForm.value.professional_name,
-      academic_degree: this.schoolForm.value.academic_degree
-    };
+    const form = new FormData();
+    const file = this.schoolForm.get('logo')?.value.split(',');
+    form.set('name', this.schoolForm.value.name);
+    form.set('photo_path', FileHelper.Base64ToFile(file[1], this.logoName(), this.logoMimeType()));
+    form.set('url_web_address', this.schoolForm.value.page_link);
+    form.set('professional_title', this.schoolForm.value.professional_name);
+    form.set('academic_degree', this.schoolForm.value.academic_degree);
+
     this._subscriptions.add(
-      this._facultiesService.createFaculty(data).subscribe({
+      this._facultiesService.createFaculty(form).subscribe({
         next: (res) => {
           if (res.error) {
             this._toastService.add({
@@ -144,8 +147,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
             detail: 'Facultad creada correctamente'
           });
           this._getFaculties();
-          this.openModal.set(false);
-          this.schoolForm.reset();
+          this.cancel();
         },
         error: (err: HttpErrorResponse) => {
           console.error(err);
@@ -162,17 +164,24 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   }
 
   private _updateFaculty(): void {
+    const form = new FormData();
+    const logo: string = this.schoolForm.get('logo')?.value;
+    if (logo.startsWith('data:')) {
+      const file = this.schoolForm.get('logo')?.value.split(',');
+      form.set('photo_path', FileHelper.Base64ToFile(file[1], this.logoName().replaceAll('', '_'), this.logoMimeType()));
+    } else {
+      form.set('photo_path', '');
+    }
+
+    form.set('name', this.schoolForm.value.name);
+    form.set('url_web_address', this.schoolForm.value.page_link);
+    form.set('professional_title', this.schoolForm.value.professional_name);
+    form.set('academic_degree', this.schoolForm.value.academic_degree);
+    form.set('_method', 'PUT');
+
     this.isLoading.set(true);
-    const data: IFacultyDTO = {
-      id: this.schoolForm.value.id,
-      logo: this.schoolForm.value.logo,
-      name: this.schoolForm.value.name,
-      page_link: this.schoolForm.value.page_link,
-      professional_name: this.schoolForm.value.professional_name,
-      academic_degree: this.schoolForm.value.academic_degree
-    };
     this._subscriptions.add(
-      this._facultiesService.updateFaculty(data).subscribe({
+      this._facultiesService.updateFaculty(form, this.schoolForm.get('id')?.value).subscribe({
         next: (res) => {
           if (res.error) {
             this._toastService.add({
@@ -188,8 +197,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
             detail: 'Facultad actualizada correctamente'
           });
           this._getFaculties();
-          this.openModal.set(false);
-          this.schoolForm.reset();
+          this.cancel();
         },
         error: (err: HttpErrorResponse) => {
           console.error(err);
@@ -223,13 +231,22 @@ export class FacultiesComponent implements OnInit, OnDestroy {
 
   protected cancel(): void {
     this.openModal.set(false);
+    this.logoMimeType.set('');
+    this.logoName.set('');
     this.schoolForm.reset();
   }
 
   protected editFaculty(faculty: IFaculties): void {
     this.isEditing.set(true);
     this.openModal.set(true);
-    this.schoolForm.patchValue(faculty);
+    this.schoolForm.patchValue({
+      id: faculty.id,
+      name: faculty.name,
+      page_link: faculty.url_web_address,
+      professional_name: faculty.professional_title,
+      academic_degree: faculty.academic_degree,
+      logo: faculty.photo_url
+    });
   }
 
   protected processLogo(ev: any): void {
@@ -246,6 +263,9 @@ export class FacultiesComponent implements OnInit, OnDestroy {
     this._subscriptions.add(
       FileHelper.fileReader(file).subscribe({
         next: res => {
+          console.log(file.name)
+          this.logoName.set(file.name);
+          this.logoMimeType.set(file.type);
           this.schoolForm.get('logo')?.setValue(res);
         },
         error: (err) => {

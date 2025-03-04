@@ -13,7 +13,7 @@ export const ExamStore = signalStore(
     { providedIn: 'root' },
     withState(initialState),
     withMethods((store) => ({
-        setExam(exam: IExam) {
+        setExam(exam: IExam | null) {
             patchState(store, (state) => ({...state, exam: exam}));
         }
     }))

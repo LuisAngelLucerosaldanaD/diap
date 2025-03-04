@@ -16,7 +16,8 @@ import {FileHelper} from "../../../../core/utils/file/file";
 import {ToastModule} from "primeng/toast";
 import {FormRegistrationComponent} from "../../../../core/ui/form-registration/form-registration.component";
 import {DialogModule} from "primeng/dialog";
-import { ExamStore } from '../../../../core/store/exam.store';
+import {ExamStore} from '../../../../core/store/exam.store';
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-postulations',
@@ -28,7 +29,8 @@ import { ExamStore } from '../../../../core/store/exam.store';
     ReactiveFormsModule,
     ToastModule,
     FormRegistrationComponent,
-    DialogModule
+    DialogModule,
+    DatePipe
   ],
   templateUrl: './postulations.component.html',
   styleUrl: './postulations.component.scss',
@@ -44,7 +46,7 @@ export class PostulationsComponent implements OnInit, OnDestroy {
   private readonly _toastService: MessageService = inject(MessageService);
   private readonly _examStore = inject(ExamStore);
 
-  protected items = [
+  protected menu = [
     {
       label: 'Acciones',
       items: [
@@ -126,7 +128,7 @@ export class PostulationsComponent implements OnInit, OnDestroy {
           const latestItem = this.exams.reduce((latest, item) => {
             return item.created_at < latest.created_at ? item : latest;
           });
-          this._examStore.setExam(latestItem)
+          this._examStore.setExam(latestItem);
           this.formExam.setValue(latestItem.id);
           this._getPostulations(latestItem.id);
         },
@@ -208,6 +210,41 @@ export class PostulationsComponent implements OnInit, OnDestroy {
     );
   }
 
+  private setVerifyApplicant(status: boolean): void {
+    this.isLoading = true;
+    this._subscriptions.add(
+      this._postulationsService.setVerifyApplicant(this.postulation.applicant.id, status).subscribe({
+        next: (res) => {
+          if (res.error) {
+            this._toastService.add({
+              severity: 'error',
+              summary: 'Módulo de Postulaciones',
+              detail: res.msg
+            });
+            return;
+          }
+
+          this._toastService.add({
+            severity: 'success',
+            summary: 'Módulo de Postulaciones',
+            detail: 'Se actualizó el estado del postulante'
+          });
+          this._getPostulations(this.formExam.value);
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error(err);
+          this._toastService.add({
+            severity: 'error',
+            summary: 'Módulo de Postulaciones',
+            detail: 'No se pudo actualizar el estado del postulante'
+          });
+          this.isLoading = false;
+        },
+        complete: () => this.isLoading = false
+      })
+    );
+  }
+
   protected changeExam(): void {
     const latestItem = this.exams.find(exam => exam.id.toString() === this.formExam.value);
     if (!latestItem) return;
@@ -217,6 +254,30 @@ export class PostulationsComponent implements OnInit, OnDestroy {
 
   protected openMenu(data: IPostulation, menu: Menu, event: any): void {
     this.postulation = data;
+    const items = this.menu[0].items;
+    if (data.applicant.is_verified) {
+      this.menu[0].items = items.filter(item => item.label !== 'Verificar Postulante');
+      const found = items.find(item => item.label === 'Desverificar Postulante');
+      if (!found) {
+        this.menu[0].items.push({
+          label: 'Desverificar Postulante',
+          icon: 'pi pi-exclamation-triangle',
+          command: () => this.setVerifyApplicant(false)
+        });
+      }
+      menu.toggle(event);
+      return;
+    }
+
+    this.menu[0].items = items.filter(item => item.label !== 'Desverificar Postulante');
+    const found = items.find(item => item.label === 'Verificar Postulante');
+    if (!found) {
+      this.menu[0].items.push({
+        label: 'Verificar Postulante',
+        icon: 'pi pi-verified',
+        command: () => this.setVerifyApplicant(true)
+      });
+    }
     menu.toggle(event);
   }
 

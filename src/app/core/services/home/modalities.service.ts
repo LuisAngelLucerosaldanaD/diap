@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IResponse} from "../../models/response";
 import {ICost, IRequirement} from "../../models/registration/registration";
-import {IModality} from "../../models/admin/postulation";
+import {IModality, IModalityDTO} from "../../models/admin/postulation";
 
 @Injectable({
   providedIn: 'root'
@@ -28,4 +28,17 @@ export class ModalitiesService {
   public getModalities(exam: number): Observable<IResponse<IModality[]>> {
     return this._http.get<IResponse<IModality[]>>(this._urlModalities + `/type/${exam}`);
   }
+
+  public createModality(modality: IModalityDTO): Observable<IResponse<IModality>> {
+    return this._http.post<IResponse<IModality>>(this._urlModalities, modality);
+  }
+
+  public updateModality(id: number, modality: IModalityDTO): Observable<IResponse<IModality>> {
+    return this._http.put<IResponse<IModality>>(this._urlModalities + `/${id}`, modality);
+  }
+
+  public deleteModality(id: number): Observable<IResponse<IModality>> {
+    return this._http.delete<IResponse<IModality>>(this._urlModalities + `/${id}`);
+  }
+
 }

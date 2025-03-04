@@ -3,13 +3,13 @@ import {EnvServiceFactory} from "../env/env.service.provider";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IResponse} from "../../models/response";
-import {IFaculties, IFacultyDTO} from "../../models/faculties/faculties";
+import {IFaculties} from "../../models/faculties/faculties";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FacultiesService {
-  private readonly _url: string = EnvServiceFactory().REST_API + '/api/v1/faculties';
+  private readonly _url: string = EnvServiceFactory().REST_API + '/api/v1/faculty';
   private _http: HttpClient = inject(HttpClient);
 
   public getFaculties(): Observable<IResponse<IFaculties[]>> {
@@ -20,12 +20,12 @@ export class FacultiesService {
     return this._http.get<any>(`${this._url}/${id}`);
   }
 
-  public createFaculty(faculty: IFacultyDTO): Observable<IResponse> {
-    return this._http.post<IResponse>(this._url, faculty);
+  public createFaculty(data: FormData): Observable<IResponse> {
+    return this._http.post<IResponse>(this._url, data);
   }
 
-  public updateFaculty(faculty: IFacultyDTO): Observable<IResponse> {
-    return this._http.put<IResponse>(this._url, faculty);
+  public updateFaculty(data: FormData, id: number): Observable<IResponse> {
+    return this._http.put<IResponse>(this._url + `/${id}`, data);
   }
 
   public deleteFaculty(id: number): Observable<IResponse> {

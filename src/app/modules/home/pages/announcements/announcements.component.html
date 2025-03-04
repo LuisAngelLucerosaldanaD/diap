@@ -19,7 +19,7 @@
               </div>
               <div class="flex flex-col">
                 <span class="text-black/60">Inscripción ordinaria</span>
-                <span class="font-bold">Hasta el {{ endDate }}</span>
+                <span class="font-bold">Hasta el {{ exam.end_date | date: 'dd/MM/yyyy' }}</span>
               </div>
             </div>
             <button routerLink="/home/registration" class="b-primary-brand mb-4 md:mb-0">Inscribirse</button>
@@ -32,7 +32,7 @@
               </div>
               <div class="flex flex-col">
                 <span class="text-black/60">Día del examen</span>
-                <span class="font-bold">{{examDate}}</span>
+                <span class="font-bold">{{exam.exam_date | date: 'dd/MM/yyyy'}}</span>
               </div>
             </div>
             <div class="flex gap-2">
@@ -43,7 +43,7 @@
               </div>
               <div class="flex flex-col">
                 <span class="text-black/60">Hora del examen</span>
-                <span class="font-bold">{{ startHour }}</span>
+                <span class="font-bold">{{ exam.exam_date | date: 'HH:mm a' }}</span>
               </div>
             </div>
             <div class="flex gap-2">

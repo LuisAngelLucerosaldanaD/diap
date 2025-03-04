@@ -1,4 +1,3 @@
-import { IFaculties } from "../../models/faculties/faculties";
 import {IOption} from "../../models/registration/registration";
 import {IMenuItem} from "../../models/ui/menu";
 
@@ -61,20 +60,25 @@ export const AUTH_MENU: IMenuItem[] = [
     icon: 'fa-book',
     roles: [1, 2],
     exact: true
-  }
-  ,
+  },
   {
     name: 'Configuraciones',
     route: '/admin/settings',
     icon: 'fa-gear',
     roles: [1],
     exact: true
-  }
-  ,
+  },
   {
     name: 'Exámenes complementarios',
     route: '/admin/exams-complementarios',
     icon: 'fa-gear',
+    roles: [1],
+    exact: true
+  },
+  {
+    name: 'Modalidades',
+    route: '/admin/modalidades',
+    icon: 'fa-shuffle',
     roles: [1],
     exact: true
   }
@@ -158,7 +162,7 @@ export const FacultiesOptions: IOption[] = [
   }
 ];
 
-export const FACULTIES: IFaculties[] = [
+export const FACULTIES: any[] = [
   {
     logo: 'https://admision.unas.edu.pe/diap-backend/public/images/agronomia.png',
     name: 'Facultad de Agronomía',

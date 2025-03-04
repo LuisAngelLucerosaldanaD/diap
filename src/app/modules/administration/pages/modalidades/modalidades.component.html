@@ -3,16 +3,16 @@
     <div class="max-w-7xl mx-auto px-2 md:px-8">
       <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
         <div class="flex gap-2 items-center mb-4">
-          <button class="text-gray rounded-full px-1 focus:outline-none" routerLink="/admin/exams">
+          <button *ngIf="false" class="text-gray rounded-full px-1 focus:outline-none" routerLink="/admin/exams">
             <div>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/>
               </svg>
 
             </div>
           </button>
-          <h2 class="font-semibold text-xl text-center md:text-left">Gestión de modalidades
-          </h2>
+          <h2 class="font-semibold text-xl text-center md:text-left">Gestión de modalidades</h2>
         </div>
         <div
           class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 px-2 md:px-4 py-4">
@@ -24,16 +24,16 @@
                   <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewbox="0 0 20 20"
                        xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
-                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
                   </svg>
                 </div>
-                <input type="text" id="search" placeholder="Buscar" class="inp-search">
+                <input type="text" id="search" placeholder="Buscar" class="inp-search" [(ngModel)]="modFilter.name">
               </div>
             </div>
           </div>
           <div
             class="flex gap-2">
-            <button type="button" class="btn-create">
+            <button type="button" class="btn-create" (click)="onCreateModality()">
               <i class="pi pi-plus mr-1"></i>
               Nueva modalidad
             </button>
@@ -48,27 +48,31 @@
                   <tr>
                     <th scope="col" class="px-4 py-3">N°</th>
                     <th scope="col" class="px-4 py-3">Nombre</th>
+                    <th scope="col" class="px-4 py-3">Descripción</th>
                     <th scope="col" class="px-4 py-3">
                       <span class="sr-only">Actions</span>
                     </th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr class="border-b">
-                    <td class="px-4 py-3">1</td>
-                    <td class="px-4 py-3">Nombre modalidad</td>
-                    <td class="px-4 py-3 flex items-center justify-end relative">
-                      <button type="button" class="btn-options" routerLink="/admin/requisitos">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                             xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                        </svg>
-                      </button>
-                      <p-menu #menu [popup]="true" appendTo="body" />
-                      <!--Gestionar requisitos, Editar, Borrar-->
-                    </td>
-                  </tr>
+                    @for (mod of modalities() | filterBy: modFilter; track mod.id; let i = $index) {
+                      <tr class="border-b">
+                        <td class="px-4 py-3">{{ i + 1 }}</td>
+                        <td class="px-4 py-3">{{ mod.name }}</td>
+                        <td class="px-4 py-3">{{ mod.description }}</td>
+                        <td class="px-4 py-3 flex items-center justify-end relative">
+                          <button type="button" class="btn-options" (click)="openMenu(mod, pMenu, $event)">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
+                                 xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
+                            </svg>
+                          </button>
+                          <p-menu #pMenu [model]="menu" [popup]="true" appendTo="body"/>
+                          <!--Gestionar requisitos, Editar, Borrar-->
+                        </td>
+                      </tr>
+                    }
                   </tbody>
                 </table>
               </div>
@@ -81,58 +85,98 @@
 </main>
 
 
-<div *ngIf="false" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+<div *ngIf="modal()" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
   <div class="bg-white rounded-lg shadow-lg p-6 w-[70%] md:w-1/2">
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-lg font-semibold">
-        {{ true ? 'Crear' : 'Actualizar' }} Modalidad
+        {{ editing() ? 'Actualizar' : 'Crear' }} Modalidad
       </h3>
-      <button class="text-gray hover:text-red-400 rounded-full px-1 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-             stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
     </div>
 
-    <form class="grid grid-cols-2 gap-4">
+    <form class="grid grid-cols-2 gap-4" [formGroup]="modForm">
       <div class="col-span-2">
         <label class="block text-sm font-medium">Nombre <span class="text-red-600 ">*</span></label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="name">
+        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="name" appNameInp>
+        @if (modForm.get('name')?.invalid && modForm.get('name')?.touched) {
+          <small *ngIf="modForm.get('name')?.hasError('required')">
+            El nombre de la modalidad es requerida
+          </small>
+          <small *ngIf="modForm.get('name')?.hasError('minlength')">
+            El nombre debe tener como minimo 6 caracteres
+          </small>
+          <small *ngIf="modForm.get('name')?.hasError('maxlength')">
+            El nombre debe de tener como máximo 100 caracteres
+          </small>
+        }
       </div>
       <div class="col-span-2">
         <label class="block text-sm font-medium">Descripción</label>
-        <textarea class="border p-2 w-full mb-2 bg-white" rows="3"></textarea>
+        <textarea class="border p-2 w-full mb-2 bg-white" rows="3" formControlName="description"></textarea>
+        @if (modForm.get('description')?.invalid && modForm.get('description')?.touched) {
+          <small *ngIf="modForm.get('description')?.hasError('required')">
+            La descripción de la modalidad es requerida
+          </small>
+          <small *ngIf="modForm.get('description')?.hasError('maxlength')">
+            La descripción debe de tener como máximo 500 caracteres
+          </small>
+        }
       </div>
       <div>
         <label class="block text-sm font-medium">Código de pago (Colegio Estatal) <span class="text-red-600 ">*</span>
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
+        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="state_code_pay">
       </div>
       <div>
-        <label class="block text-sm font-medium">Monto de pago (S/.) (Colegio Estatal)<span class="text-red-600 ">*</span>
+        <label class="block text-sm font-medium">Monto de pago (S/.) (Colegio Estatal)<span
+          class="text-red-600 ">*</span>
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
+        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="state_price">
       </div>
       <div>
         <label class="block text-sm font-medium">Código de pago (Colegio Privado) <span class="text-red-600 ">*</span>
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
+        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="private_code_pay">
       </div>
       <div>
-        <label class="block text-sm font-medium">Monto de pago (S/.) (Colegio Privado)<span class="text-red-600 ">*</span>
+        <label class="block text-sm font-medium">Monto de pago (S/.) (Colegio Privado)<span
+          class="text-red-600 ">*</span>
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="description">
+        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="private_price">
       </div>
     </form>
 
     <div class="flex justify-end space-x-2">
-      <button class="bg-gray-500 text-white px-4 py-2 rounded-md">
+      <button class="bg-gray-500 text-white px-4 py-2 rounded-md" (click)="closeMenu()">
         Cancelar
       </button>
-      <button class="bg-green-500 text-white px-4 py-2 rounded-md">
+      <button class="bg-green-500 text-white px-4 py-2 rounded-md" (click)="onSave()">
         Guardar
       </button>
     </div>
   </div>
 </div>
+
+<app-block-ui [show]="loading()"/>
+<p-confirmDialog key="modality" #cd>
+  <ng-template pTemplate="headless" let-message>
+    <div class="rounded-lg p-12 flex flex-col items-center gap-6 bg-white">
+      <div>
+        <img src="/assets/logos/diap.svg" alt="logo diap" class="pointer-events-none w-12 h-12">
+      </div>
+      <div class="flex flex-col text-center items-center gap-2">
+        <span class="font-bold text-2xl text-neutral">
+          {{ message.header }}
+        </span>
+        <p class="opacity-60">{{ message.message }}</p>
+      </div>
+      <div class="flex items-center w-full gap-2">
+        <button pButton label="Aceptar" (click)="cd.accept()" class="b-primary-neutral w-full">
+        </button>
+        <button pButton label="Cancelar" (click)="cd.reject()"
+                class="b-secondary-neutral w-full">
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</p-confirmDialog>
+<p-toast/>

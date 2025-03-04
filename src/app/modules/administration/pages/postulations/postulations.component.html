@@ -63,23 +63,32 @@
                   <td class="px-4 py-3">{{ postulation.second_option }}</td>
                   <td class="px-4 py-3">Tingo Mária</td>
                   <td class="px-4 py-3">
-                    <div class="bg-amber-100 w-fit text-amber-600 px-2 py-1 rounded">
-                      <span class="font-bold">No verificado</span>
-                    </div>
-                    <div class="bg-emerald-100 w-fit text-emerald-600 px-2 py-1 rounded">
-                      <span class="font-bold">Verificado</span>
-                    </div>
+                    @if (postulation.applicant.is_verified) {
+                      <div class="bg-emerald-100 w-fit text-emerald-600 px-2 py-1 rounded">
+                        <span class="font-bold">Verificado</span>
+                      </div>
+                    } @else {
+                      <div class="bg-amber-100 w-fit text-amber-600 px-2 py-1 rounded">
+                        <span class="font-bold">No verificado</span>
+                      </div>
+                    }
                   </td>
-                  <td class="px-4 py-3">16:23 28/02/2025</td>
+                  <td class="px-4 py-3">
+                    @if (postulation.applicant.is_verified) {
+                      {{postulation.applicant.date_verified | date: 'dd/MM/yyyy HH:mm a'}}
+                    } @else {
+                      -
+                    }
+                  </td>
                   <td class="px-4 py-3 flex items-center justify-end relative">
-                    <button type="button" class="btn-options" (click)="openMenu(postulation, menu, $event)">
+                    <button type="button" class="btn-options" (click)="openMenu(postulation, pMenu, $event)">
                       <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
                            xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
                       </svg>
                     </button>
-                    <p-menu #menu [model]="items" [popup]="true" appendTo="body"/>
+                    <p-menu #pMenu [model]="menu" [popup]="true" appendTo="body"/>
                   </td>
                 </tr>
               }

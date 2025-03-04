@@ -14,7 +14,6 @@ import {PostStore} from "../../../../core/store/post.store";
 import {ExamStore} from "../../../../core/store/exam.store";
 import {ValidateRegistrationComponent} from "../validate-registration/validate-registration.component";
 import {RecaptchaFormsModule, RecaptchaModule} from "ng-recaptcha";
-import {RouterLink} from "@angular/router";
 import {DatePipe} from "@angular/common";
 
 @Component({
@@ -27,7 +26,6 @@ import {DatePipe} from "@angular/common";
     ValidateRegistrationComponent,
     RecaptchaFormsModule,
     RecaptchaModule,
-    RouterLink,
     DatePipe
   ],
   templateUrl: './registration.component.html',
@@ -45,7 +43,7 @@ export class RegistrationComponent implements OnDestroy {
 
   // Store
   protected readonly _postStore = inject(PostStore);
-  private readonly _examStore = inject(ExamStore);
+  protected readonly _examStore = inject(ExamStore);
 
   protected selectedMode = signal(-1);
   protected isLoading = signal(false);
@@ -55,7 +53,7 @@ export class RegistrationComponent implements OnDestroy {
   protected modalities: IModality[] = [];
 
   constructor() {
-    this._getCurrentExam();
+    this._getExams();
     effect(() => {
       if (this.selectedMode() !== -1) this._getFileRequired();
     }, {allowSignalWrites: true});
@@ -65,15 +63,22 @@ export class RegistrationComponent implements OnDestroy {
     this._subscriptions.unsubscribe();
     this.isLoading.set(false);
     this.selectedMode.set(-1);
+    this._postStore.setPostulation({
+      dni: '',
+      modality: null,
+      onboarding: false,
+      typeSchool: ''
+    });
+    this._examStore.setExam(null);
     this.modalities = [];
-    this.selectedMode.set(-1);
     this.requirement = [];
+    this.exams.set([]);
   }
 
-  private _getCurrentExam(): void {
+  private _getExams(): void {
     this.isLoading.set(true);
     this._subscriptions.add(
-      this._examsService.getExams().subscribe({
+      this._examsService.getCurrentExams().subscribe({
         next: (res) => {
           if (res.error) {
             this._toastService.add({
@@ -84,10 +89,6 @@ export class RegistrationComponent implements OnDestroy {
             return;
           }
           this.exams.set(res.data);
-          console.log(res.data);
-          this.exam = res.data[0];
-          this._examStore.setExam(res.data[0]);
-          this._getModalities();
         },
         error: (err: HttpErrorResponse) => {
           console.error(err);
@@ -178,6 +179,20 @@ export class RegistrationComponent implements OnDestroy {
     if (!modality) return;
     this._postStore.setModality(modality);
     this._postStore.setOnboarding(true);
+  }
+
+  protected setExam(exam: IExam): void {
+    this.exam = exam;
+    this._examStore.setExam(exam);
+    this._getModalities();
+  }
+
+  protected closeRegister(): void {
+    this._examStore.setExam(null);
+    this.exam = {} as IExam;
+    this.modalities = [];
+    this.selectedMode.set(-1);
+    this.requirement = [];
   }
 
 }

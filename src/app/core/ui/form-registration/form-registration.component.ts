@@ -578,7 +578,8 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     const data: IPaymentDTO = {
       dni: this.basicForm.getRawValue().dni,
       type_school: this.schoolForm.value.type,
-      id_modality: this.academicForm.value.modality
+      id_modality: this.academicForm.value.modality,
+      id_examcall: this._exam.id
     }
     this._subscriptions.add(
       this._registrationService.validatePayment(data).subscribe({

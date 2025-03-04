@@ -27,8 +27,9 @@ export interface IOption {
 
 export interface IPaymentDTO {
   dni: string;
-  type_school: string | null;
-  id_modality: number | null;
+  type_school: string;
+  id_modality: number;
+  id_examcall: number;
 }
 
 export interface IPayment {

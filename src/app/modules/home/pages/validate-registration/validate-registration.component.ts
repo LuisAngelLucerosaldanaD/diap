@@ -12,6 +12,7 @@ import {IPayment, IPaymentDTO} from "../../../../core/models/registration/regist
 import {PaymentStore} from '../../../../core/store/payment.store';
 import {NumbersInpDirective} from "../../../../core/directives/numbers-inp.directive";
 import {PostStore} from "../../../../core/store/post.store";
+import {ExamStore} from "../../../../core/store/exam.store";
 
 @Component({
   selector: 'app-validate-registration',
@@ -38,6 +39,7 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
   // Store
   private readonly _paymentStore = inject(PaymentStore);
   private readonly _postStore = inject(PostStore);
+  private readonly _examStore = inject(ExamStore);
 
   protected isLoading = signal(false);
   protected isValidPayment = signal(false);
@@ -65,7 +67,8 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
     const data: IPaymentDTO = {
       dni: this.dni.value,
       type_school: this.school.value,
-      id_modality: this._postStore.modality()?.id as number
+      id_modality: this._postStore.modality()?.id as number,
+      id_examcall: this._examStore.exam()?.id as number
     }
     this._subscriptions.add(
       this._registrationService.validatePayment(data).subscribe({

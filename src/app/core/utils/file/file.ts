@@ -27,6 +27,17 @@ export class FileHelper {
     return new File([blob], name, {type: 'application/pdf'});
   }
 
+  public static Base64ToFile(base64: string, name: string, mimeType: string): File {
+    const binaryData = atob(base64);
+    const array = new Uint8Array(binaryData.length);
+    for (let i = 0; i < binaryData.length; i++) {
+      array[i] = binaryData.charCodeAt(i);
+    }
+
+    const blob = new Blob([array], {type: mimeType});
+    return new File([blob], name, {type: mimeType});
+  }
+
   public static Base64ToImage(base64: string, name: string, mimeType?: string): File {
     const binaryData = atob(base64);
     const array = new Uint8Array(binaryData.length);
