@@ -3,8 +3,9 @@ import {EnvServiceFactory} from "../env/env.service.provider";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IResponse} from "../../models/response";
-import {ICost, IRequirement} from "../../models/registration/registration";
+import {ICost} from "../../models/registration/registration";
 import {IModality, IModalityDTO} from "../../models/admin/postulation";
+import {IRequirement, IRequirementDTO} from "../../models/admin/modality";
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,18 @@ export class ModalitiesService {
 
   public deleteModality(id: number): Observable<IResponse<IModality>> {
     return this._http.delete<IResponse<IModality>>(this._urlModalities + `/${id}`);
+  }
+
+  public createRequirement(data: IRequirementDTO): Observable<IResponse<IRequirement>> {
+    return this._http.post<IResponse<IRequirement>>(this._urlRequirements, data);
+  }
+
+  public updateRequirement(id: string, data: IRequirementDTO): Observable<IResponse<IRequirement>> {
+    return this._http.put<IResponse<IRequirement>>(this._urlRequirements + `/${id}`, data);
+  }
+
+  public deleteRequirement(id: string): Observable<IResponse<IRequirement>> {
+    return this._http.delete<IResponse<IRequirement>>(this._urlRequirements + `/${id}`);
   }
 
 }

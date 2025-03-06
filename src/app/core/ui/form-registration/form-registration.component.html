@@ -2,6 +2,17 @@
   <div>
     <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 class="text-3xl font-bold mb-6 text-center">FORMULARIO DE INSCRIPCIÓN</h1>
+      @if (module === 'post' && postulation) {
+        @if (postulation.applicant.is_verified) {
+          <div class="bg-emerald-100 w-fit text-emerald-600 px-2 py-1 rounded">
+            <span class="font-bold">Verificado</span>
+          </div>
+        } @else {
+          <div class="bg-amber-100 w-fit text-amber-600 px-2 py-1 rounded">
+            <span class="font-bold">No verificado</span>
+          </div>
+        }
+      }
       <button *ngIf="mode === 'create' && module === 'regis'" (click)="cancel()"
               class="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700">
         Atras
@@ -171,26 +182,7 @@
                 </small>
               }
             </div>
-            <div>
-              <label for="phone_contact_school" class="block font-medium">
-                Número de celular de contacto del colegio
-              </label>
-              <input type="tel" id="phone_contact_school" placeholder="Ingrese número" formControlName="phone_school"
-                     title="El número debe contener hasta 9 dígitos" class="inp-form" appNumbersInp minlength="9"
-                     maxlength="9">
-              @if (basicForm.get('phone_school')?.invalid && basicForm.get('phone_school')?.touched) {
-                <small class="text-red-500" *ngIf="basicForm.get('phone_school')?.hasError('required')">
-                  El número de celular del colegio es requerido.
-                </small>
-                <small class="text-red-500"
-                       *ngIf="basicForm.get('phone_school')?.hasError('minlength') || basicForm.get('phone_school')?.hasError('maxlength')">
-                  El número de celular del colegio debe contener 9 dígitos.
-                </small>
-                <small class="text-red-500" *ngIf="basicForm.get('phone_school')?.hasError('pattern')">
-                  El número de celular del colegio solo debe de contener números.
-                </small>
-              }
-            </div>
+
             <div>
               <label for="mother_tongue" class="block font-medium">Lengua materna</label>
               <input type="text" id="mother_tongue" placeholder="Ingrese su lengua materna" class="inp-form"
@@ -277,67 +269,102 @@
           <form [formGroup]="schoolForm">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
               <div>
-                <label for="school_departmentApplicant" class="block font-medium">Región</label>
-                <select id="school_departmentApplicant" name="school_departmentApplicant" formControlName="region"
-                        (change)="getProvinces($event.target)" class="select-form">
+                <label for="nationality" class="block font-medium">Nacionalidad</label>
+                <select id="nationality" name="nationality" formControlName="nationality" class="select-form"
+                        (change)="changeNationality()">
                   <option selected disabled>Seleccione una opción</option>
-                  @for (region of regions; track region.idRegion) {
-                    <option [value]="region.idRegion">{{ region.nombreRegion }}</option>
-                  }
+                  <option value="Peruano">Peruano</option>
+                  <option value="Extranjero">Extranjero</option>
                 </select>
-                @if (schoolForm.get('region')?.invalid && schoolForm.get('region')?.touched) {
-                  <small class="text-red-500" *ngIf="schoolForm.get('region')?.hasError('required')">
-                    La región es requerida.
+                @if (nationality.invalid && nationality.touched) {
+                  <small class="text-red-500" *ngIf="nationality.hasError('required')">
+                    La Nacionalidad es requerida.
                   </small>
                 }
               </div>
-              <div>
-                <label for="school_provinceApplicant" class="block font-medium">Provincia</label>
-                <select id="school_provinceApplicant" name="school_provinceApplicant" formControlName="province"
-                        (change)="getDistricts($event.target)" class="select-form">
-                  <option selected disabled>Seleccione una opción</option>
-                  @for (province of schoolProvinces; track province.idProvincia) {
-                    <option [value]="province.idProvincia">{{ province.nombreProvincia }}</option>
+              @if (nationality.value === 'Peruano') {
+                <div>
+                  <label for="school_departmentApplicant" class="block font-medium">Región</label>
+                  <select id="school_departmentApplicant" name="school_departmentApplicant" formControlName="region"
+                          (change)="getProvinces($event.target)" class="select-form">
+                    <option selected disabled>Seleccione una opción</option>
+                    @for (region of regions; track region.idRegion) {
+                      <option [value]="region.idRegion">{{ region.nombreRegion }}</option>
+                    }
+                  </select>
+                  @if (schoolForm.get('region')?.invalid && schoolForm.get('region')?.touched) {
+                    <small class="text-red-500" *ngIf="schoolForm.get('region')?.hasError('required')">
+                      La región es requerida.
+                    </small>
                   }
-                </select>
-                @if (schoolForm.get('province')?.invalid && schoolForm.get('province')?.touched) {
-                  <small class="text-red-500" *ngIf="schoolForm.get('province')?.hasError('required')">
-                    La provincia es requerida.
-                  </small>
-                }
-              </div>
-              <div>
-                <label for="school_districtApplicant" class="block font-medium">Distrito</label>
-                <select id="school_districtApplicant" name="school_districtApplicant"
-                        (change)="getSchools($event.target)" class="select-form" formControlName="district">
-                  <option selected disabled>Seleccione una opción</option>
-                  @for (district of schoolDistricts; track district.idDistrito) {
-                    <option [value]="district.idDistrito">{{ district.nombreDistrito }}</option>
+                </div>
+                <div>
+                  <label for="school_provinceApplicant" class="block font-medium">Provincia</label>
+                  <select id="school_provinceApplicant" name="school_provinceApplicant" formControlName="province"
+                          (change)="getDistricts($event.target)" class="select-form">
+                    <option selected disabled>Seleccione una opción</option>
+                    @for (province of schoolProvinces; track province.idProvincia) {
+                      <option [value]="province.idProvincia">{{ province.nombreProvincia }}</option>
+                    }
+                  </select>
+                  @if (schoolForm.get('province')?.invalid && schoolForm.get('province')?.touched) {
+                    <small class="text-red-500" *ngIf="schoolForm.get('province')?.hasError('required')">
+                      La provincia es requerida.
+                    </small>
                   }
-                </select>
-                @if (schoolForm.get('district')?.invalid && schoolForm.get('district')?.touched) {
-                  <small class="text-red-500" *ngIf="schoolForm.get('district')?.hasError('required')">
-                    El distrito es requerido.
-                  </small>
-                }
-              </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-              <div>
-                <label for="code_schoolApplicant" class="block font-medium">Nombre</label>
-                <select id="code_schoolApplicant" name="code_schoolApplicant" class="select-form"
-                        formControlName="name">
-                  <option selected disabled>Seleccione una opción</option>
-                  @for (school of schools; track school.codMod) {
-                    <option [value]="school.codMod">{{ school.nombreCenEdu }}</option>
+                </div>
+                <div>
+                  <label for="school_districtApplicant" class="block font-medium">Distrito</label>
+                  <select id="school_districtApplicant" name="school_districtApplicant"
+                          (change)="getSchools($event.target)" class="select-form" formControlName="district">
+                    <option selected disabled>Seleccione una opción</option>
+                    @for (district of schoolDistricts; track district.idDistrito) {
+                      <option [value]="district.idDistrito">{{ district.nombreDistrito }}</option>
+                    }
+                  </select>
+                  @if (schoolForm.get('district')?.invalid && schoolForm.get('district')?.touched) {
+                    <small class="text-red-500" *ngIf="schoolForm.get('district')?.hasError('required')">
+                      El distrito es requerido.
+                    </small>
                   }
-                </select>
-                @if (schoolForm.get('name')?.invalid && schoolForm.get('name')?.touched) {
-                  <small class="text-red-500" *ngIf="schoolForm.get('name')?.hasError('required')">
-                    El nombre de la institución educativa es requerido.
-                  </small>
-                }
-              </div>
+                </div>
+                <div>
+                  <label for="code_schoolApplicant" class="block font-medium">Nombre</label>
+                  <select id="code_schoolApplicant" name="code_schoolApplicant" class="select-form"
+                          formControlName="name">
+                    <option selected disabled>Seleccione una opción</option>
+                    @for (school of schools; track school.codMod) {
+                      <option [value]="school.codMod">{{ school.nombreCenEdu }}</option>
+                    }
+                  </select>
+                  @if (schoolForm.get('name')?.invalid && schoolForm.get('name')?.touched) {
+                    <small class="text-red-500" *ngIf="schoolForm.get('name')?.hasError('required')">
+                      El nombre de la institución educativa es requerido.
+                    </small>
+                  }
+                </div>
+                <div>
+                  <label for="phone_contact_school" class="block font-medium">
+                    Número de celular de contacto del colegio
+                  </label>
+                  <input type="tel" id="phone_contact_school" placeholder="Ingrese número"
+                         formControlName="phone_school"
+                         title="El número debe contener hasta 9 dígitos" class="inp-form" appNumbersInp minlength="9"
+                         maxlength="9">
+                  @if (schoolForm.get('phone_school')?.invalid && schoolForm.get('phone_school')?.touched) {
+                    <small class="text-red-500" *ngIf="schoolForm.get('phone_school')?.hasError('required')">
+                      El número de celular del colegio es requerido.
+                    </small>
+                    <small class="text-red-500"
+                           *ngIf="schoolForm.get('phone_school')?.hasError('minlength') || schoolForm.get('phone_school')?.hasError('maxlength')">
+                      El número de celular del colegio debe contener 9 dígitos.
+                    </small>
+                    <small class="text-red-500" *ngIf="schoolForm.get('phone_school')?.hasError('pattern')">
+                      El número de celular del colegio solo debe de contener números.
+                    </small>
+                  }
+                </div>
+              }
               <div>
                 <label for="type_schoolApplicant" class="block font-medium">Tipo de colegio</label>
                 <select id="type_schoolApplicant" name="type_schoolApplicant" class="select-form"

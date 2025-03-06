@@ -5,7 +5,7 @@
       <div class="flex flex-col gap-1">
         <span class="text-sm text-gray-600">Banner pantalla de bienvenida</span>
         <input class="p-2 rounded border border-gray-200 w-1/2" type="file" accept="image/*"
-               (change)="processLogo($event, 'home')">
+               (change)="processLogo($event, 'Banner')">
       </div>
       <div class="rounded w-full h-full bg-gray-100 overflow-hidden">
         <img class="w-full h-full object-center object-contain" [src]="logoHome()" alt="Logo Home">
@@ -15,7 +15,7 @@
       <div class="flex flex-col gap-1">
         <span class="text-sm text-gray-600">Banner pantalla de inicio de sesión</span>
         <input class="p-2 rounded border border-gray-200 w-1/2" type="file" accept="image/*"
-               (change)="processLogo($event, 'login')">
+               (change)="processLogo($event, 'Login')">
       </div>
       <div class="rounded w-full h-full bg-gray-100 overflow-hidden">
         <img class="w-full h-full object-center object-contain" [src]="logoLogin()" alt="Logo Login">
@@ -23,3 +23,28 @@
     </div>
   </div>
 </div>
+<p-confirmDialog key="settings" #cd>
+  <ng-template pTemplate="headless" let-message>
+    <div class="rounded-lg p-12 flex flex-col items-center gap-6 bg-white">
+      <div>
+        <img src="/assets/logos/diap.svg" alt="logo diap" class="pointer-events-none w-12 h-12">
+      </div>
+      <div class="flex flex-col text-center items-center gap-2">
+        <span class="font-bold text-2xl text-neutral">
+          {{ message.header }}
+        </span>
+        <p class="opacity-60">{{ message.message }}</p>
+      </div>
+      <div class="flex items-center w-full gap-2">
+        <button pButton label="Aceptar" (click)="cd.accept()" class="b-primary-neutral w-full">
+        </button>
+        <button pButton label="Cancelar" (click)="cd.reject()"
+                class="b-secondary-neutral w-full">
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</p-confirmDialog>
+
+<app-block-ui [show]="loading()"/>
+<p-toast/>

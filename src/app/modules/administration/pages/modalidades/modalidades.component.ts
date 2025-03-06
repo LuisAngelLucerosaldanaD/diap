@@ -15,6 +15,8 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {IExam} from "../../../../core/models/admin/exams";
 import {NameInpDirective} from "../../../../core/directives/name-inp.directive";
+import {NumbersInpDirective} from "../../../../core/directives/numbers-inp.directive";
+import {AppStore} from "../../../../core/store/app.store";
 
 @Component({
   selector: 'app-modalidades',
@@ -29,7 +31,8 @@ import {NameInpDirective} from "../../../../core/directives/name-inp.directive";
     ReactiveFormsModule,
     RouterLink,
     ToastModule,
-    NameInpDirective
+    NameInpDirective,
+    NumbersInpDirective
   ],
   templateUrl: './modalidades.component.html',
   styleUrl: './modalidades.component.scss',
@@ -39,11 +42,16 @@ export class ModalidadesComponent implements OnInit, OnDestroy {
 
   private readonly _subscriptions: Subscription = new Subscription();
 
+  // Services
   private readonly _modalitiesService: ModalitiesService = inject(ModalitiesService);
   private readonly _toastService: MessageService = inject(MessageService);
   private readonly _confirmService: ConfirmationService = inject(ConfirmationService);
   private readonly _router: Router = inject(Router);
 
+  // Store
+  private readonly _appStore = inject(AppStore);
+
+  private modality = signal<IModality | null>(null);
   protected modalities = signal<IModality[]>([]);
   protected loading = signal(false);
   protected modal = signal(false);
@@ -68,6 +76,7 @@ export class ModalidadesComponent implements OnInit, OnDestroy {
           label: 'Gestionar Requisitos',
           icon: 'pi pi-file-check',
           command: () => {
+            this._appStore.setModality(this.modality());
             this._router.navigate(['/admin/requisitos']);
           }
         }
@@ -82,7 +91,7 @@ export class ModalidadesComponent implements OnInit, OnDestroy {
     private_price: new FormControl('', Validators.required),
     state_code_pay: new FormControl('', Validators.required),
     state_price: new FormControl('', Validators.required),
-    exam_type: new FormControl(2, Validators.required),
+    exam_type: new FormControl(2),
   });
 
 
@@ -130,12 +139,12 @@ export class ModalidadesComponent implements OnInit, OnDestroy {
     this.loading.set(true);
     const data: IModalityDTO = {
       description: this.modForm.value.description,
-      id_examtype: this.modForm.value.exam_type,
+      id_examtype: 2,
       name: this.modForm.value.name,
-      private_school_code_pay: this.modForm.value.private_code_pay,
-      private_school_price: this.modForm.value.private_price,
-      state_school_code_pay: this.modForm.value.state_code_pay,
-      state_school_price: this.modForm.value.state_price,
+      private_school_code_pay: parseInt(this.modForm.value.private_code_pay),
+      private_school_price: parseInt(this.modForm.value.private_price),
+      state_school_code_pay: parseInt(this.modForm.value.state_code_pay),
+      state_school_price: parseInt(this.modForm.value.state_price)
     };
     this._subscriptions.add(
       this._modalitiesService.createModality(data).subscribe({
@@ -177,12 +186,12 @@ export class ModalidadesComponent implements OnInit, OnDestroy {
     this.loading.set(true);
     const data: IModalityDTO = {
       description: this.modForm.value.description,
-      id_examtype: this.modForm.value.exam_type,
+      id_examtype: 2,
       name: this.modForm.value.name,
-      private_school_code_pay: this.modForm.value.private_code_pay,
-      private_school_price: this.modForm.value.private_price,
-      state_school_code_pay: this.modForm.value.state_code_pay,
-      state_school_price: this.modForm.value.state_price,
+      private_school_code_pay: parseInt(this.modForm.value.private_code_pay),
+      private_school_price: parseInt(this.modForm.value.private_price),
+      state_school_code_pay: parseInt(this.modForm.value.state_code_pay),
+      state_school_price: parseInt(this.modForm.value.state_price)
     };
 
     this._subscriptions.add(
@@ -279,8 +288,9 @@ export class ModalidadesComponent implements OnInit, OnDestroy {
       private_price: data.private_school_price,
       state_code_pay: data.state_school_code_pay,
       state_price: data.state_school_price,
-      exam_type: 3
+      exam_type: 2
     });
+    this.modality.set(data);
     menu.toggle(event);
   }
 
@@ -303,14 +313,16 @@ export class ModalidadesComponent implements OnInit, OnDestroy {
 
   protected onSave(): void {
     if (this.modForm.invalid) {
+      console.log(this.modForm);
       this._toastService.add({
         severity: 'warn',
         summary: 'Módulo de Modalidades',
         detail: 'Complete los campos requeridos'
       });
-      this.modForm.reset();
+      this.modForm.markAsUntouched();
       return;
     }
+
     if (this.editing()) return this._updateModality();
 
     return this._createModality();

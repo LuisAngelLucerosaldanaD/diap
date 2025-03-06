@@ -69,7 +69,6 @@
                             </svg>
                           </button>
                           <p-menu #pMenu [model]="menu" [popup]="true" appendTo="body"/>
-                          <!--Gestionar requisitos, Editar, Borrar-->
                         </td>
                       </tr>
                     }
@@ -98,13 +97,13 @@
         <label class="block text-sm font-medium">Nombre <span class="text-red-600 ">*</span></label>
         <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="name" appNameInp>
         @if (modForm.get('name')?.invalid && modForm.get('name')?.touched) {
-          <small *ngIf="modForm.get('name')?.hasError('required')">
+          <small class="text-red-500" *ngIf="modForm.get('name')?.hasError('required')">
             El nombre de la modalidad es requerida
           </small>
-          <small *ngIf="modForm.get('name')?.hasError('minlength')">
+          <small class="text-red-500" *ngIf="modForm.get('name')?.hasError('minlength')">
             El nombre debe tener como minimo 6 caracteres
           </small>
-          <small *ngIf="modForm.get('name')?.hasError('maxlength')">
+          <small class="text-red-500" *ngIf="modForm.get('name')?.hasError('maxlength')">
             El nombre debe de tener como máximo 100 caracteres
           </small>
         }
@@ -113,10 +112,10 @@
         <label class="block text-sm font-medium">Descripción</label>
         <textarea class="border p-2 w-full mb-2 bg-white" rows="3" formControlName="description"></textarea>
         @if (modForm.get('description')?.invalid && modForm.get('description')?.touched) {
-          <small *ngIf="modForm.get('description')?.hasError('required')">
+          <small class="text-red-500" *ngIf="modForm.get('description')?.hasError('required')">
             La descripción de la modalidad es requerida
           </small>
-          <small *ngIf="modForm.get('description')?.hasError('maxlength')">
+          <small class="text-red-500" *ngIf="modForm.get('description')?.hasError('maxlength')">
             La descripción debe de tener como máximo 500 caracteres
           </small>
         }
@@ -124,24 +123,24 @@
       <div>
         <label class="block text-sm font-medium">Código de pago (Colegio Estatal) <span class="text-red-600 ">*</span>
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="state_code_pay">
+        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="state_code_pay" appNumbersInp>
       </div>
       <div>
         <label class="block text-sm font-medium">Monto de pago (S/.) (Colegio Estatal)<span
           class="text-red-600 ">*</span>
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="state_price">
+        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="state_price" appNumbersInp>
       </div>
       <div>
         <label class="block text-sm font-medium">Código de pago (Colegio Privado) <span class="text-red-600 ">*</span>
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="private_code_pay">
+        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="private_code_pay" appNumbersInp>
       </div>
       <div>
         <label class="block text-sm font-medium">Monto de pago (S/.) (Colegio Privado)<span
           class="text-red-600 ">*</span>
         </label>
-        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="private_price">
+        <input type="text" class="border p-2 w-full mb-2 bg-white" formControlName="private_price" appNumbersInp>
       </div>
     </form>
 

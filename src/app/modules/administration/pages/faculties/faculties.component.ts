@@ -34,7 +34,6 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   private readonly _facultiesService = inject(FacultiesService);
 
   private logoName = signal('');
-  private logoMimeType = signal('');
 
   protected faculties = signal<IFaculties[]>([]);
   protected openModal = signal(false);
@@ -123,9 +122,10 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   private _createFaculty(): void {
     this.isLoading.set(true);
     const form = new FormData();
-    const file = this.schoolForm.get('logo')?.value.split(',');
+    const logo = this.schoolForm.get('logo')?.value;
+    const file = logo.split(',');
     form.set('name', this.schoolForm.value.name);
-    form.set('photo_path', FileHelper.Base64ToFile(file[1], this.logoName(), this.logoMimeType()));
+    form.set('photo_path', FileHelper.Base64ToFile(file[1], this.logoName().replaceAll('', '_'), FileHelper.GetBase64MimeType(logo)));
     form.set('url_web_address', this.schoolForm.value.page_link);
     form.set('professional_title', this.schoolForm.value.professional_name);
     form.set('academic_degree', this.schoolForm.value.academic_degree);
@@ -168,7 +168,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
     const logo: string = this.schoolForm.get('logo')?.value;
     if (logo.startsWith('data:')) {
       const file = this.schoolForm.get('logo')?.value.split(',');
-      form.set('photo_path', FileHelper.Base64ToFile(file[1], this.logoName().replaceAll('', '_'), this.logoMimeType()));
+      form.set('photo_path', FileHelper.Base64ToFile(file[1], this.logoName().replaceAll('', '_'), FileHelper.GetBase64MimeType(logo)));
     } else {
       form.set('photo_path', '');
     }
@@ -231,7 +231,6 @@ export class FacultiesComponent implements OnInit, OnDestroy {
 
   protected cancel(): void {
     this.openModal.set(false);
-    this.logoMimeType.set('');
     this.logoName.set('');
     this.schoolForm.reset();
   }
@@ -265,7 +264,6 @@ export class FacultiesComponent implements OnInit, OnDestroy {
         next: res => {
           console.log(file.name)
           this.logoName.set(file.name);
-          this.logoMimeType.set(file.type);
           this.schoolForm.get('logo')?.setValue(res);
         },
         error: (err) => {

@@ -58,11 +58,11 @@ export interface IModality {
 }
 
 export interface IModalityDTO {
-  description: string;
-  id_examtype: number;
   name: string;
   private_school_code_pay: number;
   private_school_price: number;
   state_school_code_pay: number;
   state_school_price: number;
+  description: string;
+  id_examtype: number;
 }

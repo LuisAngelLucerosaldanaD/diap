@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, signal} from '@angular/core';
 import {Subscription} from "rxjs";
 import {RegistrationService} from "../../services/admin/registration.service";
 import {MessageService} from "primeng/api";
@@ -13,7 +13,6 @@ import {
   IApplicantDTO,
   ICost, IDocumentDTO, IOption,
   IPayment, IPaymentDTO,
-  IRequirement,
   ISchoolDTO
 } from "../../models/registration/registration";
 import {NameInpDirective} from "../../directives/name-inp.directive";
@@ -28,8 +27,9 @@ import {SecureImagePipe} from "../../pipes/secure-image.pipe";
 import {SafePipePipe} from "../../pipes/safe-pipe.pipe";
 import {ModeForm} from '../../types/forms';
 import {ExamStore} from "../../store/exam.store";
-import {PaymentStore} from "../../store/payment.store";
 import {PostStore} from "../../store/post.store";
+import {IRequirement} from "../../models/admin/modality";
+import {AuthStore} from "../../store/auth.store";
 
 @Component({
   selector: 'app-form-registration',
@@ -63,11 +63,13 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
   // Stores
   private readonly _examStore = inject(ExamStore);
-  private readonly _paymentStore = inject(PaymentStore);
   private readonly _postStore = inject(PostStore);
+  private readonly _authStore = inject(AuthStore);
 
   private _payment: IPayment | null = null;
   private _exam!: IExam;
+  private school = signal(-1);
+  private answers = signal<any[]>([]);
 
   // Readonly Properties
   protected readonly faculties = FacultiesOptions;
@@ -96,7 +98,6 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     dni: new FormControl('', [Validators.required, Validators.maxLength(8), Validators.minLength(8), Validators.pattern('^[0-9]*$')]),
     civil_status: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    phone_school: new FormControl('', [Validators.required, Validators.maxLength(9), Validators.minLength(9), Validators.pattern('^[0-9]*$')]),
     mother_language: new FormControl('', [Validators.required]),
     birthdate: new FormControl('', [Validators.required]),
     region: new FormControl('', [Validators.required]),
@@ -111,6 +112,8 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     name: new FormControl('', [Validators.required]),
     type: new FormControl('', [Validators.required]),
     education_level: new FormControl('', [Validators.required]),
+    nationality: new FormControl('', [Validators.required]),
+    phone_school: new FormControl('', [Validators.required, Validators.maxLength(9), Validators.minLength(9), Validators.pattern('^[0-9]*$')]),
   });
   protected academicForm: FormGroup = new FormGroup({
     first_option: new FormControl('', [Validators.required]),
@@ -190,7 +193,6 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       dni: this.postulation.applicant.DNI,
       civil_status: this.postulation.applicant.marital_status,
       email: this.postulation.applicant.email,
-      phone_school: '',
       mother_language: this.postulation.applicant.mother_tongue,
       birthdate: this.postulation.applicant.birthdate,
       region: this.postulation.applicant.birth_department,
@@ -201,7 +203,6 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
     this.imgProfile = this.postulation.applicant.url_photo;
 
-
     const first = this.faculties.find(faculty => faculty.value === this.postulation.first_option);
     this.facultiesSecond = this.faculties.filter(faculty => faculty.type === first?.type);
 
@@ -210,7 +211,6 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       second_option: this.postulation.second_option,
       modality: this.postulation.modality_name,
     });
-
 
     this.academicForm.disable();
     this.basicForm.get('dni')?.disable();
@@ -374,14 +374,15 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     const school = this.schools.find(school => school.codMod === this.schoolForm.value.name);
     const form = this.schoolForm.getRawValue();
     const data: ISchoolDTO = {
-      name: school?.nombreCenEdu || '',
+      name: school?.nombreCenEdu || '-',
       origin_department: form.region,
       origin_province: form.province,
       origin_district: form.district,
       code_school: form.name,
-      phone_contact: this.basicForm.value.phone_school,
+      phone_contact: form.phone_school,
       type: form.type,
       level_education: form.education_level,
+      is_nacional: form.nationality === 'Peruano'
     };
 
     if (this.mode === 'create') {
@@ -401,7 +402,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
     return new Promise<IResponse>((resolve, reject) => {
       this._subscriptions.add(
-        this._registrationService.updateSchool(this.postulation.id, data).subscribe({
+        this._registrationService.updateSchool(this.school(), data).subscribe({
           next: (res) => {
             resolve(res);
           },
@@ -454,7 +455,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
     return new Promise<IResponse>((resolve, reject) => {
       this._subscriptions.add(
-        this._registrationService.updateApplicant(this.postulation.id, data).subscribe({
+        this._registrationService.updateApplicant(this.postulation.applicant.id, data).subscribe({
           next: (res) => {
             resolve(res);
           },
@@ -524,8 +525,9 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     }
 
     return new Promise<IResponse>((resolve, reject) => {
+      const answer = this.answers().find(ans => ans.question === data.question);
       this._subscriptions.add(
-        this._registrationService.updateAnswer(this.postulation.id, data).subscribe({
+        this._registrationService.updateAnswer(answer.id, data).subscribe({
           next: (res) => {
             resolve(res);
           },
@@ -603,6 +605,15 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
         error: (err: HttpErrorResponse) => {
           this.isLoading = false;
           console.error(err);
+          if (err.status === 404) {
+            this._toastService.add({
+              severity: 'warn',
+              summary: 'Validación de Pago',
+              detail: "El postulante no ha realizado el pago correspondiente o realizó el pago por caja",
+              life: 5000
+            });
+            return;
+          }
           this._toastService.add({severity: 'error', summary: 'Validación de Pago', detail: err.error.msg});
         },
         complete: () => this.isLoading = false
@@ -638,6 +649,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
             });
             return;
           }
+          this.school.set(res.data.id);
           this.schoolForm.patchValue({
             region: res.data.origin_department,
             province: res.data.origin_province,
@@ -645,11 +657,15 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
             name: res.data.code_school,
             type: res.data.type,
             education_level: res.data.level_education,
+            phone_school: res.data.phone_contact,
+            nationality: res.data.is_nacional ? 'Peruano' : 'Extranjero'
           });
 
           this.schoolForm.get('type')?.disable();
-          this.basicForm.get('phone_school')?.setValue(res.data.phone_contact);
-          this.getProvinces({id: 'school_departmentApplicant', value: res.data.origin_department});
+          if (res.data.origin_department !== '-') {
+            this.getProvinces({id: 'school_departmentApplicant', value: res.data.origin_department});
+          }
+
           if (this.mode === 'update') {
             this._validatePayment();
             this._getFileRequired();
@@ -713,6 +729,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
             return;
           }
 
+          this.answers.set(res.data);
           this.surveyForm.patchValue({
             type_preparation: res.data[0].answer,
             how_know: res.data[1].answer,
@@ -788,9 +805,8 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
           if (id === 'school_departmentApplicant') {
             this.schoolProvinces = res.data;
-            if (this.mode === 'show' || this.mode === 'update') {
+            if ((this.mode === 'show' || this.mode === 'update') && this.schoolForm.get('province')?.value !== '-' && this.schoolForm.get('province')?.value !== '') {
               const province = res.data.find(region => region.idProvincia === this.schoolForm.get('province')?.value);
-              console.log(this.schoolForm)
               this.getDistricts({id: 'school_provinceApplicant', value: province?.idProvincia});
             }
             return;
@@ -836,7 +852,9 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
           if (id === 'school_provinceApplicant') {
             this.schoolDistricts = res.data;
-            if (this.mode === 'show' || this.mode === 'update') this.getSchools({value: this.schoolForm.get('district')?.value});
+            if ((this.mode === 'show' || this.mode === 'update') && this.schoolForm.get('district')?.value !== '-' && this.schoolForm.get('district')?.value !== '') {
+              this.getSchools({value: this.schoolForm.get('district')?.value});
+            }
             return;
           }
           this.districts = res.data;
@@ -973,22 +991,26 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   }
 
   protected async createPostulation(): Promise<void> {
-    if (this.imgProfile === '') {
-      this._toastService.add({
-        severity: 'warn',
-        summary: 'Módulo de Registro',
-        detail: 'Debe subir una foto de perfil'
-      });
-      return;
+    if (this.mode === 'create') {
+      if (this.imgProfile === '') {
+        this._toastService.add({
+          severity: 'warn',
+          summary: 'Módulo de Registro',
+          detail: 'Debe subir una foto de perfil'
+        });
+        return;
+      }
     }
 
-    if (this.filesRequired.some(file => !file.file)) {
-      this._toastService.add({
-        severity: 'warn',
-        summary: 'Módulo de Registro',
-        detail: 'Debe subir todos los documentos requeridos'
-      });
-      return
+    if (this.mode === 'create' && this._authStore.role() !== 1) {
+      if (this.filesRequired.some(file => !file.file)) {
+        this._toastService.add({
+          severity: 'warn',
+          summary: 'Módulo de Registro',
+          detail: 'Debe subir todos los documentos requeridos'
+        });
+        return
+      }
     }
 
     this.isLoading = true;
@@ -1004,18 +1026,22 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
         return;
       }
 
-      const resPhoto = await this._uploadProfile();
-      if (resPhoto.error) {
-        this._toastService.add({
-          severity: 'error',
-          summary: 'Módulo de Registro',
-          detail: 'No se pudo registrar la foto de perfil'
-        });
-        this.isLoading = false;
-        return;
+      let picture = this.imgProfile;
+      if (!this.imgProfile.startsWith('https')) {
+        const resPhoto = await this._uploadProfile();
+        if (resPhoto.error) {
+          this._toastService.add({
+            severity: 'error',
+            summary: 'Módulo de Registro',
+            detail: 'No se pudo registrar la foto de perfil'
+          });
+          this.isLoading = false;
+          return;
+        }
+        picture = resPhoto.data.url;
       }
 
-      const resApplicant = await this._saveApplicant(resSchool.data.id, resPhoto.data.url);
+      const resApplicant = await this._saveApplicant(resSchool.data.id, picture);
       if (resApplicant.error) {
         this._toastService.add({
           severity: 'error',
@@ -1098,6 +1124,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       }
 
       for await (const file of this.filesRequired) {
+        if (!file.file) continue;
         const resFile = await this._uploadFiles(file);
         if (resFile.error) {
           this._toastService.add({
@@ -1172,6 +1199,56 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     }
 
     this.createPostulation();
+  }
+
+  get nationality(): FormControl {
+    return this.schoolForm.get('nationality') as FormControl;
+  }
+
+  protected changeNationality(): void {
+    if (this.nationality.value === 'Extranjero') {
+      this.schoolForm.get('region')?.setValue('-');
+      this.schoolForm.get('region')?.clearValidators();
+      this.schoolForm.get('region')?.updateValueAndValidity();
+
+      this.schoolForm.get('province')?.setValue('-');
+      this.schoolForm.get('province')?.clearValidators();
+      this.schoolForm.get('province')?.updateValueAndValidity();
+
+      this.schoolForm.get('district')?.setValue('-');
+      this.schoolForm.get('district')?.clearValidators();
+      this.schoolForm.get('district')?.updateValueAndValidity();
+
+      this.schoolForm.get('name')?.setValue('-');
+      this.schoolForm.get('name')?.clearValidators();
+      this.schoolForm.get('name')?.updateValueAndValidity();
+
+      this.schoolForm.get('phone_school')?.setValue('-');
+      this.schoolForm.get('phone_school')?.clearValidators();
+      this.schoolForm.get('phone_school')?.updateValueAndValidity();
+
+      return;
+    }
+
+    this.schoolForm.get('region')?.setValue('');
+    this.schoolForm.get('region')?.setValidators(Validators.required);
+    this.schoolForm.get('region')?.updateValueAndValidity();
+
+    this.schoolForm.get('province')?.setValue('');
+    this.schoolForm.get('province')?.setValidators(Validators.required);
+    this.schoolForm.get('province')?.updateValueAndValidity();
+
+    this.schoolForm.get('district')?.setValue('');
+    this.schoolForm.get('district')?.setValidators(Validators.required);
+    this.schoolForm.get('district')?.updateValueAndValidity();
+
+    this.schoolForm.get('name')?.setValue('');
+    this.schoolForm.get('name')?.setValidators(Validators.required);
+    this.schoolForm.get('name')?.updateValueAndValidity();
+
+    this.schoolForm.get('phone_school')?.setValue('');
+    this.schoolForm.get('phone_school')?.setValidators([Validators.required, Validators.maxLength(9), Validators.minLength(9), Validators.pattern('^[0-9]*$')]);
+    this.schoolForm.get('phone_school')?.updateValueAndValidity();
   }
 
 }

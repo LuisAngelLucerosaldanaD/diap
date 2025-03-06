@@ -71,7 +71,7 @@ export const AUTH_MENU: IMenuItem[] = [
   {
     name: 'Exámenes complementarios',
     route: '/admin/exams-complementarios',
-    icon: 'fa-gear',
+    icon: 'fa-file',
     roles: [1],
     exact: true
   },

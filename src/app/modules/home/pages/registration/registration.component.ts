@@ -1,5 +1,4 @@
 import {Component, effect, inject, OnDestroy, signal} from '@angular/core';
-import {IRequirement} from "../../../../core/models/registration/registration";
 import {FormsModule} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ExamsService} from "../../../../core/services/admin/exams.service";
@@ -15,6 +14,7 @@ import {ExamStore} from "../../../../core/store/exam.store";
 import {ValidateRegistrationComponent} from "../validate-registration/validate-registration.component";
 import {RecaptchaFormsModule, RecaptchaModule} from "ng-recaptcha";
 import {DatePipe} from "@angular/common";
+import {IRequirement} from "../../../../core/models/admin/modality";
 
 @Component({
   selector: 'app-registration',

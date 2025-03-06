@@ -6,6 +6,7 @@ import {MessageService} from "primeng/api";
 import {IExam} from "../../../../core/models/admin/exams";
 import {DatePipe} from "@angular/common";
 import {RouterLink} from "@angular/router";
+import {EnvServiceFactory} from "../../../../core/services/env/env.service.provider";
 
 @Component({
   selector: 'app-announcements',
@@ -28,6 +29,7 @@ export class AnnouncementsComponent implements OnInit, OnDestroy {
   protected examDate: string = '';
   protected endDate: string = '';
   protected startHour: string = '';
+  protected logo = EnvServiceFactory().REST_API + '/api/v1/files/public/banner';
 
   ngOnInit() {
     this._getCurrentExam();

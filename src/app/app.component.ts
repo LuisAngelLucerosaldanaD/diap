@@ -30,7 +30,8 @@ export class AppComponent {
       this._appStore.setAppState({
         menuItems: AUTH_MENU.filter((item) => item.roles.includes(this._store.role())),
         isMobileDevice: this._isMobileDevice(),
-        menuIsCompact: this._isMobileDevice()
+        menuIsCompact: this._isMobileDevice(),
+        modality: null
       });
       this._router.navigateByUrl('/admin/postulations');
       return;
@@ -39,7 +40,8 @@ export class AppComponent {
     this._appStore.setAppState({
       menuItems: HOME_MENU,
       isMobileDevice: this._isMobileDevice(),
-      menuIsCompact: this._isMobileDevice()
+      menuIsCompact: this._isMobileDevice(),
+      modality: null
     });
   }
 

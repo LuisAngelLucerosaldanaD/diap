@@ -53,6 +53,7 @@ export class LoginComponent implements OnDestroy {
   };
   protected isLoading: boolean = false;
   protected captchaKey: string = EnvServiceFactory().GOOGLE_RECAPTCHA_SITE_KEY;
+  protected logo = EnvServiceFactory().REST_API + '/api/v1/files/public/login';
 
   constructor(
     private _authService: AuthService,
