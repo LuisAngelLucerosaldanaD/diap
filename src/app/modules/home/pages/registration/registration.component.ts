@@ -53,6 +53,7 @@ export class RegistrationComponent implements OnDestroy {
   protected modalities: IModality[] = [];
 
   constructor() {
+    this._examStore.setExam(null);
     this._getExams();
     effect(() => {
       if (this.selectedMode() !== -1) this._getFileRequired();
