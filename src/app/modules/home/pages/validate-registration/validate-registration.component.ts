@@ -13,6 +13,7 @@ import {PaymentStore} from '../../../../core/store/payment.store';
 import {NumbersInpDirective} from "../../../../core/directives/numbers-inp.directive";
 import {PostStore} from "../../../../core/store/post.store";
 import {ExamStore} from "../../../../core/store/exam.store";
+import {EnvServiceFactory} from "../../../../core/services/env/env.service.provider";
 
 @Component({
   selector: 'app-validate-registration',
@@ -48,6 +49,7 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
     school: new FormControl('', [Validators.required]),
     modality: new FormControl({disabled: true, value: ''}, [Validators.required])
   });
+  protected logo = EnvServiceFactory().REST_API + '/api/v1/files/public/login';
 
   ngOnInit() {
     if (this._postStore.modality()) {

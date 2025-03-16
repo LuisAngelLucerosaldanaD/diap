@@ -69,13 +69,6 @@ export const AUTH_MENU: IMenuItem[] = [
     exact: true
   },
   {
-    name: 'Exámenes complementarios',
-    route: '/admin/exams-complementarios',
-    icon: 'fa-file',
-    roles: [1],
-    exact: true
-  },
-  {
     name: 'Modalidades',
     route: '/admin/modalidades',
     icon: 'fa-shuffle',

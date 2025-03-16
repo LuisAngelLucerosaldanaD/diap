@@ -177,7 +177,6 @@ export class FacultiesComponent implements OnInit, OnDestroy {
     form.set('url_web_address', this.schoolForm.value.page_link);
     form.set('professional_title', this.schoolForm.value.professional_name);
     form.set('academic_degree', this.schoolForm.value.academic_degree);
-    form.set('_method', 'PUT');
 
     this.isLoading.set(true);
     this._subscriptions.add(

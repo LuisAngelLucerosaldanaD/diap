@@ -49,12 +49,6 @@ export const AdminRoutes: Routes = [
     loadComponent: () => import('./pages/requisitos/requisitos.component').then(m => m.RequisitosComponent)
   },
   {
-    path: 'exams-complementarios',
-    data: {role: [1]},
-    canActivate: [permissionGuard],
-    loadComponent: () => import('./pages/exams-complementarios/exams-complementarios.component').then(m => m.ExamsComplementariosComponent)
-  },
-  {
     path: '**',
     redirectTo: 'postulations',
     pathMatch: 'full'

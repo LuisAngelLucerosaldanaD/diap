@@ -143,14 +143,17 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       this.schoolForm.get('type')?.disable();
     }
 
-    if (this._postStore.modality()) {
-      this.academicForm.get('modality')?.setValue(this._postStore.modality()?.id);
-      this.academicForm.get('modality')?.disable();
-    }
-
     if (this._examStore.exam()) {
       this._exam = this._examStore.exam() as IExam;
       this._getModalities();
+    }
+
+    if (this._postStore.modality()) {
+      this.academicForm.get('modality')?.setValue(this._postStore.modality()?.id);
+      this.academicForm.get('modality')?.disable();
+      this._validatePayment();
+      this._getFileRequired();
+      this._getCosts();
     }
 
     this._getRegions();

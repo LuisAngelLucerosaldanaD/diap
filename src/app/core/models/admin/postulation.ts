@@ -1,3 +1,5 @@
+import {IRequirement} from "./modality";
+
 export interface ISearchPostulation {
   id_examcall: number;
   search: string;
@@ -65,4 +67,8 @@ export interface IModalityDTO {
   state_school_price: number;
   description: string;
   id_examtype: number;
+}
+
+export interface IModalityShow extends IModality {
+  requirements: IRequirement[];
 }
