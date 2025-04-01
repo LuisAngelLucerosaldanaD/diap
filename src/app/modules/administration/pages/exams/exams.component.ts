@@ -145,7 +145,7 @@ export class ExamsComponent implements OnInit, OnDestroy {
           this._messageService.add({
             severity: 'error',
             summary: 'Módulo de Examenes',
-            detail: 'No se pudo crear el examen'
+            detail: err.error.msg || 'No se pudo crear el examen'
           });
           this.isLoading = false;
         },

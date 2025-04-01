@@ -187,6 +187,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   }
 
   private _loadData(): void {
+    console.log(this.postulation)
     this.basicForm.patchValue({
       names: this.postulation.applicant.name,
       father_lastname: this.postulation.applicant.paternal_surname,
@@ -499,7 +500,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
     return new Promise<IResponse>((resolve, reject) => {
       this._subscriptions.add(
-        this._registrationService.updateAcademic(this.postulation.id, data).subscribe({
+        this._registrationService.updateAcademic(this.postulation.applicant.id, data).subscribe({
           next: (res) => {
             resolve(res);
           },
@@ -721,7 +722,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   private _getAnswers(): void {
     this.isLoading = true;
     this._subscriptions.add(
-      this._registrationService.getAnswers(this.postulation.id).subscribe({
+      this._registrationService.getAnswers(this.postulation.applicant.id).subscribe({
         next: (res) => {
           if (res.error) {
             this._toastService.add({

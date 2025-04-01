@@ -14,10 +14,10 @@ import { SESSION } from '../../types/session';
 })
 export class AuthService {
   private readonly _url: string = EnvServiceFactory().REST_API + '/api/v1';
-  private _http: HttpClient = inject(HttpClient);
-  private _router: Router = inject(Router);
-  private _cipher: Cipher = new Cipher();
-  private _jwtHelper: JwtHelper = new JwtHelper();
+  private readonly _http: HttpClient = inject(HttpClient);
+  private readonly _router: Router = inject(Router);
+  private readonly _cipher: Cipher = new Cipher();
+  private readonly  _jwtHelper: JwtHelper = new JwtHelper();
 
 
   /**

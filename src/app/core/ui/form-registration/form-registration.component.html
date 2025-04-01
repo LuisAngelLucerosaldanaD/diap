@@ -126,8 +126,8 @@
               <label for="sexApplicant" class="block font-medium">Sexo</label>
               <select id="sexApplicant" name="sexApplicant" formControlName="sex" class="select-form">
                 <option selected disabled>Seleccione su sexo</option>
-                <option value="Hombre">Hombre</option>
-                <option value="Mujer">Mujer</option>
+                <option value="HOMBRE">Hombre</option>
+                <option value="MUJER">Mujer</option>
               </select>
               @if (basicForm.get('sex')?.invalid && basicForm.get('sex')?.touched) {
                 <small class="text-red-500" *ngIf="basicForm.get('sex')?.hasError('required')">
@@ -158,11 +158,11 @@
               <select id="marital_statusApplicant" name="marital_statusApplicant" formControlName="civil_status"
                       class="select-form">
                 <option selected disabled>Seleccione su estado civil</option>
-                <option value="Soltero">Soltero</option>
-                <option value="Casado">Casado</option>
-                <option value="Viudo">Viudo</option>
-                <option value="Separado">Separado</option>
-                <option value="Divorciado">Divorciado</option>
+                <option value="SOLTERO">Soltero</option>
+                <option value="CASADO">Casado</option>
+                <option value="VIUDO">Viudo</option>
+                <option value="SEPARADO">Separado</option>
+                <option value="DIVORCIADO">Divorciado</option>
               </select>
               @if (basicForm.get('civil_status')?.invalid && basicForm.get('civil_status')?.touched) {
                 <small class="text-red-500" *ngIf="basicForm.get('civil_status')?.hasError('required')">
