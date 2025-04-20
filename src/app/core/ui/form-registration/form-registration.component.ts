@@ -1006,7 +1006,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.mode === 'create' && this._authStore.role() !== 1) {
+    if (this.mode === 'create' && ![1, 2].includes(this._authStore.role())) {
       if (this.filesRequired.some(file => !file.file)) {
         this._toastService.add({
           severity: 'warn',
