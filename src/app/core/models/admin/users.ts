@@ -12,7 +12,7 @@ export interface IUsers {
 export interface ICreatUser {
   name: string;
   email: string;
-  role: number;
+  id_role: number;
   password: string;
 }
 
@@ -20,5 +20,5 @@ export interface IUpdateUser {
   id: number;
   name: string;
   email: string;
-  role: number;
+  id_role: number;
 }

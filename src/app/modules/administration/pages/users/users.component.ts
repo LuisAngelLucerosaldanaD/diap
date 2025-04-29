@@ -1,18 +1,27 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {UsersService} from "../../../../core/services/admin/users.service";
-import {Subscription} from "rxjs";
-import {HttpErrorResponse} from "@angular/common/http";
-import {ConfirmationService, MessageService} from "primeng/api";
-import {ToastModule} from "primeng/toast";
-import {ICreatUser, IUpdateUser, IUsers} from "../../../../core/models/admin/users";
-import {PaginatorModule} from "primeng/paginator";
-import {FilterPipeModule} from "ngx-filter-pipe";
-import {NgIf} from "@angular/common";
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MenuModule} from "primeng/menu";
-import {ConfirmDialogModule} from "primeng/confirmdialog";
-import {BlockUIModule} from "primeng/blockui";
-import { BlockUiComponent } from "../../../../core/ui/block-ui/block-ui.component";
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { UsersService } from '../../../../core/services/admin/users.service';
+import { Subscription } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import {
+  ICreatUser,
+  IUpdateUser,
+  IUsers,
+} from '../../../../core/models/admin/users';
+import { PaginatorModule } from 'primeng/paginator';
+import { FilterPipeModule } from 'ngx-filter-pipe';
+import { NgIf } from '@angular/common';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MenuModule } from 'primeng/menu';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { BlockUIModule } from 'primeng/blockui';
+import { BlockUiComponent } from '../../../../core/ui/block-ui/block-ui.component';
 
 @Component({
   selector: 'app-users',
@@ -26,29 +35,37 @@ import { BlockUiComponent } from "../../../../core/ui/block-ui/block-ui.componen
     MenuModule,
     ConfirmDialogModule,
     BlockUIModule,
-    BlockUiComponent
-],
+    BlockUiComponent,
+  ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
-  providers: [MessageService, ConfirmationService]
+  providers: [MessageService, ConfirmationService],
 })
 export class UsersComponent implements OnInit, OnDestroy {
-
   private _subscriptions: Subscription = new Subscription();
   private readonly _messageService: MessageService = inject(MessageService);
-  private readonly _confirmService: ConfirmationService = inject(ConfirmationService);
+  private readonly _confirmService: ConfirmationService =
+    inject(ConfirmationService);
   private readonly _usersService: UsersService = inject(UsersService);
 
-  protected userFilter: any = {name: ''};
+  protected userFilter: any = { name: '' };
   protected users: IUsers[] = [];
   protected isLoading: boolean = false;
   protected openModal: boolean = false;
   protected userForm: FormGroup = new FormGroup({
     id: new FormControl(''),
-    name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
+    name: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(100),
+    ]),
     email: new FormControl('', [Validators.required, Validators.email]),
     role: new FormControl('', Validators.required),
-    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(100)]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.maxLength(100),
+    ]),
   });
   protected type: string = 'create';
   protected items = [
@@ -58,15 +75,15 @@ export class UsersComponent implements OnInit, OnDestroy {
         {
           label: 'Editar',
           icon: 'pi pi-pen-to-square',
-          command: () => this.updateUser(this.user)
+          command: () => this.updateUser(this.user),
         },
         {
           label: 'Eliminar',
           icon: 'pi pi-trash',
-          command: () => this.deleteUser()
-        }
-      ]
-    }
+          command: () => this.deleteUser(),
+        },
+      ],
+    },
   ];
   protected user!: IUsers;
 
@@ -84,18 +101,26 @@ export class UsersComponent implements OnInit, OnDestroy {
       this._usersService.getUsers().subscribe({
         next: (res) => {
           if (res.error) {
-            this._messageService.add({severity: 'error', summary: 'Módulo de Ususarios', detail: res.msg});
+            this._messageService.add({
+              severity: 'error',
+              summary: 'Módulo de Ususarios',
+              detail: res.msg,
+            });
             return;
           }
 
           this.users = res.data;
         },
         error: (err: HttpErrorResponse) => {
-          this._messageService.add({severity: 'error', summary: 'Módulo de Usuarios', detail: err.message});
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Módulo de Usuarios',
+            detail: err.error.msg,
+          });
           this.isLoading = false;
           console.error(err);
         },
-        complete: () => this.isLoading = false
+        complete: () => (this.isLoading = false),
       })
     );
   }
@@ -106,19 +131,31 @@ export class UsersComponent implements OnInit, OnDestroy {
       this._usersService.deleteUser(id).subscribe({
         next: (res) => {
           if (res.error) {
-            this._messageService.add({severity: 'error', summary: 'Módulo de Usuarios', detail: res.msg});
+            this._messageService.add({
+              severity: 'error',
+              summary: 'Módulo de Usuarios',
+              detail: res.msg,
+            });
             return;
           }
 
-          this._messageService.add({severity: 'success', summary: 'Módulo de Usuarios', detail: res.msg});
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Módulo de Usuarios',
+            detail: res.msg,
+          });
           this.users = this.users.filter((user) => user.id !== id);
         },
         error: (err: HttpErrorResponse) => {
-          this._messageService.add({severity: 'error', summary: 'Módulo de Usuarios', detail: err.message});
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Módulo de Usuarios',
+            detail: err.error.msg,
+          });
           this.isLoading = false;
           console.error(err);
         },
-        complete: () => this.isLoading = false
+        complete: () => (this.isLoading = false),
       })
     );
   }
@@ -129,20 +166,32 @@ export class UsersComponent implements OnInit, OnDestroy {
       this._usersService.createUser(data).subscribe({
         next: (res) => {
           if (res.error) {
-            this._messageService.add({severity: 'error', summary: 'Módulo de Usuarios', detail: res.msg});
+            this._messageService.add({
+              severity: 'error',
+              summary: 'Módulo de Usuarios',
+              detail: res.msg,
+            });
             return;
           }
 
-          this._messageService.add({severity: 'success', summary: 'Módulo de Usuarios', detail: res.msg});
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Módulo de Usuarios',
+            detail: res.msg,
+          });
           this.users.push(res.data);
           this.openModal = false;
         },
         error: (err: HttpErrorResponse) => {
-          this._messageService.add({severity: 'error', summary: 'Módulo de Usuarios', detail: err.message});
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Módulo de Usuarios',
+            detail: err.error.msg,
+          });
           this.isLoading = false;
           console.error(err);
         },
-        complete: () => this.isLoading = false
+        complete: () => (this.isLoading = false),
       })
     );
   }
@@ -153,20 +202,32 @@ export class UsersComponent implements OnInit, OnDestroy {
       this._usersService.updateUser(data).subscribe({
         next: (res) => {
           if (res.error) {
-            this._messageService.add({severity: 'error', summary: 'Módulo de Usuarios', detail: res.msg});
+            this._messageService.add({
+              severity: 'error',
+              summary: 'Módulo de Usuarios',
+              detail: res.msg,
+            });
             return;
           }
 
-          this._messageService.add({severity: 'success', summary: 'Módulo de Usuarios', detail: res.msg});
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Módulo de Usuarios',
+            detail: res.msg,
+          });
           const index = this.users.findIndex((user) => user.id === data.id);
           this.users[index] = res.data;
         },
         error: (err: HttpErrorResponse) => {
-          this._messageService.add({severity: 'error', summary: 'Módulo de Usuarios', detail: err.message});
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Módulo de Usuarios',
+            detail: err.error.msg,
+          });
           this.isLoading = false;
           console.error(err);
         },
-        complete: () => this.isLoading = false
+        complete: () => (this.isLoading = false),
       })
     );
   }
@@ -176,7 +237,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       this._messageService.add({
         severity: 'warn',
         summary: 'Módulo de Usuarios',
-        detail: 'Complete correctamente los campos requeridos'
+        detail: 'Complete correctamente los campos requeridos',
       });
       this.userForm.markAllAsTouched();
       return;
@@ -186,7 +247,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       const data: ICreatUser = {
         name: this.userForm.value.name,
         email: this.userForm.value.email,
-        role: parseInt(this.userForm.value.role),
+        id_role: parseInt(this.userForm.value.role),
         password: this.userForm.value.password,
       };
       return this._createUser(data);
@@ -196,7 +257,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       id: this.userForm.value.id,
       name: this.userForm.value.name,
       email: this.userForm.value.email,
-      role: parseInt(this.userForm.value.role),
+      id_role: parseInt(this.userForm.value.role),
     };
 
     this._updateUser(data);
@@ -231,8 +292,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       header: 'Módulos de Usuarios',
       message: `¿Estás seguro de eliminar al usuario ${this.user.name}?`,
       accept: () => this._deleteUser(this.user.id),
-      key: 'users'
+      key: 'users',
     });
   }
-
 }

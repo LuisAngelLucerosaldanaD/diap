@@ -76,7 +76,7 @@ export class AnnouncementsComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener el examen actual, error: ' + err.message
+            detail: 'No se pudo obtener el examen actual, error: ' + err.error.msg
           });
         },
         complete: () => this.isLoading = false

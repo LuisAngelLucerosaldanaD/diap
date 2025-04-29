@@ -48,7 +48,7 @@ export const AUTH_MENU: IMenuItem[] = [
     exact: false
   },
   {
-    name: 'Escuelas',
+    name: 'Facultades',
     route: '/admin/schools',
     icon: 'fa-graduation-cap',
     roles: [1],

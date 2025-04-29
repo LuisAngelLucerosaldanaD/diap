@@ -87,7 +87,7 @@ export class ModalitiesComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Modalidades',
-            detail: 'Error al obtener las modalidades, intente nuevamente'
+            detail: err.error.msg
           });
         },
         complete: () => this.loading.set(false)

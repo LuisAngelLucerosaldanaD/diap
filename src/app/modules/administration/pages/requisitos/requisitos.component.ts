@@ -165,7 +165,7 @@ export class RequisitosComponent implements OnDestroy, OnInit {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Requisitos',
-            detail: 'No se pudo crear el requerimiento, error: ' + err.message
+            detail: 'No se pudo crear el requerimiento, error: ' + err.error.msg
           });
           this.loading.set(false);
         },
@@ -198,7 +198,7 @@ export class RequisitosComponent implements OnDestroy, OnInit {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Requisitos',
-            detail: 'No se pudo eliminar el requerimiento, error: ' + err.message
+            detail: 'No se pudo eliminar el requerimiento, error: ' + err.error.msg
           });
           this.loading.set(false);
         },
@@ -238,7 +238,7 @@ export class RequisitosComponent implements OnDestroy, OnInit {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Requisitos',
-            detail: 'No se pudo actualizar el requerimiento, error: ' + err.message
+            detail: 'No se pudo actualizar el requerimiento, error: ' + err.error.msg
           });
           this.loading.set(false);
         },
