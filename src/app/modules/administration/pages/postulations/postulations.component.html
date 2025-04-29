@@ -1,110 +1,101 @@
 <main class="p-4 md:p-6 overflow-y-auto h-full">
-  <div class="flex flex-col md:flex-row gap-4 mb-4">
-    <div class="w-full md:w-1/2">
-      <label for="examcall" class="block font-semibold mb-2">Seleccionar Convocatoria:</label>
-      <select id="examcall" class="w-full border p-2 rounded bg-white" [formControl]="formExam"
-              (change)="changeExam()">
+    <div class="flex flex-col md:flex-row gap-4 mb-4">
+        <div class="w-full md:w-1/2">
+            <label for="examcall" class="block font-semibold mb-2">Seleccionar Convocatoria:</label>
+            <select id="examcall" class="w-full border p-2 rounded bg-white" [formControl]="formExam" (change)="changeExam()">
         <option disabled selected>Todas las Convocatorias</option>
         @for (exam of exams; track exam.id) {
           <option [value]="exam.id">{{ exam.name }}</option>
         }
       </select>
-    </div>
+        </div>
 
-    <div class="w-full md:w-1/2">
-      <label for="searchDNI" class="block font-semibold mb-2">Buscar postulante:</label>
-      <input type="text" id="searchDNI" [formControl]="formSearch"
-             placeholder="Ingrese el DNI del postulante" class="w-full border p-2 rounded bg-white">
-    </div>
+        <div class="w-full md:w-1/2">
+            <label for="searchDNI" class="block font-semibold mb-2">Buscar postulante:</label>
+            <input type="text" id="searchDNI" [formControl]="formSearch" placeholder="Ingrese el DNI del postulante" class="w-full border p-2 rounded bg-white">
+        </div>
 
-  </div>
-  <div class="flex flex-col md:flex-row gap-4 mb-4">
-    <div class="w-full md:w-1/4">
-      <button (click)="createPostulation()" type="button"
-              class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 w-full md:w-auto">
+    </div>
+    <div *ngIf="this.formExam.value!='' && this.formSearch.value!=null" class="flex flex-col md:flex-row gap-4 mb-4">
+        <div class="w-full md:w-1/4">
+            <button (click)="createPostulation()" type="button" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 w-full md:w-auto">
         Registrar postulación
       </button>
-    </div>
+        </div>
 
-    <div class="w-full">
-      <button (click)="exportReport()" type="button"
-              class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-800 w-full md:w-auto">
+        <div class="w-full">
+            <button (click)="exportReport()" type="button" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-800 w-full md:w-auto">
         Descargar lista de postulaciones
       </button>
+        </div>
     </div>
-  </div>
 
-  <div class="overflow-x-auto bg-white">
-    <div class="mx-auto">
-      <div class="bg-white  relative shadow-md sm:rounded-lg overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm text-left text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr>
-              <th scope="col" class="px-4 py-3">Nombre del Postulante</th>
-              <th scope="col" class="px-4 py-3">Primera Opción</th>
-              <th scope="col" class="px-4 py-3">Segunda Opción</th>
-              <th scope="col" class="px-4 py-3">Sede</th>
-              <th scope="col" class="px-4 py-3">Estado</th>
-              <th scope="col" class="px-4 py-3">Fecha verificación</th>
-              <th scope="col" class="px-4 py-3">
-                <span class="sr-only">Actions</span>
-              </th>
-            </tr>
-            </thead>
-            <tbody>
+    <div class="overflow-x-auto bg-white">
+        <div class="mx-auto">
+            <div class="bg-white  relative shadow-md sm:rounded-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-4 py-3">Nombre del Postulante</th>
+                                <th scope="col" class="px-4 py-3">Primera Opción</th>
+                                <th scope="col" class="px-4 py-3">Segunda Opción</th>
+                                <th scope="col" class="px-4 py-3">Sede</th>
+                                <th scope="col" class="px-4 py-3">Estado</th>
+                                <th scope="col" class="px-4 py-3">Fecha verificación</th>
+                                <th scope="col" class="px-4 py-3">
+                                    <span class="sr-only">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-              @for (postulation of postulations; track postulation.id) {
-                <tr class="border-b">
-                  <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                    {{ postulation.applicant.name }} {{ postulation.applicant.paternal_surname }} {{ postulation.applicant.maternal_surname }}
-                  </th>
-                  <td class="px-4 py-3">{{ postulation.first_option }}</td>
-                  <td class="px-4 py-3">{{ postulation.second_option }}</td>
-                  <td class="px-4 py-3">Tingo Mária</td>
-                  <td class="px-4 py-3">
-                    @if (postulation.applicant.is_verified) {
-                      <div class="bg-emerald-100 w-fit text-emerald-600 px-2 py-1 rounded">
-                        <span class="font-bold">Verificado</span>
-                      </div>
-                    } @else {
-                      <div class="bg-amber-100 w-fit text-amber-600 px-2 py-1 rounded">
-                        <span class="font-bold">No verificado</span>
-                      </div>
-                    }
-                  </td>
-                  <td class="px-4 py-3">
-                    @if (postulation.applicant.is_verified) {
-                      {{postulation.applicant.date_verified | date: 'dd/MM/yyyy HH:mm a'}}
-                    } @else {
-                      -
-                    }
-                  </td>
-                  <td class="px-4 py-3 flex items-center justify-end relative">
-                    <button type="button" class="btn-options" (click)="openMenu(postulation, pMenu, $event)">
+                            @for (postulation of postulations; track postulation.id) {
+                            <tr class="border-b">
+                                <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                                    {{ postulation.applicant.name }} {{ postulation.applicant.paternal_surname }} {{ postulation.applicant.maternal_surname }}
+                                </th>
+                                <td class="px-4 py-3">{{ postulation.first_option }}</td>
+                                <td class="px-4 py-3">{{ postulation.second_option }}</td>
+                                <td class="px-4 py-3">Tingo Mária</td>
+                                <td class="px-4 py-3">
+                                    @if (postulation.applicant.is_verified) {
+                                    <div class="bg-emerald-100 w-fit text-emerald-600 px-2 py-1 rounded">
+                                        <span class="font-bold">Verificado</span>
+                                    </div>
+                                    } @else {
+                                    <div class="bg-amber-100 w-fit text-amber-600 px-2 py-1 rounded">
+                                        <span class="font-bold">No verificado</span>
+                                    </div>
+                                    }
+                                </td>
+                                <td class="px-4 py-3">
+                                    @if (postulation.applicant.is_verified) { {{postulation.applicant.date_verified | date: 'dd/MM/yyyy HH:mm a'}} } @else { - }
+                                </td>
+                                <td class="px-4 py-3 flex items-center justify-end relative">
+                                    <button type="button" class="btn-options" (click)="openMenu(postulation, pMenu, $event)">
                       <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
                            xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
                       </svg>
                     </button>
-                    <p-menu #pMenu [model]="menu" [popup]="true" appendTo="body"/>
-                  </td>
-                </tr>
-              }
+                                    <p-menu #pMenu [model]="menu" [popup]="true" appendTo="body" />
+                                </td>
+                            </tr>
+                            }
 
-            </tbody>
-          </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </main>
 
-<app-block-ui [show]="isLoading"/>
+<app-block-ui [show]="isLoading" />
 <p-toast/>
 <p-dialog [(visible)]="showPostulation" [modal]="true">
-  @if (showPostulation) {
-    <app-form-registration [mode]="mode" [postulation]="postulation" module="post" (finish)="closeForm()"/>
-  }
+    @if (showPostulation) {
+    <app-form-registration [mode]="mode" [postulation]="postulation" module="post" (finish)="closeForm()" /> }
 </p-dialog>

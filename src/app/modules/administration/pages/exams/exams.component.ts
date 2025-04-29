@@ -109,7 +109,7 @@ export class ExamsComponent implements OnInit, OnDestroy {
           this._messageService.add({
             severity: 'error',
             summary: 'Módulo de Examenes',
-            detail: 'No se pudo obtener la información de los examenes'
+            detail: err.error.msg
           });
           this.isLoading = false;
         },
@@ -145,7 +145,7 @@ export class ExamsComponent implements OnInit, OnDestroy {
           this._messageService.add({
             severity: 'error',
             summary: 'Módulo de Examenes',
-            detail: 'No se pudo crear el examen'
+            detail: err.error.msg
           });
           this.isLoading = false;
         },
@@ -159,6 +159,7 @@ export class ExamsComponent implements OnInit, OnDestroy {
     this._subscriptions.add(
       this._examsService.updateExam(data).subscribe({
         next: (res) => {
+          console.log(res);
           if (res.error) {
             this._messageService.add({
               severity: 'error',
@@ -177,11 +178,10 @@ export class ExamsComponent implements OnInit, OnDestroy {
           this.cancelModal();
         },
         error: (err: HttpErrorResponse) => {
-          console.error(err);
           this._messageService.add({
             severity: 'error',
             summary: 'Módulo de Examenes',
-            detail: 'No se pudo actualizar el examen'
+            detail: err.error.msg
           });
           this.isLoading = false;
         },
@@ -216,7 +216,7 @@ export class ExamsComponent implements OnInit, OnDestroy {
           this._messageService.add({
             severity: 'error',
             summary: 'Módulo de Examenes',
-            detail: 'No se pudo eliminar el examen'
+            detail: err.error.msg
           });
           this.isLoading = false;
         },

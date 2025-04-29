@@ -1,19 +1,27 @@
-import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
-import {Subscription} from "rxjs";
-import {RegistrationService} from "../../../../core/services/admin/registration.service";
-import {MessageService} from "primeng/api";
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {HttpErrorResponse} from "@angular/common/http";
-import {ToastModule} from "primeng/toast";
-import {BlockUiComponent} from "../../../../core/ui/block-ui/block-ui.component";
-import {NgIf} from "@angular/common";
-import {FormRegistrationComponent} from "../../../../core/ui/form-registration/form-registration.component";
-import {IPayment, IPaymentDTO} from "../../../../core/models/registration/registration";
-import {PaymentStore} from '../../../../core/store/payment.store';
-import {NumbersInpDirective} from "../../../../core/directives/numbers-inp.directive";
-import {PostStore} from "../../../../core/store/post.store";
-import {ExamStore} from "../../../../core/store/exam.store";
-import {EnvServiceFactory} from "../../../../core/services/env/env.service.provider";
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { RegistrationService } from '../../../../core/services/admin/registration.service';
+import { MessageService } from 'primeng/api';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastModule } from 'primeng/toast';
+import { BlockUiComponent } from '../../../../core/ui/block-ui/block-ui.component';
+import { NgIf } from '@angular/common';
+import { FormRegistrationComponent } from '../../../../core/ui/form-registration/form-registration.component';
+import {
+  IPayment,
+  IPaymentDTO,
+} from '../../../../core/models/registration/registration';
+import { PaymentStore } from '../../../../core/store/payment.store';
+import { NumbersInpDirective } from '../../../../core/directives/numbers-inp.directive';
+import { PostStore } from '../../../../core/store/post.store';
+import { ExamStore } from '../../../../core/store/exam.store';
+import { EnvServiceFactory } from '../../../../core/services/env/env.service.provider';
 
 @Component({
   selector: 'app-validate-registration',
@@ -28,13 +36,14 @@ import {EnvServiceFactory} from "../../../../core/services/env/env.service.provi
   ],
   templateUrl: './validate-registration.component.html',
   styleUrl: './validate-registration.component.scss',
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class ValidateRegistrationComponent implements OnDestroy, OnInit {
   private readonly _subscriptions: Subscription = new Subscription();
 
   // Services
-  private readonly _registrationService: RegistrationService = inject(RegistrationService);
+  private readonly _registrationService: RegistrationService =
+    inject(RegistrationService);
   private readonly _toastService: MessageService = inject(MessageService);
 
   // Store
@@ -45,9 +54,15 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
   protected isLoading = signal(false);
   protected isValidPayment = signal(false);
   protected postForm: FormGroup = new FormGroup({
-    dni: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
+    dni: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.maxLength(8),
+    ]),
     school: new FormControl('', [Validators.required]),
-    modality: new FormControl({disabled: true, value: ''}, [Validators.required])
+    modality: new FormControl({ disabled: true, value: '' }, [
+      Validators.required,
+    ]),
   });
   protected logo = EnvServiceFactory().REST_API + '/api/v1/files/public/login';
 
@@ -70,13 +85,17 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
       dni: this.dni.value,
       type_school: this.school.value,
       id_modality: this._postStore.modality()?.id as number,
-      id_examcall: this._examStore.exam()?.id as number
-    }
+      id_examcall: this._examStore.exam()?.id as number,
+    };
     this._subscriptions.add(
       this._registrationService.validatePayment(data).subscribe({
         next: (res) => {
           if (res.error) {
-            this._toastService.add({severity: 'error', summary: 'Error', detail: res.msg});
+            this._toastService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: res.msg,
+            });
             return;
           }
 
@@ -84,7 +103,8 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
             this._toastService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'No se encontraron pagos realizados para el DNI ingresado'
+              detail:
+                'No se encontraron pagos realizados para el DNI ingresado',
             });
             return;
           }
@@ -101,13 +121,17 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
             this._toastService.add({
               severity: 'warn',
               summary: 'Validación de Pago',
-              detail: err.error.msg
+              detail: err.error.msg,
             });
             return;
           }
-          this._toastService.add({severity: 'warn', summary: 'Validación de Pago', detail: err.error.msg});
+          this._toastService.add({
+            severity: 'warn',
+            summary: 'Validación de Pago',
+            detail: err.error.msg,
+          });
         },
-        complete: () => this.isLoading.set(false)
+        complete: () => this.isLoading.set(false),
       })
     );
   }
@@ -129,7 +153,7 @@ export class ValidateRegistrationComponent implements OnDestroy, OnInit {
       this._toastService.add({
         severity: 'warn',
         summary: 'Módulo de Registro',
-        detail: 'Complete los campos requeridos'
+        detail: 'Complete los campos requeridos',
       });
       this.postForm.markAllAsTouched();
       return;

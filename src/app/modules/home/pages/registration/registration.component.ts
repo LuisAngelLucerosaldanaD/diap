@@ -135,7 +135,7 @@ export class RegistrationComponent implements OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener las modalidades, error: ' + err.message
+            detail: 'No se pudo obtener las modalidades, error: ' + err.error.msg
           });
           this.isLoading.set(false);
         },
@@ -166,7 +166,7 @@ export class RegistrationComponent implements OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener los archivos requeridos, error: ' + err.message
+            detail: 'No se pudo obtener los archivos requeridos, error: ' + err.error.msg
           });
           this.isLoading.set(false);
         },

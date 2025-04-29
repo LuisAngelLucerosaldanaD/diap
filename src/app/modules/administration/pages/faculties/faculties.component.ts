@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
-import {IFaculties} from "../../../../core/models/faculties/faculties";
+import {IFaculties, IUpdateFaculty} from "../../../../core/models/faculties/faculties";
 import {NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -76,7 +76,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Facultades',
-            detail: 'Error al obtener las facultades, intente nuevamente'
+            detail: err.error.msg
           });
           this.isLoading.set(false);
         },
@@ -110,7 +110,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Facultades',
-            detail: 'Error al eliminar la facultad, intente nuevamente'
+            detail: err.error.msg
           });
           this.isLoading.set(false);
         },
@@ -154,7 +154,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Facultades',
-            detail: 'Error al crear la facultad, intente nuevamente'
+            detail: err.error.msg
           });
           this.isLoading.set(false);
         },
@@ -164,23 +164,19 @@ export class FacultiesComponent implements OnInit, OnDestroy {
   }
 
   private _updateFaculty(): void {
-    const form = new FormData();
     const logo: string = this.schoolForm.get('logo')?.value;
-    if (logo.startsWith('data:')) {
-      const file = this.schoolForm.get('logo')?.value.split(',');
-      form.set('photo_path', FileHelper.Base64ToFile(file[1], this.logoName().replaceAll('', '_'), FileHelper.GetBase64MimeType(logo)));
-    } else {
-      form.set('photo_path', '');
-    }
 
-    form.set('name', this.schoolForm.value.name);
-    form.set('url_web_address', this.schoolForm.value.page_link);
-    form.set('professional_title', this.schoolForm.value.professional_name);
-    form.set('academic_degree', this.schoolForm.value.academic_degree);
+    const facultyData: IUpdateFaculty = {
+      name: this.schoolForm.value.name,
+      url_web_address: this.schoolForm.value.page_link,
+      professional_title: this.schoolForm.value.professional_name,
+      academic_degree: this.schoolForm.value.academic_degree,
+      photo_path: logo.startsWith('data:') ? logo : undefined
+    };
 
     this.isLoading.set(true);
     this._subscriptions.add(
-      this._facultiesService.updateFaculty(form, this.schoolForm.get('id')?.value).subscribe({
+      this._facultiesService.updateFaculty(facultyData, this.schoolForm.get('id')?.value).subscribe({
         next: (res) => {
           if (res.error) {
             this._toastService.add({
@@ -195,7 +191,10 @@ export class FacultiesComponent implements OnInit, OnDestroy {
             summary: 'Facultades',
             detail: 'Facultad actualizada correctamente'
           });
-          this._getFaculties();
+          const updatedFaculties = this.faculties().map(faculty =>
+            faculty.id.toString() === this.schoolForm.get('id')?.value.toString() ? res.data : faculty
+          );
+          this.faculties.set(updatedFaculties);
           this.cancel();
         },
         error: (err: HttpErrorResponse) => {
@@ -203,7 +202,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Facultades',
-            detail: 'Error al actualizar la facultad, intente nuevamente'
+            detail: err.error.msg
           });
           this.isLoading.set(false);
         },
@@ -270,7 +269,7 @@ export class FacultiesComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo procesar la imagen'
+            detail: err.error.msg
           });
         }
       })

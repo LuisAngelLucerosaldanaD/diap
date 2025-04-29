@@ -17,12 +17,13 @@ import {ToastModule} from "primeng/toast";
 import {FormRegistrationComponent} from "../../../../core/ui/form-registration/form-registration.component";
 import {DialogModule} from "primeng/dialog";
 import {ExamStore} from '../../../../core/store/exam.store';
-import {DatePipe} from "@angular/common";
+import {CommonModule, DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-postulations',
   standalone: true,
   imports: [
+    CommonModule,
     FilterPipeModule,
     MenuModule,
     BlockUiComponent,

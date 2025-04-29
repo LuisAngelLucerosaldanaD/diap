@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { CommonModule } from '@angular/common';
 import { AuthService } from "../../../../core/services/auth/auth.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { IFormValidation } from "../../../../core/models/ui/form";
@@ -18,6 +19,7 @@ import { AppStore } from '../../../../core/store/app.store';
   selector: 'app-login',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ToastModule,
@@ -43,6 +45,7 @@ export class LoginComponent implements OnDestroy {
     remember_me: new FormControl(false),
     captcha: new FormControl('', Validators.required)
   });
+  protected showPassword : boolean;
   protected emailValidation: IFormValidation = {
     error: false,
     msg: ''
@@ -55,11 +58,13 @@ export class LoginComponent implements OnDestroy {
   protected captchaKey: string = EnvServiceFactory().GOOGLE_RECAPTCHA_SITE_KEY;
   protected logo = EnvServiceFactory().REST_API + '/api/v1/files/public/login';
 
+
   constructor(
     private _authService: AuthService,
     private _toastService: MessageService,
     private _router: Router
   ) {
+    this.showPassword = false;
     this._subscriptions.add(
       this.email.statusChanges.subscribe((status) => {
         if (this.email.untouched) return;
@@ -175,7 +180,7 @@ export class LoginComponent implements OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Inicio de sessión',
-            detail: 'No se pudo iniciar sesión, intente de nuevo'
+            detail: error.error.msg
           });
           return;
         },
@@ -184,4 +189,7 @@ export class LoginComponent implements OnDestroy {
     );
   }
 
+  public changeShowPassword(): void {
+    this.showPassword = !this.showPassword;
+  }
 }

@@ -53,6 +53,8 @@ export interface ISchoolDTO {
   type: string;
   level_education: string;
   is_nacional: boolean;
+  id_examcall: number;
+  dni_applicant: string;
 }
 
 

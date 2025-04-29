@@ -174,7 +174,7 @@ export class ModalidadesComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Modalidades',
-            detail: 'Error al crear la modalidad, intente nuevamente'
+            detail: err.error.msg
           });
         },
         complete: () => this.loading.set(false)
@@ -222,7 +222,7 @@ export class ModalidadesComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Modalidades',
-            detail: 'Error al actualizar la modalidad, intente nuevamente'
+            detail: err.error.msg
           });
         },
         complete: () => this.loading.set(false)
@@ -260,7 +260,7 @@ export class ModalidadesComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Modalidades',
-            detail: 'Error al eliminar la modalidad, intente nuevamente'
+            detail: err.error.msg
           });
         },
         complete: () => this.loading.set(false)

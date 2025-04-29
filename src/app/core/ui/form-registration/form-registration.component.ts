@@ -88,6 +88,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   protected cost!: ICost;
   protected imgProfile: string = '';
 
+
   // Forms
   protected basicForm: FormGroup = new FormGroup({
     names: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
@@ -104,6 +105,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     province: new FormControl('', [Validators.required]),
     district: new FormControl('', Validators.required),
     address: new FormControl('', [Validators.required]),
+    phone_school: new FormControl('', [Validators.required, Validators.maxLength(9), Validators.minLength(9), Validators.pattern('^[0-9]*$')]),
   });
   protected schoolForm: FormGroup = new FormGroup({
     region: new FormControl('', [Validators.required]),
@@ -142,7 +144,6 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       this.schoolForm.get('type')?.setValue(this._postStore.typeSchool());
       this.schoolForm.get('type')?.disable();
     }
-
     if (this._examStore.exam()) {
       this._exam = this._examStore.exam() as IExam;
       this._getModalities();
@@ -163,7 +164,6 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       this._getAnnexes();
       this._getAnswers();
     }
-
     if (this.mode === 'show') this._disableForms();
   }
 
@@ -253,7 +253,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener las regiones, error: ' + err.message
+            detail: 'No se pudo obtener las regiones, error: ' + err.error.msg
           });
           this.isLoading = false;
         },
@@ -291,7 +291,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener los archivos requeridos, error: ' + err.message
+            detail: 'No se pudo obtener los archivos requeridos, error: ' + err.error.msg
           });
           this.isLoading = false;
         },
@@ -323,7 +323,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener los costos de la modalidad, error: ' + err.message
+            detail: 'No se pudo obtener los costos de la modalidad, error: ' + err.error.msg
           });
           this.isLoading = false;
         },
@@ -385,9 +385,10 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       phone_contact: form.phone_school,
       type: form.type,
       level_education: form.education_level,
-      is_nacional: form.nationality === 'Peruano'
+      is_nacional: form.nationality === 'Peruano',
+      id_examcall: this._exam.id,
+      dni_applicant: this.basicForm.getRawValue().dni
     };
-
     if (this.mode === 'create') {
       return new Promise<IResponse>((resolve, reject) => {
         this._subscriptions.add(
@@ -420,6 +421,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   private _saveApplicant(school: number, profile: string): Promise<IResponse> {
     const date = new Date();
     const form = this.basicForm.getRawValue();
+
     const data: IApplicantDTO = {
       name: form.names,
       paternal_surname: form.father_lastname,
@@ -433,7 +435,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       sex: form.sex,
       DNI: this.basicForm.getRawValue().dni,
       marital_status: form.civil_status,
-      code_applicant: date.getFullYear() + this._exam.id + this.basicForm.getRawValue().dni,
+      code_applicant: date.getFullYear() + (this._exam.id).toString() + (this.basicForm.getRawValue().dni).toString(),
       email: form.email,
       mother_tongue: form.mother_language,
       address: form.address,
@@ -663,6 +665,9 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
             phone_school: res.data.phone_contact,
             nationality: res.data.is_nacional ? 'Peruano' : 'Extranjero'
           });
+          this.basicForm.patchValue({
+            phone_school: res.data.phone_contact
+          }, { emitEvent: true });
 
           this.schoolForm.get('type')?.disable();
           if (res.data.origin_department !== '-') {
@@ -679,7 +684,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener los colegios, error: ' + err.message
+            detail: 'No se pudo obtener los colegios, error: ' + err.error.msg
           });
           this.isLoading = false;
         },
@@ -709,7 +714,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener los documentos anexos, error: ' + err.message
+            detail: 'No se pudo obtener los documentos anexos, error: ' + err.error.msg
           });
           this.isLoading = false;
         },
@@ -750,7 +755,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener las respuestas, error: ' + err.message
+            detail: 'No se pudo obtener las respuestas, error: ' + err.error.msg
           });
           this.isLoading = false;
         },
@@ -780,7 +785,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener las modalidades, error: ' + err.message
+            detail: 'No se pudo obtener las modalidades, error: ' + err.error.msg
           });
           this.isLoading = false;
         },
@@ -827,7 +832,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener las provincias, error: ' + err.message
+            detail: 'No se pudo obtener las provincias, error: ' + err.error.msg
           });
           this.isLoading = false;
         },
@@ -872,7 +877,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener los distritos, error: ' + err.message
+            detail: 'No se pudo obtener los distritos, error: ' + err.error.msg
           });
           this.isLoading = false;
         },
@@ -904,7 +909,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo obtener los colegios, error: ' + err.message
+            detail: 'No se pudo obtener los colegios, error: ' + err.error.msg
           });
           this.isLoading = false;
         },
@@ -950,7 +955,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo procesar la imagen'
+            detail: err.error.msg
           });
         }
       })
@@ -980,7 +985,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
           this._toastService.add({
             severity: 'error',
             summary: 'Módulo de Registro',
-            detail: 'No se pudo procesar el archivo'
+            detail: err.error.msg
           });
         }
       })
@@ -1004,8 +1009,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
         return;
       }
     }
-
-    if (this.mode === 'create' && this._authStore.role() !== 1) {
+    if (this.mode === 'create' && (this._authStore.role() !== 1 && this._authStore.role() !== 2)) {
       if (this.filesRequired.some(file => !file.file)) {
         this._toastService.add({
           severity: 'warn',
@@ -1019,6 +1023,9 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     try {
       const resSchool = await this._saveSchool();
+      console.log('====================================');
+      console.log(resSchool.error);
+      console.log('====================================');
       if (resSchool.error) {
         this._toastService.add({
           severity: 'error',
@@ -1188,6 +1195,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   }
 
   protected save(): void {
+    this.changePhoneSchool();
     if (this.basicForm.invalid || this.schoolForm.invalid || this.academicForm.invalid || this.surveyForm.invalid) {
       this._toastService.add({
         severity: 'warn',
@@ -1252,6 +1260,14 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     this.schoolForm.get('phone_school')?.setValue('');
     this.schoolForm.get('phone_school')?.setValidators([Validators.required, Validators.maxLength(9), Validators.minLength(9), Validators.pattern('^[0-9]*$')]);
     this.schoolForm.get('phone_school')?.updateValueAndValidity();
+  }
+  public changePhoneSchool(): void {
+    const phoneValue = this.basicForm.get('phone_school')?.value;
+    if (phoneValue !== undefined && phoneValue !== null) {
+      this.schoolForm.patchValue({
+        phone_school: phoneValue
+      }, { emitEvent: true });
+    }
   }
 
 }

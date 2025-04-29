@@ -1,158 +1,136 @@
 <main class="w-full h-full p-6">
-  <div class="pb-4">
-    <h1 class="text-2xl font-bold text-gray-900">Escuelas</h1>
-  </div>
-  <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-    <div (click)="createFaculty()"
-      class="border border-gray-300 rounded-lg p-4 bg-white shadow-md flex items-center justify-center w-full h-full">
-      <div class="group flex items-center justify-center w-full h-full cursor-pointer hover:bg-blue-300">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-             stroke="currentColor" class="size-12 group-hover:text-white">
+    <div class="pb-4">
+        <h1 class="text-2xl font-bold text-gray-900">Facultades</h1>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div (click)="createFaculty()" class="border border-gray-300 rounded-lg p-4 bg-white shadow-md flex items-center justify-center w-full h-full">
+            <div class="group flex items-center justify-center w-full h-full cursor-pointer hover:bg-blue-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12 group-hover:text-white">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
         </svg>
-      </div>
-    </div>
-    @for (faculty of faculties(); track faculty.name) {
-      <div class="border border-gray-300 rounded-lg p-4 bg-white shadow-md">
-        <div class="relative">
-          <img [src]="faculty.photo_url" alt="logo {{faculty.name}}" loading="lazy"
-               class="facultad-logo mx-auto mb-4 w-3/5">
-          <div (click)="editFaculty(faculty)"
-               class="top-0 right-0 absolute w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white cursor-pointer hover:bg-blue-300">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                 stroke="currentColor" class="size-4">
+            </div>
+        </div>
+        @for (faculty of faculties(); track faculty.name) {
+        <div class="border border-gray-300 rounded-lg p-4 bg-white shadow-md">
+            <div class="relative">
+                <img [src]="faculty.photo_url" alt="logo {{faculty.name}}" loading="lazy" class="facultad-logo mx-auto mb-4 w-3/5">
+                <div (click)="editFaculty(faculty)" class="top-0 right-0 absolute w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white cursor-pointer hover:bg-blue-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
               <path stroke-linecap="round" stroke-linejoin="round"
                     d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
             </svg>
-          </div>
+                </div>
+            </div>
+            <div class="text-left">
+                <h2 class="text-xl font-semibold mb-2">{{ faculty.name }}</h2>
+                <p class="text-gray-700"><strong>Grado Académico:</strong> {{ faculty.academic_degree }}</p>
+                <p class="text-gray-700"><strong>Título Profesional:</strong> {{ faculty.professional_title }}</p>
+            </div>
         </div>
-        <div class="text-left">
-          <h2 class="text-xl font-semibold mb-2">{{ faculty.name }}</h2>
-          <p class="text-gray-700"><strong>Grado Académico:</strong> {{ faculty.academic_degree }}</p>
-          <p class="text-gray-700"><strong>Título Profesional:</strong> {{ faculty.professional_title }}</p>
-        </div>
-      </div>
-    }
-  </div>
+        }
+    </div>
 </main>
 
 <div *ngIf="openModal()" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg shadow-lg p-6 w-[70%] md:w-1/2">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-semibold">
-        {{ isEditing() ? 'Actualizar' : 'Crear' }} Escuela
-      </h3>
-    </div>
+    <div class="bg-white rounded-lg shadow-lg p-6 w-[70%] md:w-1/2">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold">
+                {{ isEditing() ? 'Actualizar' : 'Crear' }} Escuela
+            </h3>
+        </div>
 
-    <div class="mb-4">
-      <label for="name" class="block text-sm font-medium mb-2">Logo <span class="text-red-600 ">*</span></label>
-      <input type="file" class="hidden" id="file" #logo (change)="processLogo($event)" accept="image/*">
-      @if (isEditing() || schoolForm.get('logo')?.value) {
-        <div class="group relative border-slate-400 border-dashed rounded-lg">
-          <img [src]="schoolForm.get('logo')?.value" alt="logo {{schoolForm.get('name')?.value}}" loading="lazy"
-               class="facultad-logo mx-auto mb-4 w-2/5">
-          <div (click)="logo.click()"
-               class="group-hover:flex hidden absolute inset-0  items-center justify-center bg-black bg-opacity-25 rounded-lg cursor-pointer">
-            <button type="button" class="text-white">
+        <div class="mb-4">
+            <label for="name" class="block text-sm font-medium mb-2">Logo <span class="text-red-600 ">*</span></label>
+            <input type="file" class="hidden" id="file" #logo (change)="processLogo($event)" accept="image/*"> @if (isEditing() || schoolForm.get('logo')?.value) {
+            <div class="group relative border-slate-400 border-dashed rounded-lg">
+                <img [src]="schoolForm.get('logo')?.value" alt="logo {{schoolForm.get('name')?.value}}" loading="lazy" class="facultad-logo mx-auto mb-4 w-2/5">
+                <div (click)="logo.click()" class="group-hover:flex hidden absolute inset-0  items-center justify-center bg-black bg-opacity-25 rounded-lg cursor-pointer">
+                    <button type="button" class="text-white">
               <i class="fa-solid fa-upload"></i> Subir Foto
             </button>
-          </div>
-        </div>
-      } @else {
-        <div (click)="logo.click()"
-             class="w-full border border-slate-400 border-dashed rounded-lg p-4 mb-4 flex items-center justify-center h-20 cursor-pointer hover:bg-slate-200">
-          <i class="fas fa-upload text-3xl text-gray-400"></i>
-        </div>
-      }
-      @if (schoolForm.get('logo')?.invalid && schoolForm.get('logo')?.touched) {
-        <small *ngIf="schoolForm.get('logo')?.hasError('required')" class="text-red-600 text-sm">
+                </div>
+            </div>
+            } @else {
+            <div (click)="logo.click()" class="w-full border border-slate-400 border-dashed rounded-lg p-4 mb-4 flex items-center justify-center h-20 cursor-pointer hover:bg-slate-200">
+                <i class="fas fa-upload text-3xl text-gray-400"></i>
+            </div>
+            } @if (schoolForm.get('logo')?.invalid && schoolForm.get('logo')?.touched) {
+            <small *ngIf="schoolForm.get('logo')?.hasError('required')" class="text-red-600 text-sm">
           El logo es requerido
-        </small>
-      }
-    </div>
+        </small> }
+        </div>
 
-    <form [formGroup]="schoolForm">
-      <div class="mb-4">
-        <label for="name" class="block text-sm font-medium">Nombre <span class="text-red-600 ">*</span></label>
-        <input type="text" id="name" class="border p-2 w-full mb-2 bg-white rounded-md" formControlName="name"
-               appNameInp>
-        @if (schoolForm.get('name')?.invalid && schoolForm.get('name')?.touched) {
-          <small *ngIf="schoolForm.get('name')?.hasError('required')" class="text-red-600 text-sm">
+        <form [formGroup]="schoolForm">
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-medium">Nombre <span class="text-red-600 ">*</span></label>
+                <input type="text" id="name" class="border p-2 w-full mb-2 bg-white rounded-md" formControlName="name" appNameInp> @if (schoolForm.get('name')?.invalid && schoolForm.get('name')?.touched) {
+                <small *ngIf="schoolForm.get('name')?.hasError('required')" class="text-red-600 text-sm">
             El nombre es requerido
           </small>
-          <small *ngIf="schoolForm.get('name')?.hasError('minlength')" class="text-red-600 text-sm">
+                <small *ngIf="schoolForm.get('name')?.hasError('minlength')" class="text-red-600 text-sm">
             El nombre debe tener al menos 3 caracteres
           </small>
-          <small *ngIf="schoolForm.get('name')?.hasError('maxlength')" class="text-red-600 text-sm">
+                <small *ngIf="schoolForm.get('name')?.hasError('maxlength')" class="text-red-600 text-sm">
             El nombre debe tener máximo 100 caracteres
-          </small>
-        }
-      </div>
-      <div class="mb-4">
-        <label for="professional_name" class="block text-sm font-medium rounded-md">Titulo Profesional <span
+          </small> }
+            </div>
+            <div class="mb-4">
+                <label for="professional_name" class="block text-sm font-medium rounded-md">Titulo Profesional <span
           class="text-red-600">*</span>
         </label>
-        <input type="text" id="professional_name" class="border p-2 w-full mb-2 bg-white rounded-md"
-               formControlName="professional_name" appNameInp>
-        @if (schoolForm.get('professional_name')?.invalid && schoolForm.get('professional_name')?.touched) {
-          <small *ngIf="schoolForm.get('professional_name')?.hasError('required')" class="text-red-600 text-sm">
+                <input type="text" id="professional_name" class="border p-2 w-full mb-2 bg-white rounded-md" formControlName="professional_name" appNameInp> @if (schoolForm.get('professional_name')?.invalid && schoolForm.get('professional_name')?.touched)
+                {
+                <small *ngIf="schoolForm.get('professional_name')?.hasError('required')" class="text-red-600 text-sm">
             El título profesional es requerido
           </small>
-          <small *ngIf="schoolForm.get('professional_name')?.hasError('minlength')" class="text-red-600 text-sm">
+                <small *ngIf="schoolForm.get('professional_name')?.hasError('minlength')" class="text-red-600 text-sm">
             El título profesional debe tener al menos 3 caracteres
           </small>
-          <small *ngIf="schoolForm.get('professional_name')?.hasError('maxlength')" class="text-red-600 text-sm">
+                <small *ngIf="schoolForm.get('professional_name')?.hasError('maxlength')" class="text-red-600 text-sm">
             El título profesional debe tener máximo 100 caracteres
-          </small>
-        }
-      </div>
-      <div class="mb-4">
-        <label for="academic_degree" class="block text-sm font-medium">Grado Académico <span
+          </small> }
+            </div>
+            <div class="mb-4">
+                <label for="academic_degree" class="block text-sm font-medium">Grado Académico <span
           class="text-red-600">*</span>
         </label>
-        <input type="text" id="academic_degree" class="border p-2 w-full mb-2 bg-white rounded-md"
-               formControlName="academic_degree" appNameInp>
-        @if (schoolForm.get('academic_degree')?.invalid && schoolForm.get('academic_degree')?.touched) {
-          <small *ngIf="schoolForm.get('academic_degree')?.hasError('required')" class="text-red-600 text-sm">
+                <input type="text" id="academic_degree" class="border p-2 w-full mb-2 bg-white rounded-md" formControlName="academic_degree" appNameInp> @if (schoolForm.get('academic_degree')?.invalid && schoolForm.get('academic_degree')?.touched) {
+                <small *ngIf="schoolForm.get('academic_degree')?.hasError('required')" class="text-red-600 text-sm">
             El grado académico es requerido
           </small>
-          <small *ngIf="schoolForm.get('academic_degree')?.hasError('minlength')" class="text-red-600 text-sm">
+                <small *ngIf="schoolForm.get('academic_degree')?.hasError('minlength')" class="text-red-600 text-sm">
             El grado académico debe tener al menos 3 caracteres
           </small>
-          <small *ngIf="schoolForm.get('academic_degree')?.hasError('maxlength')" class="text-red-600 text-sm">
+                <small *ngIf="schoolForm.get('academic_degree')?.hasError('maxlength')" class="text-red-600 text-sm">
             El grado académico debe tener máximo 50 caracteres
-          </small>
-        }
-      </div>
-      <div class="mb-4">
-        <label for="page_link" class="block text-sm font-medium">URL de la Página <span class="text-red-600">*</span>
+          </small> }
+            </div>
+            <div class="mb-4">
+                <label for="page_link" class="block text-sm font-medium">URL de la Página <span class="text-red-600">*</span>
         </label>
-        <input type="url" id="page_link" class="border p-2 w-full mb-2 rounded-md" formControlName="page_link">
-        @if (schoolForm.get('page_link')?.invalid && schoolForm.get('page_link')?.touched) {
-          <small *ngIf="schoolForm.get('page_link')?.hasError('required')" class="text-red-600 text-sm">
+                <input type="url" id="page_link" class="border p-2 w-full mb-2 rounded-md" formControlName="page_link"> @if (schoolForm.get('page_link')?.invalid && schoolForm.get('page_link')?.touched) {
+                <small *ngIf="schoolForm.get('page_link')?.hasError('required')" class="text-red-600 text-sm">
             La URL de la página es requerida
           </small>
-          <small *ngIf="schoolForm.get('page_link')?.hasError('maxlength')" class="text-red-600 text-sm">
+                <small *ngIf="schoolForm.get('page_link')?.hasError('maxlength')" class="text-red-600 text-sm">
             La URL de la página debe tener máximo 500 caracteres
           </small>
-          <small *ngIf="schoolForm.get('page_link')?.hasError('pattern')" class="text-red-600 text-sm">
+                <small *ngIf="schoolForm.get('page_link')?.hasError('pattern')" class="text-red-600 text-sm">
             La URL de la página no es válida
-          </small>
-        }
-      </div>
-    </form>
+          </small> }
+            </div>
+        </form>
 
-    <div class="flex justify-end space-x-2">
-      <button class="border border-neutral text-neutral hover:border-blue-800 hover:text-blue-800 px-4 py-2 rounded-md"
-              (click)="cancel()">
+        <div class="flex justify-end space-x-2">
+            <button class="border border-neutral text-neutral hover:border-blue-800 hover:text-blue-800 px-4 py-2 rounded-md" (click)="cancel()">
         Cancelar
       </button>
-      <button class="bg-neutral hover:bg-blue-800 text-white px-4 py-2 rounded-md" (click)="saveSchool()">
+            <button class="bg-neutral hover:bg-blue-800 text-white px-4 py-2 rounded-md" (click)="saveSchool()">
         Guardar
       </button>
+        </div>
     </div>
-  </div>
 </div>
 
 <p-toast/>
-<app-block-ui [show]="isLoading()"/>
+<app-block-ui [show]="isLoading()" />

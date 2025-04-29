@@ -3,7 +3,7 @@ import {EnvServiceFactory} from "../env/env.service.provider";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IResponse} from "../../models/response";
-import {IFaculties} from "../../models/faculties/faculties";
+import {IFaculties, IUpdateFaculty} from "../../models/faculties/faculties";
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +24,8 @@ export class FacultiesService {
     return this._http.post<IResponse>(this._url, data);
   }
 
-  public updateFaculty(data: FormData, id: number): Observable<IResponse> {
-    return this._http.put<IResponse>(this._url + `/${id}`, data);
+  public updateFaculty(data: IUpdateFaculty, id: number): Observable<IResponse> {
+    return this._http.put<IResponse>(`${this._url}/${id}`, data);
   }
 
   public deleteFaculty(id: number): Observable<IResponse> {
