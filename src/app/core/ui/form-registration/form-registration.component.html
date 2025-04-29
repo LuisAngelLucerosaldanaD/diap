@@ -343,27 +343,6 @@
                     </small>
                   }
                 </div>
-                <div>
-                  <label for="phone_contact_school" class="block font-medium">
-                    Número de celular de contacto del colegio
-                  </label>
-                  <input type="tel" id="phone_contact_school" placeholder="Ingrese número"
-                         formControlName="phone_school"
-                         title="El número debe contener hasta 9 dígitos" class="inp-form" appNumbersInp minlength="9"
-                         maxlength="9">
-                  @if (schoolForm.get('phone_school')?.invalid && schoolForm.get('phone_school')?.touched) {
-                    <small class="text-red-500" *ngIf="schoolForm.get('phone_school')?.hasError('required')">
-                      El número de celular del colegio es requerido.
-                    </small>
-                    <small class="text-red-500"
-                           *ngIf="schoolForm.get('phone_school')?.hasError('minlength') || schoolForm.get('phone_school')?.hasError('maxlength')">
-                      El número de celular del colegio debe contener 9 dígitos.
-                    </small>
-                    <small class="text-red-500" *ngIf="schoolForm.get('phone_school')?.hasError('pattern')">
-                      El número de celular del colegio solo debe de contener números.
-                    </small>
-                  }
-                </div>
               }
               <div>
                 <label for="type_schoolApplicant" class="block font-medium">Tipo de colegio</label>
