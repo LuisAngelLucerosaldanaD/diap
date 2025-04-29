@@ -184,6 +184,7 @@ export class RegistrationComponent implements OnDestroy {
 
   protected setExam(exam: IExam): void {
     this.exam = exam;
+    sessionStorage.setItem('exam', JSON.stringify(exam));
     this._examStore.setExam(exam);
     this._getModalities();
   }

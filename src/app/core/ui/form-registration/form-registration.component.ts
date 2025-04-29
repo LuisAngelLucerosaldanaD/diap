@@ -53,7 +53,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   @Input() postulation!: IPostulation;
   @Input() mode: ModeForm = 'create';
   @Input() module: 'post' | 'regis' = 'regis';
-  @Output() finish: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() finish: EventEmitter<void> = new EventEmitter<void>();
 
   // Services
   private readonly _subscriptions: Subscription = new Subscription();
@@ -70,6 +70,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   private _exam!: IExam;
   private school = signal(-1);
   private answers = signal<any[]>([]);
+  private timeout: any = null;
 
   // Readonly Properties
   protected readonly faculties = FacultiesOptions;
@@ -114,8 +115,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     name: new FormControl('', [Validators.required]),
     type: new FormControl('', [Validators.required]),
     education_level: new FormControl('', [Validators.required]),
-    nationality: new FormControl('', [Validators.required]),
-    phone_school: new FormControl('', [Validators.required, Validators.maxLength(9), Validators.minLength(9), Validators.pattern('^[0-9]*$')]),
+    nationality: new FormControl('', [Validators.required])
   });
   protected academicForm: FormGroup = new FormGroup({
     first_option: new FormControl('', [Validators.required]),
@@ -135,6 +135,16 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit() {
+    if (!this._examStore.exam()) {
+      this._toastService.add({severity: 'warn', summary: 'Módulo de Registro', detail: 'Debe seleccionar un examen'});
+
+      this.timeout = setTimeout(() => {
+        this.finish.emit();
+        this._postStore.setOnboarding(false);
+      }, 1000);
+      return;
+    }
+
     if (this._postStore.dni()) {
       this.basicForm.get('dni')?.setValue(this._postStore.dni());
       this.basicForm.get('dni')?.disable();
@@ -184,6 +194,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     this.cost = {} as ICost;
     this.imgProfile = '';
     this.mode = 'create';
+    if (this.timeout) clearTimeout(this.timeout);
   }
 
   private _loadData(): void {
@@ -217,6 +228,14 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
     this.academicForm.disable();
     this.basicForm.get('dni')?.disable();
+  }
+
+  private getExamId(): number {
+    if (this._exam && this._exam.id) return this._exam.id;
+    const examSession = sessionStorage.getItem('exam');
+    if (!examSession) return 0;
+    const exam = JSON.parse(examSession);
+    return exam.id;
   }
 
   private _disableForms(): void {
@@ -382,7 +401,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       origin_province: form.province,
       origin_district: form.district,
       code_school: form.name,
-      phone_contact: form.phone_school,
+      phone_contact: '-',
       type: form.type,
       level_education: form.education_level,
       is_nacional: form.nationality === 'Peruano',
@@ -481,7 +500,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       application_headquarters: this.surveyForm.value.type_preparation,
       id_applicant: this.mode === 'create' ? applicant : this.postulation.applicant.id,
       id_payment: this._payment?.cod_recibo || 'Registrado por administrador, no consigna pago en la pasarela de pagos UNAS',
-      id_examcall: this._exam.id
+      id_examcall: this.getExamId()
     };
 
     if (this.mode === 'create') {
@@ -501,7 +520,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
 
     return new Promise<IResponse>((resolve, reject) => {
       this._subscriptions.add(
-        this._registrationService.updateAcademic(this.postulation.id, data).subscribe({
+        this._registrationService.updateAcademic(this.postulation.applicant.id, data).subscribe({
           next: (res) => {
             resolve(res);
           },
@@ -586,7 +605,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       dni: this.basicForm.getRawValue().dni,
       type_school: this.schoolForm.value.type,
       id_modality: this.academicForm.value.modality,
-      id_examcall: this._exam.id
+      id_examcall: this.getExamId()
     }
     this._subscriptions.add(
       this._registrationService.validatePayment(data).subscribe({
@@ -662,7 +681,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
             name: res.data.code_school,
             type: res.data.type,
             education_level: res.data.level_education,
-            phone_school: res.data.phone_contact,
+            phone_school: '-',
             nationality: res.data.is_nacional ? 'Peruano' : 'Extranjero'
           });
           this.basicForm.patchValue({
@@ -726,7 +745,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   private _getAnswers(): void {
     this.isLoading = true;
     this._subscriptions.add(
-      this._registrationService.getAnswers(this.postulation.id).subscribe({
+      this._registrationService.getAnswers(this.postulation.applicant.id).subscribe({
         next: (res) => {
           if (res.error) {
             this._toastService.add({
@@ -1179,8 +1198,8 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       });
       this.isLoading = false;
 
-      setTimeout(() => {
-        if (this.module === 'post') return this.finish.emit(true);
+      this.timeout = setTimeout(() => {
+        if (this.module === 'post') return this.finish.emit();
         this._postStore.setOnboarding(false);
       }, 1000);
     } catch (e: any) {
@@ -1233,10 +1252,6 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       this.schoolForm.get('name')?.setValue('-');
       this.schoolForm.get('name')?.clearValidators();
       this.schoolForm.get('name')?.updateValueAndValidity();
-
-      this.schoolForm.get('phone_school')?.setValue('-');
-      this.schoolForm.get('phone_school')?.clearValidators();
-      this.schoolForm.get('phone_school')?.updateValueAndValidity();
 
       return;
     }
