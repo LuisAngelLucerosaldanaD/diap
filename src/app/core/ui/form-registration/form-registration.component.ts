@@ -571,7 +571,13 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       id_application: this.mode === 'create' ? application.toString() : this.postulation.id.toString()
     };
 
-    if (this.mode === 'create') {
+    let isUpdate = false
+    if (this.mode === 'update') {
+      const fileId = this.annexes.find(fl => fl.name === file.name);
+      isUpdate = !!fileId;
+    }
+
+    if (this.mode === 'create' || !isUpdate) {
       return new Promise<IResponse>((resolve, reject) => {
         this._subscriptions.add(
           this._registrationService.registerDocument(data).subscribe({
