@@ -1,6 +1,7 @@
 @if (!isValidPayment()) {
   <main class="p-4 md:p-10 min-h-[calc(100vh-64px)] w-full">
-    <div class="flex flex-col-reverse gap-5 md:gap-0 md:flex-row items-center mx-auto w-full max-w-[1200px] bg-white md:border md:border-black/10 md:rounded-lg md:shadow-lg md:overflow-hidden">
+    <div
+      class="flex flex-col-reverse gap-5 md:gap-0 md:flex-row items-center mx-auto w-full max-w-[1200px] bg-white md:border md:border-black/10 md:rounded-lg md:shadow-lg md:overflow-hidden">
       <div class="w-full md:max-w-[400px] flex flex-col gap-4 md:px-8 md:py-12 h-fit">
         <div class="flex flex-col w-full items-center gap-10">
           <div class="flex flex-col w-full items-center gap-3">
@@ -44,7 +45,9 @@
             <button (click)="goBack()" class="w-fit b-link-neutral">
               <div>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.28007 7.71995C7.42052 7.86058 7.49941 8.0512 7.49941 8.24995C7.49941 8.4487 7.42052 8.63932 7.28007 8.77995L4.81007 11.25H21.0001C21.199 11.25 21.3898 11.329 21.5304 11.4696C21.6711 11.6103 21.7501 11.801 21.7501 12C21.7501 12.1989 21.6711 12.3896 21.5304 12.5303C21.3898 12.6709 21.199 12.75 21.0001 12.75H4.81007L7.28007 15.22C7.35376 15.2886 7.41286 15.3714 7.45385 15.4634C7.49485 15.5554 7.51689 15.6547 7.51866 15.7554C7.52044 15.8561 7.50192 15.9562 7.4642 16.0495C7.42647 16.1429 7.37033 16.2278 7.29911 16.299C7.22789 16.3702 7.14306 16.4264 7.04967 16.4641C6.95628 16.5018 6.85625 16.5203 6.75555 16.5185C6.65485 16.5168 6.55553 16.4947 6.46353 16.4537C6.37153 16.4127 6.28873 16.3536 6.22007 16.28L2.47007 12.53C2.32962 12.3893 2.25073 12.1987 2.25073 12C2.25073 11.8012 2.32962 11.6106 2.47007 11.47L6.22007 7.71995C6.3607 7.5795 6.55132 7.50061 6.75007 7.50061C6.94882 7.50061 7.13945 7.5795 7.28007 7.71995Z" fill="#0F75BC"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M7.28007 7.71995C7.42052 7.86058 7.49941 8.0512 7.49941 8.24995C7.49941 8.4487 7.42052 8.63932 7.28007 8.77995L4.81007 11.25H21.0001C21.199 11.25 21.3898 11.329 21.5304 11.4696C21.6711 11.6103 21.7501 11.801 21.7501 12C21.7501 12.1989 21.6711 12.3896 21.5304 12.5303C21.3898 12.6709 21.199 12.75 21.0001 12.75H4.81007L7.28007 15.22C7.35376 15.2886 7.41286 15.3714 7.45385 15.4634C7.49485 15.5554 7.51689 15.6547 7.51866 15.7554C7.52044 15.8561 7.50192 15.9562 7.4642 16.0495C7.42647 16.1429 7.37033 16.2278 7.29911 16.299C7.22789 16.3702 7.14306 16.4264 7.04967 16.4641C6.95628 16.5018 6.85625 16.5203 6.75555 16.5185C6.65485 16.5168 6.55553 16.4947 6.46353 16.4537C6.37153 16.4127 6.28873 16.3536 6.22007 16.28L2.47007 12.53C2.32962 12.3893 2.25073 12.1987 2.25073 12C2.25073 11.8012 2.32962 11.6106 2.47007 11.47L6.22007 7.71995C6.3607 7.5795 6.55132 7.50061 6.75007 7.50061C6.94882 7.50061 7.13945 7.5795 7.28007 7.71995Z"
+                        fill="#0F75BC"/>
                 </svg>
               </div>
               <span>Volver</span>
@@ -52,36 +55,45 @@
           </div>
         </div>
         <div class="w-full border-t border-black/10"></div>
-        <div class="text-black/60 w-full flex flex-col md:flex-row md:items-center md:items-start md:flex-wrap gap-2 md:gap-4 justify-center font-bold text-xs">
+        <div
+          class="text-black/60 w-full flex flex-col md:flex-row md:items-center md:items-start md:flex-wrap gap-2 md:gap-4 justify-center font-bold text-xs">
           <div class="flex items-center gap-2">
             <div>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/>
               </svg>
             </div>
             <span>062 56 17 96</span>
           </div>
           <div class="flex items-center gap-2">
             <div>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/>
               </svg>
             </div>
             <span>987 654 321</span>
           </div>
           <div class="flex items-center gap-2">
             <div>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
               </svg>
             </div>
             <a href="mailto:admision.pregrado@unas.edu.pe">Admisión.pregrado&#64;unas.edu.pe</a>
           </div>
           <div class="flex items-center gap-2">
             <div>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
               </svg>
             </div>
             <span>UNAS, Carretera Central - km. 1.21 Tingo María, Perú</span>
@@ -89,12 +101,15 @@
         </div>
         <div class="w-full border-t border-black/10"></div>
         <div class="flex justify-center w-full">
-          <a target="_blank" class="flex items-center gap-2 text-xs underline" href="https://www.facebook.com/AdmisionunasOFICIAL?locale=es_LA">
-            <img class="w-5" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/768px-Facebook_Logo_%282019%29.png" alt="logo-facebook">
+          <a target="_blank" class="flex items-center gap-2 text-xs underline"
+             href="https://www.facebook.com/AdmisionunasOFICIAL?locale=es_LA">
+            <img class="w-5" alt="logo-facebook"
+                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/768px-Facebook_Logo_%282019%29.png">
             <span>Admisión UNAS</span>
             <div>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-3">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="size-3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/>
               </svg>
             </div>
           </a>

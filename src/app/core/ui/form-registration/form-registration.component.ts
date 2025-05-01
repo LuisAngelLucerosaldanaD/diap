@@ -135,6 +135,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit() {
+
     if (!this._examStore.exam()) {
       this._toastService.add({severity: 'warn', summary: 'Módulo de Registro', detail: 'Debe seleccionar un examen'});
 
@@ -401,7 +402,7 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
       origin_province: form.province,
       origin_district: form.district,
       code_school: form.name,
-      phone_contact: '-',
+      phone_contact: this.basicForm.get('phone_school')?.value || '-',
       type: form.type,
       level_education: form.education_level,
       is_nacional: form.nationality === 'Peruano',
@@ -681,20 +682,17 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
             name: res.data.code_school,
             type: res.data.type,
             education_level: res.data.level_education,
-            phone_school: '-',
             nationality: res.data.is_nacional ? 'Peruano' : 'Extranjero'
           });
-          this.basicForm.patchValue({
-            phone_school: res.data.phone_contact
-          }, { emitEvent: true });
 
+          this.basicForm.patchValue({phone_school: res.data.phone_contact});
           this.schoolForm.get('type')?.disable();
           if (res.data.origin_department !== '-') {
             this.getProvinces({id: 'school_departmentApplicant', value: res.data.origin_department});
           }
 
           if (this.mode === 'update') {
-            this._validatePayment();
+            // this._validatePayment();
             this._getFileRequired();
           }
         },
@@ -1042,9 +1040,6 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     try {
       const resSchool = await this._saveSchool();
-      console.log('====================================');
-      console.log(resSchool.error);
-      console.log('====================================');
       if (resSchool.error) {
         this._toastService.add({
           severity: 'error',
@@ -1214,7 +1209,6 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
   }
 
   protected save(): void {
-    this.changePhoneSchool();
     if (this.basicForm.invalid || this.schoolForm.invalid || this.academicForm.invalid || this.surveyForm.invalid) {
       this._toastService.add({
         severity: 'warn',
@@ -1271,18 +1265,6 @@ export class FormRegistrationComponent implements OnInit, OnDestroy {
     this.schoolForm.get('name')?.setValue('');
     this.schoolForm.get('name')?.setValidators(Validators.required);
     this.schoolForm.get('name')?.updateValueAndValidity();
-
-    this.schoolForm.get('phone_school')?.setValue('');
-    this.schoolForm.get('phone_school')?.setValidators([Validators.required, Validators.maxLength(9), Validators.minLength(9), Validators.pattern('^[0-9]*$')]);
-    this.schoolForm.get('phone_school')?.updateValueAndValidity();
-  }
-  public changePhoneSchool(): void {
-    const phoneValue = this.basicForm.get('phone_school')?.value;
-    if (phoneValue !== undefined && phoneValue !== null) {
-      this.schoolForm.patchValue({
-        phone_school: phoneValue
-      }, { emitEvent: true });
-    }
   }
 
 }

@@ -1,286 +1,183 @@
 <main class="flex-1 p-6 bg-gray-100 overflow-y-auto">
-    <div>
-        <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
-            <h1 class="text-3xl font-bold mb-6 text-center">
-                FORMULARIO DE INSCRIPCIÓN
-            </h1>
-            @if (module === 'post' && postulation) { @if (postulation.applicant.is_verified) {
-            <div class="bg-emerald-100 w-fit text-emerald-600 px-2 py-1 rounded">
-                <span class="font-bold">Verificado</span>
-            </div>
-            } @else {
-            <div class="bg-amber-100 w-fit text-amber-600 px-2 py-1 rounded">
-                <span class="font-bold">No verificado</span>
-            </div>
-            } }
-            <button *ngIf="mode === 'create' && module === 'regis'" (click)="cancel()" class="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+  <div>
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <h1 class="text-3xl font-bold mb-6 text-center">
+        FORMULARIO DE INSCRIPCIÓN
+      </h1>
+      @if (module === 'post' && postulation) {
+        @if (postulation.applicant.is_verified) {
+          <div class="bg-emerald-100 w-fit text-emerald-600 px-2 py-1 rounded">
+            <span class="font-bold">Verificado</span>
+          </div>
+        } @else {
+          <div class="bg-amber-100 w-fit text-amber-600 px-2 py-1 rounded">
+            <span class="font-bold">No verificado</span>
+          </div>
+        }
+      }
+      <button *ngIf="mode === 'create' && module === 'regis'" (click)="cancel()"
+              class="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700">
         Atras
       </button>
-            <div>
-                <div>
-                    <h2 class="text-xl font-semibold mb-4">Datos Generales</h2>
-                    <form [formGroup]="basicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="md:col-span-2">
-                            <label for="nameApplicant" class="block font-medium">Nombres</label
-              >
-              <input
-                type="text"
-                id="nameApplicant"
-                placeholder="Ingrese su nombre"
-                formControlName="names"
-                appNameInp
-                class="inp-form"
-                title="El nombre no puede contener números ni caracteres especiales"
-              />
-              @if (basicForm.get('names')?.invalid &&
-              basicForm.get('names')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('names')?.hasError('required')"
-              >
-                El nombre es requerido.
-              </small>
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('names')?.hasError('minlength')"
-              >
-                El nombre debe contener al menos 2 caracteres.
-              </small>
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('name')?.hasError('maxlength')"
-              >
-                El nombre debe contener máximo 50 caracteres.
-              </small>
+      <div>
+        <div>
+          <h2 class="text-xl font-semibold mb-4">Datos Generales</h2>
+          <form [formGroup]="basicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+              <label for="nameApplicant" class="block font-medium">Nombres</label>
+              <input type="text" id="nameApplicant" placeholder="Ingrese su nombre" formControlName="names"
+                     appNameInp class="inp-form" title="El nombre no puede contener números ni caracteres especiales"/>
+              @if (basicForm.get('names')?.invalid && basicForm.get('names')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('names')?.hasError('required')">
+                  El nombre es requerido.
+                </small>
+                <small class="text-red-500" *ngIf="basicForm.get('names')?.hasError('minlength')">
+                  El nombre debe contener al menos 2 caracteres.
+                </small>
+                <small class="text-red-500" *ngIf="basicForm.get('name')?.hasError('maxlength')">
+                  El nombre debe contener máximo 50 caracteres.
+                </small>
               }
             </div>
 
-            <div
-              class="row-span-3 flex items-center justify-center border border-gray-300 rounded-md bg-gray-100 p-4"
-            >
+            <div class="row-span-3 flex items-center justify-center border border-gray-300 rounded-md bg-gray-100 p-4">
               @if (imgProfile) {
-              <div class="group h-full w-full relative cursor-pointer max-w-60">
-                @if (this.mode === 'show' || this.mode === 'update') {
-                <img
-                  [src]="imgProfile | secureImage | async"
-                  alt="Foto de perfil"
-                  class="pointer-events-none"
-                  style="max-height: 13rem; width: 100%; object-fit: contain"
-                />
-                } @else {
-                <img
-                  [src]="imgProfile"
-                  alt="Foto de perfil"
-                  style="max-height: 13rem; width: 100%; object-fit: contain"
-                />
-                } @if (this.mode === 'update') {
-                <div
-                  (click)="inpImage.click()"
-                  class="group-hover:flex hidden absolute inset-0 items-center justify-center bg-black bg-opacity-50"
-                >
-                  <button type="button" class="text-white">
-                    <i class="fa-solid fa-upload"></i> Subir Foto
-                  </button>
+                <div class="group h-full w-full relative cursor-pointer max-w-60">
+                  @if (this.mode === 'show' || this.mode === 'update') {
+                    <img [src]="imgProfile | secureImage | async" alt="Foto de perfil" class="pointer-events-none"
+                         style="max-height: 13rem; width: 100%; object-fit: contain"/>
+                  } @else {
+                    <img [src]="imgProfile" alt="Foto de perfil"
+                         style="max-height: 13rem; width: 100%; object-fit: contain"/>
+                  }
+                  @if (this.mode === 'update') {
+                    <div (click)="inpImage.click()"
+                         class="group-hover:flex hidden absolute inset-0 items-center justify-center bg-black bg-opacity-50">
+                      <button type="button" class="text-white">
+                        <i class="fa-solid fa-upload"></i> Subir Foto
+                      </button>
+                    </div>
+                  }
                 </div>
-                }
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                class="hidden"
-                (change)="processProfile($event)"
-                #inpImage
-              />
+                <input type="file" accept="image/*" class="hidden" (change)="processProfile($event)" #inpImage/>
               } @else {
-              <div class="text-center">
-                <label class="block font-medium mb-2"
-                  >Foto del postulante</label
-                >
-
-                <input
-                  type="file"
-                  id="photoApplicant"
-                  accept="image/*"
-                  class="hidden"
-                  (change)="processProfile($event)"
-                />
-                <label
-                  for="photoApplicant"
-                  class="cursor-pointer text-blue-500 hover:text-blue-700"
-                >
-                  <i class="fa-solid fa-upload"></i> Subir Foto
-                </label>
-                        </div>
-                        }
+                <div class="text-center">
+                  <label class="block font-medium mb-2">Foto del postulante</label>
+                  <input type="file" id="photoApplicant" accept="image/*" class="hidden"
+                         (change)="processProfile($event)"/>
+                  <label for="photoApplicant" class="cursor-pointer text-blue-500 hover:text-blue-700">
+                    <i class="fa-solid fa-upload"></i> Subir Foto
+                  </label>
                 </div>
-
-                <div class="md:col-span-2">
-                    <label for="paternalSurnameApplicant" class="block font-medium">Apellido Paterno</label
-              >
-              <input
-                type="text"
-                id="paternalSurnameApplicant"
-                placeholder="Ingrese su apellido"
-                class="inp-form"
-                formControlName="father_lastname"
-                appNameInp
-                title="El apellido no puede contener números ni caracteres especiales"
-              />
-              @if (basicForm.get('father_lastname')?.invalid &&
-              basicForm.get('father_lastname')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('father_lastname')?.hasError('required')"
-              >
-                El apellido paterno es requerido.
-              </small>
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('father_lastname')?.hasError('minlength')"
-              >
-                El apellido paterno debe contener al menos 2 caracteres.
-              </small>
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('father_lastname')?.hasError('maxlength')"
-              >
-                El apellido paterno debe contener máximo 50 caracteres.
-              </small>
               }
             </div>
 
             <div class="md:col-span-2">
-              <label for="maternalSurnameApplicant" class="block font-medium"
-                >Apellido Materno</label
-              >
-              <input
-                type="text"
-                id="maternalSurnameApplicant"
-                placeholder="Ingrese su apellido"
-                class="inp-form"
-                formControlName="mother_lastname"
-                appNameInp
-                title="El apellido no puede contener números ni caracteres especiales"
-              />
-              @if (basicForm.get('mother_lastname')?.invalid &&
-              basicForm.get('mother_lastname')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('mother_lastname')?.hasError('required')"
-              >
-                El apellido materno es requerido.
-              </small>
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('mother_lastname')?.hasError('minlength')"
-              >
-                El apellido materno debe contener al menos 2 caracteres.
-              </small>
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('mother_lastname')?.hasError('maxlength')"
-              >
-                El apellido materno debe contener máximo 50 caracteres.
-              </small>
+              <label for="paternalSurnameApplicant" class="block font-medium">Apellido Paterno</label>
+              <input type="text" id="paternalSurnameApplicant" placeholder="Ingrese su apellido" class="inp-form"
+                     formControlName="father_lastname" appNameInp
+                     title="El apellido no puede contener números ni caracteres especiales"/>
+              @if (basicForm.get('father_lastname')?.invalid && basicForm.get('father_lastname')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('father_lastname')?.hasError('required')">
+                  El apellido paterno es requerido.
+                </small>
+                <small class="text-red-500" *ngIf="basicForm.get('father_lastname')?.hasError('minlength')">
+                  El apellido paterno debe contener al menos 2 caracteres.
+                </small>
+                <small class="text-red-500" *ngIf="basicForm.get('father_lastname')?.hasError('maxlength')">
+                  El apellido paterno debe contener máximo 50 caracteres.
+                </small>
+              }
+            </div>
+
+            <div class="md:col-span-2">
+              <label for="maternalSurnameApplicant" class="block font-medium">Apellido Materno</label>
+              <input type="text" id="maternalSurnameApplicant" placeholder="Ingrese su apellido" class="inp-form"
+                     formControlName="mother_lastname" appNameInp
+                     title="El apellido no puede contener números ni caracteres especiales"/>
+              @if (basicForm.get('mother_lastname')?.invalid && basicForm.get('mother_lastname')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('mother_lastname')?.hasError('required')">
+                  El apellido materno es requerido.
+                </small>
+                <small class="text-red-500" *ngIf="basicForm.get('mother_lastname')?.hasError('minlength')">
+                  El apellido materno debe contener al menos 2 caracteres.
+                </small>
+                <small class="text-red-500" *ngIf="basicForm.get('mother_lastname')?.hasError('maxlength')">
+                  El apellido materno debe contener máximo 50 caracteres.
+                </small>
               }
             </div>
             <div>
-              <label for="phoneApplicant" class="block font-medium"
-                >Número de celular de contacto</label
-              >
-              <input
-                type="tel"
-                id="phoneApplicant"
-                placeholder="Ingrese número"
-                maxlength="9"
-                minlength="9"
-                formControlName="phone"
-                class="inp-form"
-                appNumbersInp
-                title="El número debe contener 9 dígitos"
-              />
-              @if (basicForm.get('phone')?.invalid &&
-              basicForm.get('phone')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('phone')?.hasError('required')"
-              >
-                El número de celular es requerido.
-              </small>
-              <small
-                class="text-red-500"
-                *ngIf="
-                  basicForm.get('phone')?.hasError('minlength') ||
-                  basicForm.get('phone')?.hasError('maxlength')
-                "
-              >
-                El número de celular debe contener 9 dígitos.
-              </small>
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('phone')?.hasError('pattern')"
-              >
-                El número de celular solo debe de contener números.
-              </small>
+              <label for="phoneApplicant" class="block font-medium">Número de celular de contacto</label>
+              <input type="tel" id="phoneApplicant" placeholder="Ingrese número" maxlength="9" minlength="9"
+                     formControlName="phone" class="inp-form" appNumbersInp title="El número debe contener 9 dígitos"/>
+              @if (basicForm.get('phone')?.invalid && basicForm.get('phone')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('phone')?.hasError('required')">
+                  El número de celular es requerido.
+                </small>
+                <small class="text-red-500"
+                       *ngIf="basicForm.get('phone')?.hasError('minlength') || basicForm.get('phone')?.hasError('maxlength')">
+                  El número de celular debe contener 9 dígitos.
+                </small>
+                <small class="text-red-500" *ngIf="basicForm.get('phone')?.hasError('pattern')">
+                  El número de celular solo debe de contener números.
+                </small>
               }
             </div>
             <div>
-              <label for="phone_contact_school" class="block font-medium">
-                Número de celular del apoderado
-              </label>
-                    <input type="tel" id="phone_contact_school" placeholder="Ingrese número" formControlName="phone_school" title="El número debe contener hasta 9 dígitos" class="inp-form" appNumbersInp minlength="9" maxlength="9" (change)="changePhoneSchool()" />                    @if (basicForm.get('phone_school')?.invalid && basicForm.get('phone_school')?.touched) {
-                    <small class="text-red-500" *ngIf="basicForm.get('phone_school')?.hasError('required')">
-                El número de celular del apoderado es requerido.
-              </small>
-                    <small class="text-red-500" *ngIf="
-                  basicForm.get('phone_school')?.hasError('minlength') ||
-                  basicForm.get('phone_school')?.hasError('maxlength')
-                ">
-                El número de celular del apoderado debe contener 9 dígitos.
-              </small>
-                    <small class="text-red-500" *ngIf="basicForm.get('phone_school')?.hasError('pattern')">
-                El número de celular del apoderado solo debe de contener
-                números.
-              </small> }
-                </div>
-                <div>
-                    <label for="sexApplicant" class="block font-medium">Sexo</label>
-                    <select id="sexApplicant" name="sexApplicant" formControlName="sex" class="select-form">
+              <label for="phone_contact_school" class="block font-medium">Número de celular del apoderado</label>
+              <input type="tel" id="phone_contact_school" placeholder="Ingrese número" formControlName="phone_school"
+                     title="El número debe contener hasta 9 dígitos" class="inp-form" appNumbersInp minlength="9"
+                     maxlength="9"/>
+              @if (basicForm.get('phone_school')?.invalid && basicForm.get('phone_school')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('phone_school')?.hasError('required')">
+                  El número de celular del apoderado es requerido.
+                </small>
+                <small class="text-red-500"
+                       *ngIf="basicForm.get('phone_school')?.hasError('minlength') ||basicForm.get('phone_school')?.hasError('maxlength')">
+                  El número de celular del apoderado debe contener 9 dígitos.
+                </small>
+                <small class="text-red-500" *ngIf="basicForm.get('phone_school')?.hasError('pattern')">
+                  El número de celular del apoderado solo debe de contener
+                  números.
+                </small>
+              }
+            </div>
+            <div>
+              <label for="sexApplicant" class="block font-medium">Sexo</label>
+              <select id="sexApplicant" name="sexApplicant" formControlName="sex" class="select-form">
                 <option selected disabled>Seleccione su sexo</option>
                 <option value="MASCULINO">Masculino</option>
                 <option value="FEMENINO">Femenino</option>
               </select> @if (basicForm.get('sex')?.invalid && basicForm.get('sex')?.touched) {
-                    <small class="text-red-500" *ngIf="basicForm.get('sex')?.hasError('required')">
+              <small class="text-red-500" *ngIf="basicForm.get('sex')?.hasError('required')">
                 El sexo es requerido.
-              </small> }
-                </div>
+              </small>
+            }
+            </div>
 
-                <div>
-                    <label for="dni" class="block font-medium">DNI</label>
-                    <input type="text" id="dni" title="El DNI debe contener 8 dígitos numéricos" formControlName="dni" class="inp-form" appNumbersInp placeholder="Ingrese su número de DNI" minlength="8" maxlength="8" /> @if (basicForm.get('dni')?.invalid
-                    && basicForm.get('dni')?.touched) {
-                    <small class="text-red-500" *ngIf="basicForm.get('dni')?.hasError('required')">
-                El DNI es requerido.
-              </small>
-                    <small class="text-red-500" *ngIf="
-                  basicForm.get('dni')?.hasError('minlength') ||
-                  basicForm.get('dni')?.hasError('maxlength')
-                ">
-                El DNI debe contener 8 dígitos.
-              </small>
-                    <small class="text-red-500" *ngIf="basicForm.get('dni')?.hasError('pattern')">
-                El DNI solo debe de contener números.
-              </small> }
-                </div>
-                <div>
-                    <label for="marital_statusApplicant" class="block font-medium">Estado civil</label
-              >
-              <select
-                id="marital_statusApplicant"
-                name="marital_statusApplicant"
-                formControlName="civil_status"
-                class="select-form"
-              >
+            <div>
+              <label for="dni" class="block font-medium">DNI</label>
+              <input type="text" id="dni" title="El DNI debe contener 8 dígitos numéricos" formControlName="dni"
+                     class="inp-form" appNumbersInp placeholder="Ingrese su número de DNI" minlength="8"
+                     maxlength="8"/>
+              @if (basicForm.get('dni')?.invalid && basicForm.get('dni')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('dni')?.hasError('required')">
+                  El DNI es requerido.
+                </small>
+                <small class="text-red-500"
+                       *ngIf="basicForm.get('dni')?.hasError('minlength') || basicForm.get('dni')?.hasError('maxlength')">
+                  El DNI debe contener 8 dígitos.
+                </small>
+                <small class="text-red-500" *ngIf="basicForm.get('dni')?.hasError('pattern')">
+                  El DNI solo debe de contener números.
+                </small>
+              }
+            </div>
+            <div>
+              <label for="marital_statusApplicant" class="block font-medium">Estado civil</label>
+              <select id="marital_statusApplicant" name="marital_statusApplicant" formControlName="civil_status"
+                      class="select-form">
                 <option selected disabled>Seleccione su estado civil</option>
                 <option value="SOLTERO">Soltero</option>
                 <option value="CASADO">Casado</option>
@@ -293,727 +190,457 @@
                 <option value="SEPARADO">Separado</option>
                 <option value="DIVORCIADO">Divorciado</option>
               </select>
-              @if (basicForm.get('civil_status')?.invalid &&
-              basicForm.get('civil_status')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('civil_status')?.hasError('required')"
-              >
-                El estado civil es requerido.
-              </small>
+              @if (basicForm.get('civil_status')?.invalid && basicForm.get('civil_status')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('civil_status')?.hasError('required')">
+                  El estado civil es requerido.
+                </small>
               }
             </div>
             <div>
-              <label for="email" class="block font-medium"
-                >Correo electronico</label
-              >
-              <input
-                type="text"
-                id="email"
-                placeholder="ejemplo@gmail.com"
-                formControlName="email"
-                class="inp-form"
-              />
-              @if (basicForm.get('email')?.invalid &&
-              basicForm.get('email')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('email')?.hasError('required')"
-              >
-                El correo electrónico es requerido.
-              </small>
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('email')?.hasError('email')"
-              >
-                El correo electrónico no es válido.
-              </small>
+              <label for="email" class="block font-medium">Correo electronico</label>
+              <input type="text" id="email" placeholder="ejemplo@gmail.com" formControlName="email" class="inp-form"/>
+              @if (basicForm.get('email')?.invalid && basicForm.get('email')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('email')?.hasError('required')">
+                  El correo electrónico es requerido.
+                </small>
+                <small class="text-red-500" *ngIf="basicForm.get('email')?.hasError('email')">
+                  El correo electrónico no es válido.
+                </small>
               }
             </div>
 
             <div>
-              <label for="mother_tongue" class="block font-medium"
-                >Lengua materna</label
-              >
-              <input
-                type="text"
-                id="mother_tongue"
-                placeholder="Ingrese su lengua materna"
-                class="inp-form"
-                formControlName="mother_language"
-                appNameInp
-                title="La lengua materne no puede contener números ni caracteres especiales"
-              />
-              @if (basicForm.get('mother_language')?.invalid &&
-              basicForm.get('mother_language')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('mother_language')?.hasError('required')"
-              >
-                La lengua materna es requerida.
-              </small>
+              <label for="mother_tongue" class="block font-medium">Lengua materna</label>
+              <input type="text" id="mother_tongue" placeholder="Ingrese su lengua materna" class="inp-form"
+                     formControlName="mother_language" appNameInp
+                     title="La lengua materne no puede contener números ni caracteres especiales"/>
+              @if (basicForm.get('mother_language')?.invalid && basicForm.get('mother_language')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('mother_language')?.hasError('required')">
+                  La lengua materna es requerida.
+                </small>
               }
             </div>
 
             <div class="relative">
-              <label for="fecha_nacimiento" class="block font-medium"
-                >Fecha de Nacimiento</label
-              >
+              <label for="fecha_nacimiento" class="block font-medium">Fecha de Nacimiento</label>
               <div class="relative">
-                <input
-                  type="date"
-                  id="fecha_nacimiento"
-                  name="fecha_nacimiento"
-                  formControlName="birthdate"
-                  class="select-form"
-                />
-                @if (basicForm.get('birthdate')?.invalid &&
-                basicForm.get('birthdate')?.touched) {
-                <small
-                  class="text-red-500"
-                  *ngIf="basicForm.get('birthdate')?.hasError('required')"
-                >
-                  La fecha de nacimiento es requerida.
-                </small>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" formControlName="birthdate"
+                       class="select-form"/>
+                @if (basicForm.get('birthdate')?.invalid && basicForm.get('birthdate')?.touched) {
+                  <small class="text-red-500" *ngIf="basicForm.get('birthdate')?.hasError('required')">
+                    La fecha de nacimiento es requerida.
+                  </small>
                 }
               </div>
             </div>
             <div>
-              <label for="birth_departmentApplicant" class="block font-medium"
-                >Región de Nacimiento</label
-              >
-              <select
-                id="birth_departmentApplicant"
-                name="birth_departmentApplicant"
-                formControlName="region"
-                (change)="getProvinces($event.target)"
-                class="select-form"
-              >
+              <label for="birth_departmentApplicant" class="block font-medium">Región de Nacimiento</label>
+              <select id="birth_departmentApplicant" name="birth_departmentApplicant" formControlName="region"
+                      (change)="getProvinces($event.target)" class="select-form">
                 <option selected disabled>Seleccione una opción</option>
                 @for (region of regions; track region.idRegion) {
-                <option [value]="region.idRegion">
-                  {{ region.nombreRegion }}
-                </option>
+                  <option [value]="region.idRegion">
+                    {{ region.nombreRegion }}
+                  </option>
                 }
               </select>
-              @if (basicForm.get('region')?.invalid &&
-              basicForm.get('region')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('region')?.hasError('required')"
-              >
-                La región de nacimiento es requerida.
-              </small>
+              @if (basicForm.get('region')?.invalid && basicForm.get('region')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('region')?.hasError('required')">
+                  La región de nacimiento es requerida.
+                </small>
               }
             </div>
             <div>
-              <label for="birth_provinceApplicant" class="block font-medium"
-                >Provincia de Nacimiento</label
-              >
-              <select
-                id="birth_provinceApplicant"
-                name="birth_provinceApplicant"
-                (change)="getDistricts($event.target)"
-                class="select-form"
-                formControlName="province"
-              >
+              <label for="birth_provinceApplicant" class="block font-medium">Provincia de Nacimiento</label>
+              <select id="birth_provinceApplicant" name="birth_provinceApplicant" (change)="getDistricts($event.target)"
+                      class="select-form" formControlName="province">
                 <option selected disabled>Seleccione una opción</option>
                 @for (province of provinces; track province.idProvincia) {
-                <option [value]="province.idProvincia">
-                  {{ province.nombreProvincia }}
-                </option>
+                  <option [value]="province.idProvincia">
+                    {{ province.nombreProvincia }}
+                  </option>
                 }
               </select>
-              @if (basicForm.get('province')?.invalid &&
-              basicForm.get('province')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('province')?.hasError('required')"
-              >
-                La provincia de nacimiento es requerida.
-              </small>
+              @if (basicForm.get('province')?.invalid && basicForm.get('province')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('province')?.hasError('required')">
+                  La provincia de nacimiento es requerida.
+                </small>
               }
             </div>
             <div>
-              <label for="birth_districtApplicant" class="block font-medium"
-                >Distrito de Nacimiento</label
-              >
-              <select
-                id="birth_districtApplicant"
-                name="birth_districtApplicant"
-                formControlName="district"
-                class="select-form"
-              >
+              <label for="birth_districtApplicant" class="block font-medium">Distrito de Nacimiento</label>
+              <select id="birth_districtApplicant" name="birth_districtApplicant" formControlName="district"
+                      class="select-form">
                 <option selected disabled>Seleccione una opción</option>
                 @for (district of districts; track district.idDistrito) {
-                <option [value]="district.idDistrito">
-                  {{ district.nombreDistrito }}
-                </option>
+                  <option [value]="district.idDistrito">
+                    {{ district.nombreDistrito }}
+                  </option>
                 }
               </select>
-              @if (basicForm.get('district')?.invalid &&
-              basicForm.get('district')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="basicForm.get('district')?.hasError('required')"
-              >
-                El distrito de nacimiento es requerido.
-              </small>
+              @if (basicForm.get('district')?.invalid && basicForm.get('district')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('district')?.hasError('required')">
+                  El distrito de nacimiento es requerido.
+                </small>
               }
             </div>
             <div>
               <label for="address" class="block font-medium">Dirección</label>
-                    <input type="text" id="address" placeholder="Ingrese su dirección" formControlName="address" class="inp-form" title="No puede contener números ni caracteres especiales" /> @if (basicForm.get('address')?.invalid && basicForm.get('address')?.touched)
-                    {
-                    <small class="text-red-500" *ngIf="basicForm.get('address')?.hasError('required')">
-                La dirección es requerida.
-              </small> }
-                </div>
-                </form>
+              <input type="text" id="address" placeholder="Ingrese su dirección" formControlName="address"
+                     class="inp-form" title="No puede contener números ni caracteres especiales"/>
+              @if (basicForm.get('address')?.invalid && basicForm.get('address')?.touched) {
+                <small class="text-red-500" *ngIf="basicForm.get('address')?.hasError('required')">
+                  La dirección es requerida.
+                </small>
+              }
+            </div>
+          </form>
 
-                <h2 class="text-xl font-semibold my-4">
-                    Datos de la institución educativa
-                </h2>
-                <form [formGroup]="schoolForm">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                        <div>
-                            <label for="nationality" class="block font-medium">Nacionalidad</label
-                >
-                <select
-                  id="nationality"
-                  name="nationality"
-                  formControlName="nationality"
-                  class="select-form"
-                  (change)="changeNationality()"
-                >
+          <h2 class="text-xl font-semibold my-4">Datos de la institución educativa</h2>
+          <form [formGroup]="schoolForm">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+              <div>
+                <label for="nationality" class="block font-medium">Nacionalidad</label>
+                <select id="nationality" name="nationality" formControlName="nationality" class="select-form"
+                        (change)="changeNationality()">
                   <option selected disabled>Seleccione una opción</option>
                   <option value="Peruano">Peruano</option>
                   <option value="Extranjero">Extranjero</option>
                 </select>
                 @if (nationality.invalid && nationality.touched) {
-                <small
-                  class="text-red-500"
-                  *ngIf="nationality.hasError('required')"
-                >
-                  La Nacionalidad es requerida.
-                </small>
+                  <small class="text-red-500" *ngIf="nationality.hasError('required')">
+                    La Nacionalidad es requerida.
+                  </small>
                 }
               </div>
-              <div style="display: none;">
-                <label for="phone_contact_school" class="block font-medium">
-                  Número de celular del apoderado
-                </label>
-                            <input type="tel" id="phone_contact_school" placeholder="Ingrese número" formControlName="phone_school" title="El número debe contener hasta 9 dígitos" class="inp-form" appNumbersInp minlength="9" maxlength="9" /> @if (schoolForm.get('phone_school')?.invalid
-                            && schoolForm.get('phone_school')?.touched) {
-                            <small class="text-red-500" *ngIf="schoolForm.get('phone_school')?.hasError('required')">
-                  El número de celular del apoderado es requerido.
-                </small>
-                            <small class="text-red-500" *ngIf="
-                    schoolForm.get('phone_school')?.hasError('minlength') ||
-                    schoolForm.get('phone_school')?.hasError('maxlength')
-                  ">
-                  El número de celular del apoderado debe contener 9 dígitos.
-                </small>
-                            <small class="text-red-500" *ngIf="schoolForm.get('phone_school')?.hasError('pattern')">
-                  El número de celular del apoderado solo debe de contener
-                  números.
-                </small> }
-                        </div>
-                        @if (nationality.value === 'Peruano') {
-                        <div>
-                            <label for="school_departmentApplicant" class="block font-medium">Región</label
-                >
-                <select
-                  id="school_departmentApplicant"
-                  name="school_departmentApplicant"
-                  formControlName="region"
-                  (change)="getProvinces($event.target)"
-                  class="select-form"
-                >
-                  <option selected disabled>Seleccione una opción</option>
-                  @for (region of regions; track region.idRegion) {
-                  <option [value]="region.idRegion">
-                    {{ region.nombreRegion }}
-                  </option>
+              @if (nationality.value === 'Peruano') {
+                <div>
+                  <label for="school_departmentApplicant" class="block font-medium">Región</label>
+                  <select id="school_departmentApplicant" name="school_departmentApplicant" formControlName="region"
+                          (change)="getProvinces($event.target)" class="select-form">
+                    <option selected disabled>Seleccione una opción</option>
+                    @for (region of regions; track region.idRegion) {
+                      <option [value]="region.idRegion">
+                        {{ region.nombreRegion }}
+                      </option>
+                    }
+                  </select>
+                  @if (schoolForm.get('region')?.invalid && schoolForm.get('region')?.touched) {
+                    <small class="text-red-500" *ngIf="schoolForm.get('region')?.hasError('required')">
+                      La región es requerida.
+                    </small>
                   }
-                </select>
-                @if (schoolForm.get('region')?.invalid &&
-                schoolForm.get('region')?.touched) {
-                <small
-                  class="text-red-500"
-                  *ngIf="schoolForm.get('region')?.hasError('required')"
-                >
-                  La región es requerida.
-                </small>
-                }
-              </div>
-              <div>
-                <label for="school_provinceApplicant" class="block font-medium"
-                  >Provincia</label
-                >
-                <select
-                  id="school_provinceApplicant"
-                  name="school_provinceApplicant"
-                  formControlName="province"
-                  (change)="getDistricts($event.target)"
-                  class="select-form"
-                >
-                  <option selected disabled>Seleccione una opción</option>
-                  @for (province of schoolProvinces; track province.idProvincia)
-                  {
-                  <option [value]="province.idProvincia">
-                    {{ province.nombreProvincia }}
-                  </option>
+                </div>
+                <div>
+                  <label for="school_provinceApplicant" class="block font-medium">Provincia</label>
+                  <select id="school_provinceApplicant" name="school_provinceApplicant" formControlName="province"
+                          (change)="getDistricts($event.target)" class="select-form">
+                    <option selected disabled>Seleccione una opción</option>
+                    @for (province of schoolProvinces; track province.idProvincia) {
+                      <option [value]="province.idProvincia">
+                        {{ province.nombreProvincia }}
+                      </option>
+                    }
+                  </select>
+                  @if (schoolForm.get('province')?.invalid && schoolForm.get('province')?.touched) {
+                    <small class="text-red-500" *ngIf="schoolForm.get('province')?.hasError('required')">
+                      La provincia es requerida.
+                    </small>
                   }
-                </select>
-                @if (schoolForm.get('province')?.invalid &&
-                schoolForm.get('province')?.touched) {
-                <small
-                  class="text-red-500"
-                  *ngIf="schoolForm.get('province')?.hasError('required')"
-                >
-                  La provincia es requerida.
-                </small>
-                }
-              </div>
-              <div>
-                <label for="school_districtApplicant" class="block font-medium"
-                  >Distrito</label
-                >
-                <select
-                  id="school_districtApplicant"
-                  name="school_districtApplicant"
-                  (change)="getSchools($event.target)"
-                  class="select-form"
-                  formControlName="district"
-                >
-                  <option selected disabled>Seleccione una opción</option>
-                  @for (district of schoolDistricts; track district.idDistrito)
-                  {
-                  <option [value]="district.idDistrito">
-                    {{ district.nombreDistrito }}
-                  </option>
+                </div>
+                <div>
+                  <label for="school_districtApplicant" class="block font-medium">Distrito</label>
+                  <select id="school_districtApplicant" name="school_districtApplicant"
+                          (change)="getSchools($event.target)" class="select-form" formControlName="district">
+                    <option selected disabled>Seleccione una opción</option>
+                    @for (district of schoolDistricts; track district.idDistrito) {
+                      <option [value]="district.idDistrito">
+                        {{ district.nombreDistrito }}
+                      </option>
+                    }
+                  </select>
+                  @if (schoolForm.get('district')?.invalid && schoolForm.get('district')?.touched) {
+                    <small class="text-red-500" *ngIf="schoolForm.get('district')?.hasError('required')">
+                      El distrito es requerido.
+                    </small>
                   }
-                </select>
-                @if (schoolForm.get('district')?.invalid &&
-                schoolForm.get('district')?.touched) {
-                <small
-                  class="text-red-500"
-                  *ngIf="schoolForm.get('district')?.hasError('required')"
-                >
-                  El distrito es requerido.
-                </small>
-                }
-              </div>
-              <div>
-                <label for="code_schoolApplicant" class="block font-medium"
-                  >Nombre</label
-                >
-                <select
-                  id="code_schoolApplicant"
-                  name="code_schoolApplicant"
-                  class="select-form"
-                  formControlName="name"
-                >
-                  <option selected disabled>Seleccione una opción</option>
-                  @for (school of schools; track school.codMod) {
-                  <option [value]="school.codMod">
-                    {{ school.nombreCenEdu }}
-                  </option>
+                </div>
+                <div>
+                  <label for="code_schoolApplicant" class="block font-medium">Nombre</label>
+                  <select id="code_schoolApplicant" name="code_schoolApplicant" class="select-form"
+                          formControlName="name">
+                    <option selected disabled>Seleccione una opción</option>
+                    @for (school of schools; track school.codMod) {
+                      <option [value]="school.codMod">
+                        {{ school.nombreCenEdu }}
+                      </option>
+                    }
+                  </select>
+                  @if (schoolForm.get('name')?.invalid && schoolForm.get('name')?.touched) {
+                    <small class="text-red-500" *ngIf="schoolForm.get('name')?.hasError('required')">
+                      El nombre de la institución educativa es requerido.
+                    </small>
                   }
-                </select>
-                @if (schoolForm.get('name')?.invalid &&
-                schoolForm.get('name')?.touched) {
-                <small
-                  class="text-red-500"
-                  *ngIf="schoolForm.get('name')?.hasError('required')"
-                >
-                  El nombre de la institución educativa es requerido.
-                </small>
-                }
-              </div>
+                </div>
               }
               <div>
-                <label for="type_schoolApplicant" class="block font-medium"
-                  >Tipo de colegio</label
-                >
-                <select
-                  id="type_schoolApplicant"
-                  name="type_schoolApplicant"
-                  class="select-form"
-                  formControlName="type"
-                  (change)="changeSchool()"
-                >
+                <label for="type_schoolApplicant" class="block font-medium">Tipo de colegio</label>
+                <select id="type_schoolApplicant" name="type_schoolApplicant" class="select-form" formControlName="type"
+                        (change)="changeSchool()">
                   <option selected disabled>Seleccione una opción</option>
                   <option value="Colegio Estatal">Colegio Estatal</option>
                   <option value="Colegio Privado">Colegio Privado</option>
                 </select>
-                @if (schoolForm.get('type')?.invalid &&
-                schoolForm.get('type')?.touched) {
-                <small
-                  class="text-red-500"
-                  *ngIf="schoolForm.get('type')?.hasError('required')"
-                >
-                  El tipo de colegio es requerido.
-                </small>
+                @if (schoolForm.get('type')?.invalid && schoolForm.get('type')?.touched) {
+                  <small class="text-red-500" *ngIf="schoolForm.get('type')?.hasError('required')">
+                    El tipo de colegio es requerido.
+                  </small>
                 }
               </div>
               <div>
-                <label for="level_educationApplicant" class="block font-medium"
-                  >Nivel de educación</label
-                >
-                <select
-                  id="level_educationApplicant"
-                  name="level_educationApplicant"
-                  class="select-form"
-                  formControlName="education_level"
-                >
+                <label for="level_educationApplicant" class="block font-medium">Nivel de educación</label>
+                <select id="level_educationApplicant" name="level_educationApplicant" class="select-form"
+                        formControlName="education_level">
                   <option selected disabled>Seleccione una opción</option>
-                  <option value="No Concluyo Secundaria">
-                    No Concluyó Secundaria
-                  </option>
-                  <option value="Secundaria Concluida">
-                    Secundaria Concluida
-                  </option>
+                  <option value="No Concluyo Secundaria">No Concluyó Secundaria</option>
+                  <option value="Secundaria Concluida">Secundaria Concluida</option>
                   <option value="5 Quinto Año">5 Quinto Año</option>
                   <option value="4 Cuarto Año">4 Cuarto Año</option>
                   <option value="3 Tercer Año">3 Tercer Año</option>
                   <option value="2 Segundo Año">2 Segundo Año</option>
                   <option value="1 Primer Año">1 Primer Año</option>
                 </select>
-                @if (schoolForm.get('education_level')?.invalid &&
-                schoolForm.get('education_level')?.touched) {
-                <small
-                  class="text-red-500"
-                  *ngIf="
-                    schoolForm.get('education_level')?.hasError('required')
-                  "
-                >
-                  El nivel de educación es requerido.
-                </small>
+                @if (schoolForm.get('education_level')?.invalid && schoolForm.get('education_level')?.touched) {
+                  <small class="text-red-500" *ngIf="schoolForm.get('education_level')?.hasError('required')">
+                    El nivel de educación es requerido.
+                  </small>
                 }
               </div>
             </div>
           </form>
 
-          <h2 class="text-xl font-semibold my-4">
-            Datos de carreras a postular
-          </h2>
+          <h2 class="text-xl font-semibold my-4">Datos de carreras a postular</h2>
 
-          <form
-            [formGroup]="academicForm"
-            class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6"
-          >
+          <form [formGroup]="academicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             <div>
-              <label for="firstOptionApplicant" class="block font-medium"
-                >Primera Opción</label
-              >
-              <select
-                id="firstOptionApplicant"
-                name="firstOptionApplicant"
-                class="select-form"
-                formControlName="first_option"
-                (change)="changeFaculty()"
-              >
+              <label for="firstOptionApplicant" class="block font-medium">Primera Opción</label>
+              <select id="firstOptionApplicant" name="firstOptionApplicant" class="select-form"
+                      formControlName="first_option" (change)="changeFaculty()">
                 <option selected disabled>Seleccione una opción</option>
                 @for (faculty of faculties; track faculty.value) {
-                <option [value]="faculty.value">{{ faculty.name }}</option>
+                  <option [value]="faculty.value">{{ faculty.name }}</option>
                 }
               </select>
-              @if (academicForm.get('first_option')?.invalid &&
-              academicForm.get('first_option')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="academicForm.get('first_option')?.hasError('required')"
-              >
-                La primera opción es requerida.
-              </small>
+              @if (academicForm.get('first_option')?.invalid && academicForm.get('first_option')?.touched) {
+                <small class="text-red-500" *ngIf="academicForm.get('first_option')?.hasError('required')">
+                  La primera opción es requerida.
+                </small>
               }
             </div>
             <div>
-              <label for="secondOptionApplicant" class="block font-medium"
-                >Segunda Opción</label
-              >
-              <select
-                id="secondOptionApplicant"
-                name="secondOptionApplicant"
-                formControlName="second_option"
-                class="select-form"
-              >
+              <label for="secondOptionApplicant" class="block font-medium">Segunda Opción</label>
+              <select id="secondOptionApplicant" name="secondOptionApplicant" formControlName="second_option"
+                      class="select-form">
                 <option selected disabled value="">
                   Seleccione una opción
                 </option>
                 @for (faculty of facultiesSecond; track faculty.value) {
-                <option [value]="faculty.value">{{ faculty.name }}</option>
+                  <option [value]="faculty.value">{{ faculty.name }}</option>
                 }
               </select>
-              @if (academicForm.get('second_option')?.invalid &&
-              academicForm.get('second_option')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="academicForm.get('second_option')?.hasError('required')"
-              >
-                La segunda opción es requerida.
-              </small>
+              @if (academicForm.get('second_option')?.invalid && academicForm.get('second_option')?.touched) {
+                <small class="text-red-500" *ngIf="academicForm.get('second_option')?.hasError('required')">
+                  La segunda opción es requerida.
+                </small>
               }
             </div>
             <div>
-              <label for="modalityApplicant" class="block font-medium"
-                >Modalidad</label
-              >
-              <select
-                id="modalityApplicant"
-                name="modalityApplicant"
-                formControlName="modality"
-                class="select-form"
-                (change)="changeModality()"
-              >
+              <label for="modalityApplicant" class="block font-medium">Modalidad</label>
+              <select id="modalityApplicant" name="modalityApplicant" formControlName="modality" class="select-form"
+                      (change)="changeModality()">
                 <option selected disabled>Seleccione una opción</option>
                 @for (modality of modalities; track modality.id) {
-                <option [value]="modality.id">{{ modality.name }}</option>
+                  <option [value]="modality.id">{{ modality.name }}</option>
                 }
               </select>
-              @if (academicForm.get('modality')?.invalid &&
-              academicForm.get('modality')?.touched) {
-              <small
-                class="text-red-500"
-                *ngIf="academicForm.get('modality')?.hasError('required')"
-              >
-                La modalidad es requerida.
-              </small>
+              @if (academicForm.get('modality')?.invalid && academicForm.get('modality')?.touched) {
+                <small class="text-red-500" *ngIf="academicForm.get('modality')?.hasError('required')">
+                  La modalidad es requerida.
+                </small>
               }
             </div>
           </form>
           @if (cost) {
-          <div
-            class="w-full border-2 border-dashed border-red-300 mt-4 p-4 rounded-md text-center bg-white"
-          >
-            <h2 class="text-xl font-semibold my-4">{{ cost.name }}</h2>
-            <h2 class="text-xl font-semibold my-4">{{ cost.description }}</h2>
-            <h2 class="text-xl font-semibold my-4">
-              Costo de pago: S/. {{ cost.price }}
-            </h2>
-            <h2 class="text-xl font-semibold my-4">
-              Plataforma de pagos:
-              <a href="https://pagos.unas.edu.pe/" target="_blank"
-                >https://pagos.unas.edu.pe/</a
-              >
-            </h2>
-          </div>
+            <div class="w-full border-2 border-dashed border-red-300 mt-4 p-4 rounded-md text-center bg-white">
+              <h2 class="text-xl font-semibold my-4">{{ cost.name }}</h2>
+              <h2 class="text-xl font-semibold my-4">{{ cost.description }}</h2>
+              <h2 class="text-xl font-semibold my-4">Costo de pago: S/. {{ cost.price }}</h2>
+              <h2 class="text-xl font-semibold my-4">Plataforma de pagos:
+                <a href="https://pagos.unas.edu.pe/" target="_blank">https://pagos.unas.edu.pe/</a>
+              </h2>
+            </div>
           }
         </div>
 
         @if (filesRequired.length || annexes.length) {
-        <h2 class="text-xl font-semibold my-4">
-          Archivos Adjuntos
-          <div class="space-y-6">
-            @if (mode === 'show') { @for (annexe of annexes; track annexe.id) {
-            <div>
-              <label class="block font-medium">{{ annexe.name }}</label>
-                            <iframe [src]="annexe.document_url | secureImage | async | safe" class="w-full h-64 border border-gray-300 rounded-md" [title]="annexe.name"></iframe>
-                        </div>
-                        } } @else { @for (file of filesRequired; track file.id) {
-                        <div>
-                            <label class="block font-medium">{{ file.name }}</label> @if (mode === 'update') {
-                            <a [href]="file.url || '' | secureImage | async" [download]="file.file_name" class="text-blue-500 underline hover:text-blue-700 text-sm">
-                {{ file.file_name }}
-              </a> }
-                            <div class="w-full border-2 border-dashed border-gray-300 p-4 rounded-md text-center bg-white">
-                                <input type="file" [id]="file.id" accept="image/*,application/pdf" class="hidden" (change)="processFiles($event, file.id)" />
-                                <label [for]="file.id" class="cursor-pointer">
-                  <i class="fas fa-upload text-3xl text-gray-400"></i>
-                  <p class="mt-2 text-gray-500">Subir Archivo</p>
-                  <p *ngIf="file.file_name" class="mt-2 text-gray-500">
-                    {{ file.file_name }}
-                  </p>
-                </label>
-                            </div>
-                        </div>
-                        } }
-                    </div>
-                    </h2>
+          <h2 class="text-xl font-semibold my-4">
+            Archivos Adjuntos
+            <div class="space-y-6">
+              @if (mode === 'show') {
+                @for (annexe of annexes; track annexe.id) {
+                  <div>
+                    <label class="block font-medium">{{ annexe.name }}</label>
+                    <iframe [src]="annexe.document_url | secureImage | async | safe"
+                            class="w-full h-64 border border-gray-300 rounded-md" [title]="annexe.name"></iframe>
+                  </div>
+                }
+              } @else {
+                @for (file of filesRequired; track file.id) {
+                  <div>
+                    <label class="block font-medium">{{ file.name }}</label>
+                    @if (mode === 'update') {
+                      <a [href]="file.url || '' | secureImage | async" [download]="file.file_name"
+                         class="text-blue-500 underline hover:text-blue-700 text-sm">
+                        {{ file.file_name }}
+                      </a>
                     }
+                    <div class="w-full border-2 border-dashed border-gray-300 p-4 rounded-md text-center bg-white">
+                      <input type="file" [id]="file.id" accept="image/*,application/pdf" class="hidden"
+                             (change)="processFiles($event, file.id)"/>
+                      <label [for]="file.id" class="cursor-pointer">
+                        <i class="fas fa-upload text-3xl text-gray-400"></i>
+                        <p class="mt-2 text-gray-500">Subir Archivo</p>
+                        <p *ngIf="file.file_name" class="mt-2 text-gray-500">{{ file.file_name }}</p>
+                      </label>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          </h2>
+        }
 
-                    <h2 class="text-xl font-semibold my-4">Encuesta de postulación</h2>
+        <h2 class="text-xl font-semibold my-4">Encuesta de postulación</h2>
 
-                    <form [formGroup]="surveyForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input class="hidden" type="hidden" name="application_headquarters" value="Tingo Maria" />
-                        <div>
-                            <label for="type_preparation" class="block font-medium">Tipo de preparación para su postulación</label
+        <form [formGroup]="surveyForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input class="hidden" type="hidden" name="application_headquarters" value="Tingo Maria"/>
+          <div>
+            <label for="type_preparation" class="block font-medium">Tipo de preparación para su postulación</label
             >
-            <select
-              id="type_preparation"
-              name="type_preparation"
-              class="select-form"
-              formControlName="type_preparation"
-            >
+            <select id="type_preparation" name="type_preparation" class="select-form"
+                    formControlName="type_preparation">
               <option selected disabled>Seleccione una opción</option>
               <option value="Academia">Academia</option>
               <option value="Auto-preparacion">Auto-preparación</option>
             </select>
-            @if (surveyForm.get('type_preparation')?.invalid &&
-            surveyForm.get('type_preparation')?.touched) {
-            <small
-              class="text-red-500"
-              *ngIf="surveyForm.get('type_preparation')?.hasError('required')"
-            >
-              Esta pregunta es requerida.
-            </small>
+            @if (surveyForm.get('type_preparation')?.invalid && surveyForm.get('type_preparation')?.touched) {
+              <small class="text-red-500" *ngIf="surveyForm.get('type_preparation')?.hasError('required')">
+                Esta pregunta es requerida.
+              </small>
             }
           </div>
           <div>
             <label for="how_know" class="block font-medium">
               ¿Cómo se enteró de la fecha de nuestro concurso de admisión?
             </label>
-                            <select id="how_know" name="how_know" class="select-form" formControlName="how_know">
+            <select id="how_know" name="how_know" class="select-form" formControlName="how_know">
               <option selected disabled>Seleccione una opción</option>
               <option value="Amigos">Amigos</option>
               <option value="Redes_Sociales">Redes Sociales</option>
-            </select> @if (surveyForm.get('how_know')?.invalid && surveyForm.get('how_know')?.touched) {
-                            <small class="text-red-500" *ngIf="surveyForm.get('how_know')?.hasError('required')">
-              Esta pregunta es requerida.
-            </small> }
-                        </div>
-                        <div>
-                            <label for="motivation" class="block font-medium">
-              ¿Cuál fue el principal motivo por el que se animó a postular a la
-              UNAS?
+            </select>
+            @if (surveyForm.get('how_know')?.invalid && surveyForm.get('how_know')?.touched) {
+              <small class="text-red-500" *ngIf="surveyForm.get('how_know')?.hasError('required')">
+                Esta pregunta es requerida.
+              </small>
+            }
+          </div>
+          <div>
+            <label for="motivation" class="block font-medium">
+              ¿Cuál fue el principal motivo por el que se animó a postular a la UNAS?
             </label>
-                            <select id="motivation" name="motivation" class="select-form" formControlName="motivation">
+            <select id="motivation" name="motivation" class="select-form" formControlName="motivation">
               <option selected disabled>Seleccione una opción</option>
               <option value="Vocacion">Vocación</option>
               <option value="Proyeccion_Laboral">Proyección Laboral</option>
-            </select> @if (surveyForm.get('motivation')?.invalid && surveyForm.get('motivation')?.touched) {
-                            <small class="text-red-500" *ngIf="surveyForm.get('motivation')?.hasError('required')">
-              Esta pregunta es requerida.
-            </small> }
-                        </div>
-                        <div>
-                            <label for="do_work" class="block font-medium">¿Trabaja?</label>
-                            <select id="do_work" name="do_work" class="select-form" formControlName="do_work">
+            </select>
+            @if (surveyForm.get('motivation')?.invalid && surveyForm.get('motivation')?.touched) {
+              <small class="text-red-500" *ngIf="surveyForm.get('motivation')?.hasError('required')">
+                Esta pregunta es requerida.
+              </small>
+            }
+          </div>
+          <div>
+            <label for="do_work" class="block font-medium">¿Trabaja?</label>
+            <select id="do_work" name="do_work" class="select-form" formControlName="do_work">
               <option selected disabled>Seleccione una opción</option>
               <option value="Si">Sí</option>
               <option value="No">No</option>
-            </select> @if (surveyForm.get('do_work')?.invalid && surveyForm.get('do_work')?.touched) {
-                            <small class="text-red-500" *ngIf="surveyForm.get('do_work')?.hasError('required')">
-              Esta pregunta es requerida.
-            </small> }
-                        </div>
-                        <div>
-                            <label for="economic_dependent" class="block font-medium">Dependencia Económica</label
-            >
-            <select
-              id="economic_dependent"
-              name="economic_dependent"
-              class="select-form"
-              formControlName="economic_dependent"
-            >
+            </select>
+            @if (surveyForm.get('do_work')?.invalid && surveyForm.get('do_work')?.touched) {
+              <small class="text-red-500" *ngIf="surveyForm.get('do_work')?.hasError('required')">
+                Esta pregunta es requerida.
+              </small>
+            }
+          </div>
+          <div>
+            <label for="economic_dependent" class="block font-medium">Dependencia Económica</label>
+            <select id="economic_dependent" name="economic_dependent" class="select-form"
+                    formControlName="economic_dependent">
               <option selected disabled>Seleccione una opción</option>
               <option value="Padres">Padres</option>
               <option value="Propio">Propio</option>
             </select>
-            @if (surveyForm.get('economic_dependent')?.invalid &&
-            surveyForm.get('economic_dependent')?.touched) {
-            <small
-              class="text-red-500"
-              *ngIf="surveyForm.get('economic_dependent')?.hasError('required')"
-            >
-              Esta pregunta es requerida.
-            </small>
+            @if (surveyForm.get('economic_dependent')?.invalid && surveyForm.get('economic_dependent')?.touched) {
+              <small class="text-red-500" *ngIf="surveyForm.get('economic_dependent')?.hasError('required')">
+                Esta pregunta es requerida.
+              </small>
             }
           </div>
           <div>
-            <label for="lives_parents" class="block font-medium"
-              >¿Viven tus padres?</label
-            >
-            <select
-              id="lives_parents"
-              name="lives_parents"
-              class="select-form"
-              formControlName="lives_parents"
-            >
+            <label for="lives_parents" class="block font-medium">¿Viven tus padres?</label>
+            <select id="lives_parents" name="lives_parents" class="select-form" formControlName="lives_parents">
               <option selected disabled>Seleccione una opción</option>
               <option value="Si">Sí</option>
               <option value="No">No</option>
             </select>
-            @if (surveyForm.get('lives_parents')?.invalid &&
-            surveyForm.get('lives_parents')?.touched) {
-            <small
-              class="text-red-500"
-              *ngIf="surveyForm.get('lives_parents')?.hasError('required')"
-            >
-              Esta pregunta es requerida.
-            </small>
+            @if (surveyForm.get('lives_parents')?.invalid && surveyForm.get('lives_parents')?.touched) {
+              <small class="text-red-500" *ngIf="surveyForm.get('lives_parents')?.hasError('required')">
+                Esta pregunta es requerida.
+              </small>
             }
           </div>
           <div>
-            <label for="siblings" class="block font-medium"
-              >¿Cuántos hermanos son?</label
-            >
-            <input
-              type="number"
-              id="siblings"
-              name="siblings"
-              class="select-form"
-              min="0"
-              formControlName="siblings"
-              placeholder="Ingrese la cantidad de hermanos"
-              appNumbersInp
-              max="100"
-            />
-            @if (surveyForm.get('siblings')?.invalid &&
-            surveyForm.get('siblings')?.touched) {
-            <small
-              class="text-red-500"
-              *ngIf="surveyForm.get('siblings')?.hasError('required')"
-            >
-              Esta pregunta es requerida.
-            </small>
+            <label for="siblings" class="block font-medium">¿Cuántos hermanos son?</label>
+            <input type="number" id="siblings" name="siblings" class="select-form" min="0" formControlName="siblings"
+                   placeholder="Ingrese la cantidad de hermanos" appNumbersInp max="100"/>
+            @if (surveyForm.get('siblings')?.invalid && surveyForm.get('siblings')?.touched) {
+              <small class="text-red-500" *ngIf="surveyForm.get('siblings')?.hasError('required')">
+                Esta pregunta es requerida.
+              </small>
             }
           </div>
           <div>
-            <label for="lives_currently" class="block font-medium"
-              >¿Con quién vives actualmente?</label
-            >
-            <select
-              id="lives_currently"
-              name="lives_currently"
-              class="select-form"
-              formControlName="lives_currently"
-            >
+            <label for="lives_currently" class="block font-medium">¿Con quién vives actualmente?</label>
+            <select id="lives_currently" name="lives_currently" class="select-form" formControlName="lives_currently">
               <option selected disabled>Seleccione una opción</option>
               <option value="Padres">Padres</option>
               <option value="Otros">Otros</option>
             </select>
-            @if (surveyForm.get('lives_currently')?.invalid &&
-            surveyForm.get('lives_currently')?.touched) {
-            <small
-              class="text-red-500"
-              *ngIf="surveyForm.get('lives_currently')?.hasError('required')"
-            >
-              Esta pregunta es requerida.
-            </small>
+            @if (surveyForm.get('lives_currently')?.invalid && surveyForm.get('lives_currently')?.touched) {
+              <small class="text-red-500" *ngIf="surveyForm.get('lives_currently')?.hasError('required')">
+                Esta pregunta es requerida.
+              </small>
             }
           </div>
           <div>
-            <label for="survey-address" class="block font-medium"
-              >Lugar donde vives</label
-            >
-            <input
-              type="text"
-              id="survey-address"
-              class="inp-form"
-              formControlName="address"
-              placeholder="Departamento / Provincia / Distrito"
+            <label for="survey-address" class="block font-medium">Lugar donde vives</label>
+            <input type="text" id="survey-address" class="inp-form" formControlName="address"
+                   placeholder="Departamento / Provincia / Distrito"
             />
-            @if (surveyForm.get('address')?.invalid &&
-            surveyForm.get('address')?.touched) {
-            <small
-              class="text-red-500"
-              *ngIf="surveyForm.get('address')?.hasError('required')"
-            >
-              Esta pregunta es requerida.
-            </small>
+            @if (surveyForm.get('address')?.invalid && surveyForm.get('address')?.touched) {
+              <small class="text-red-500" *ngIf="surveyForm.get('address')?.hasError('required')">
+                Esta pregunta es requerida.
+              </small>
             }
           </div>
         </form>
@@ -1022,17 +649,12 @@
       <div *ngIf="mode !== 'show'">
         <div class="flex justify-center">
           <button type="submit" class="btn-save" (click)="save()">
-            <span
-              >{{
-                mode === "create" ? "Registrar" : "Actualizar"
-              }}
-              Postulación</span
-            >
+            <span>{{ mode === "create" ? "Registrar" : "Actualizar" }}Postulación</span>
           </button>
         </div>
       </div>
     </div>
   </div>
 </main>
-<p-toast />
-<app-block-ui [show]="isLoading" />
+<p-toast/>
+<app-block-ui [show]="isLoading"/>
